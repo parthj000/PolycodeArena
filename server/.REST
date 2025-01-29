@@ -1,0 +1,174 @@
+POST http://localhost:8080/api/user/signup
+Content-Type: application/json
+
+{
+    "name":"ol",
+    "email":"jparth582@gmail.com",
+    "password":"ol"
+}
+
+
+###
+POST http://localhost:8080/api/user/login
+Content-Type: application/json
+
+{
+    "email":"jparth582@gmail.com",
+    "password":"ol"
+}
+
+
+###
+POST http://localhost:8080/api/community/create/contest
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoicGFyIiwiZW1haWwiOiJwYXJ0aCIsIndhbGxldF9pZCI6IlJ2d3hJSjhQWnpkNUFnc2YiLCJyb2xlIjoiQyIsImlkIjoiNjczYjliOWNhM2YxZGE0ZmNiMzFiMzMzIiwiaWF0IjoxNzMzNTk4OTkwfQ.aSohIFSR5Z_8jmtu2ems4h33yLKOHKPaWHSqvuVi6o4
+
+{
+  "contest_name": "dnnde",
+  "question_set": [
+    {
+      "question_id": 1,
+      "question_text": "What is the capital of France?",
+      "test_cases": {"public":[{"input":2,"output":"6"},{"input":2,"output":"6"}],"hidden":[{"input":2,"output":"6"},{"input":2,"output":"6"}]},
+      "max_marks":24
+    },
+    {
+      "question_id": 1,
+      "question_text": "What is the capital of France?",
+      "description":"fsmkfmsfks",
+      "test_cases": {"public":[{"input":2,"output":"6"},{"input":2,"output":"6"}],"hidden":[{"input":2,"output":"6"},{"input":2,"output":"6"}]},
+      "max_marks":24
+    },
+    
+  ],
+  "prize_distribution": [4,2,15],
+  "start_time":1,
+  "end_time":2,
+  "description":"fjnfkjvndfjkvnfjkvnfjfnfdkndfkjf",
+  "private":false
+}
+
+
+###
+POST http://localhost:8080/api/wallet/pay
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoicGFydGgiLCJlbWFpbCI6InBhcnRoQHBhcnRoIiwid2FsbGV0X2lkIjoiS2xwenZBRDlFODA2Yk9VOCIsInJvbGUiOiJVIiwiaWQiOiI2NzNjM2RhODNmZDgyMDE4OWFjMWQyMjYiLCJpYXQiOjE3MzM1ODk2NTB9.-9qpGt4lXiNfW4CXPK29XaPQsklu48iGBOghGBcuTuM
+Content-Type: application/json
+
+{
+  "headId":"KlpzvAD9E806bOU8",
+  "amount":5
+
+}
+
+###
+GET http://localhost:8080/api/wallet/KlpzvAD9E806bOU8
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoicGFydGgiLCJlbWFpbCI6InBhcnRoQHBhcnRoIiwid2FsbGV0X2lkIjoiS2xwenZBRDlFODA2Yk9VOCIsInJvbGUiOiJVIiwiaWQiOiI2NzNjM2RhODNmZDgyMDE4OWFjMWQyMjYiLCJpYXQiOjE3MzM1ODk2NTB9.-9qpGt4lXiNfW4CXPK29XaPQsklu48iGBOghGBcuTuM
+
+
+
+###
+GET http://localhost:8080/api/user/contest
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoicGFydGgiLCJlbWFpbCI6InBhcnRoQHBhcnRoIiwid2FsbGV0X2lkIjoiS2xwenZBRDlFODA2Yk9VOCIsInJvbGUiOiJVIiwiaWQiOiI2NzNjM2RhODNmZDgyMDE4OWFjMWQyMjYiLCJpYXQiOjE3MzM1ODk2NTB9.-9qpGt4lXiNfW4CXPK29XaPQsklu48iGBOghGBcuTuM
+
+
+###
+POST http://localhost:8080/api/user/contest/register
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoidiIsImVtYWlsIjoidiIsIndhbGxldF9pZCI6Im9venVmUmdISHdJeTQzTFciLCJyb2xlIjoiVSIsImlkIjoiNjc1NzRmNGQ1YzBlYjQxNDY4MWQ5YmNhIiwiaWF0IjoxNzMzNzc1MTgyfQ.aekEYVKjhUQECxq4oscm53djL1Khd0Dq83W6Qy8IbG8
+Content-Type: application/json
+
+{
+  "contest_id":"67582ed0f7217ab6dd8d0b68",
+   "invitation_code":"uL0i,ZJWh"
+
+
+}
+
+
+###
+POST http://localhost:8080/api/user/submit
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoidiIsImVtYWlsIjoidiIsIndhbGxldF9pZCI6Im9venVmUmdISHdJeTQzTFciLCJyb2xlIjoiVSIsImlkIjoiNjc1NzRmNGQ1YzBlYjQxNDY4MWQ5YmNhIiwiaWF0IjoxNzMzNzc1MTgyfQ.aekEYVKjhUQECxq4oscm53djL1Khd0Dq83W6Qy8IbG8
+Content-Type: application/json
+
+{
+  "contest_token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJxdWVzdGlvbl9zZXQiOlt7InF1ZXN0aW9uX2lkIjoxLCJxdWVzdGlvbl90ZXh0IjoiYWRqIiwicXVlc3Rpb25fZGVzY3JpcHRpb24iOiJha2RtbSIsIm1heF9tYXJrcyI6MTQsInRlc3RfY2FzZXMiOnsicHVibGljIjpbeyJpbnB1dCI6ImFrbWQiLCJleHBlY3RlZF9vdXRwdXQiOiJha21kIn1dLCJoaWRkZW4iOlt7ImlucHV0Ijoia21hIiwiZXhwZWN0ZWRfb3V0cHV0IjoiYWtkIn1dfX1dLCJzdGFydF90aW1lIjoxNzA2ODEyMjAwLCJlbmRfdGltZSI6MTczODQzNDYwMCwidXNlcl9pZCI6IjY3NTc0ZjRkNWMwZWI0MTQ2ODFkOWJjYSIsImNvbnRlc3RfaWQiOiI2NzU4MmVkMGY3MjE3YWI2ZGQ4ZDBiNjgiLCJjb250ZXN0X25hbWUiOiJha20iLCJpYXQiOjE3MzM4MzM5MzJ9.zZ0DfT7uXk6B6Rccdp2uRnjv7WxXzqSM9FE5L0T3TkU",
+  "question_id":1,
+  "code":""
+}
+
+
+###
+POST https://w8pax9lc8b.execute-api.us-east-1.amazonaws.com/prod/polycode
+Content-Type: application/json
+
+{
+  "code": "def greet(name):\n    if name == '':\n        return 'Hello, World!'\n    return f'Hello, {name}!'",
+  "language": "python",
+  "test_cases": {
+    "public": [
+      {
+        "input": "\"Alce\"",
+        "expected_output": "Hello, Alice!\n"
+      },
+      {
+        "input": "\"\"",
+        "expected_output": "Hello, ld!\n"
+      },
+      {
+        "input": "\"Bob\"",
+        "expected_output": "Hello, Bob!\n"
+      }
+    ],
+    "hidden": [
+      {
+        "input": "\"Charlie\"",
+        "expected_output": "Hello, Charlie!\n"
+      },
+      {
+        "input": "\"\"",
+        "expected_output": "Hello, World!\n"
+      },
+      {
+        "input": "\"David\"",
+        "expected_output": "Hello, David!\n"
+      }
+    ]
+  }
+}
+
+
+###
+POST http://localhost:8080/api/community/join
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoicGFyIiwiZW1haWwiOiJwYXJ0aCIsIndhbGxldF9pZCI6IlJ2d3hJSjhQWnpkNUFnc2YiLCJyb2xlIjoiQyIsImlkIjoiNjczYjliOWNhM2YxZGE0ZmNiMzFiMzMzIiwiaWF0IjoxNzMzNTk4OTkwfQ.aSohIFSR5Z_8jmtu2ems4h33yLKOHKPaWHSqvuVi6o4
+Content-Type: application/json
+
+
+{
+  "contest_id":"675774890599355bccf6085f"
+}
+
+
+###
+GET http://localhost:8080/api/community/join/eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NzU3NzQ4OTA1OTkzNTViY2NmNjA4NWYiLCJtZXRhIjp7ImNvbnRlc3RfbmFtZSI6ImRubmRlIiwiaW52aXRhdGlvbl9jb2RlIjoiM1ZnWSx0ZXdiIiwicXVlc3Rpb25fc2V0IjpbeyJxdWVzdGlvbl9pZCI6MSwicXVlc3Rpb25fdGV4dCI6IldoYXQgaXMgdGhlIGNhcGl0YWwgb2YgRnJhbmNlPyIsInRlc3RfY2FzZXMiOnsicHVibGljIjpbeyJpbnB1dCI6Miwib3V0cHV0IjoiNiJ9LHsiaW5wdXQiOjIsIm91dHB1dCI6IjYifV0sImhpZGRlbiI6W3siaW5wdXQiOjIsIm91dHB1dCI6IjYifSx7ImlucHV0IjoyLCJvdXRwdXQiOiI2In1dfSwiY29ycmVjdF9vcHRpb24iOiJQYXJpcyIsIm1heF9tYXJrcyI6MjR9LHsicXVlc3Rpb25faWQiOjIsInF1ZXN0aW9uX3RleHQiOiJXaGF0IGlzIDIgKyAyPyIsIm9wdGlvbnMiOlsiMyIsIjQiLCI1IiwiNiJdLCJjb3JyZWN0X29wdGlvbiI6IjQiLCJtYXhfbWFya3MiOjI0fV0sInByaXplX2Rpc3RyaWJ1dGlvbiI6WzQsMiwxNV0sImNvbW11bml0eV9pZCI6IjY3M2I5YjljYTNmMWRhNGZjYjMxYjMzMyIsInN0YXJ0X3RpbWUiOjEsImVuZF90aW1lIjoyLCJkZXNjcmlwdGlvbiI6ImZqbmZranZuZGZqa3ZuZmprdm5mamZuZmRrbmRma2pmIn0sInN0YXJ0X3RpbWUiOjEsImVuZF90aW1lIjoyLCJyYW5raW5ncyI6e30sInN1Ym1pc3Npb25zIjp7fSwiX192IjowLCJpYXQiOjE3MzM3ODc0NzQsImV4cCI6MTczMzc5MTA3NH0.29AWeCKwW2jBVxS5lN01Ktr6_bh78jXlBzaNwwvBMAc
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoicGFyIiwiZW1haWwiOiJwYXJ0aCIsIndhbGxldF9pZCI6IlJ2d3hJSjhQWnpkNUFnc2YiLCJyb2xlIjoiQyIsImlkIjoiNjczYjliOWNhM2YxZGE0ZmNiMzFiMzMzIiwiaWF0IjoxNzMzNTk4OTkwfQ.aSohIFSR5Z_8jmtu2ems4h33yLKOHKPaWHSqvuVi6o4
+Content-Type: application/json
+
+
+###
+POST http://localhost:8080/api/community/contest/pay-reward
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiYSIsImVtYWlsIjoiYSIsIndhbGxldF9pZCI6IlhRWFdQdzBHaHN2WnJiUWMiLCJyb2xlIjoiQyIsImlkIjoiNjc1MDU4MzhiYWVmZTBhN2ZmZWYxMWIwIiwiaWF0IjoxNzMzODQ0OTQ5fQ.i9xDN3p41j7fI9uacgYY67GYjQHu06rz8VA_ZAYRKHI
+Content-Type: application/json
+
+{
+ "contest_id":"675860e2b3d6d502c81389d9"
+}
+
+
+
+###
+POST http://localhost:8080/api/community/generate-certificate
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiYSIsImVtYWlsIjoiYSIsIndhbGxldF9pZCI6IlhRWFdQdzBHaHN2WnJiUWMiLCJyb2xlIjoiQyIsImlkIjoiNjc1MDU4MzhiYWVmZTBhN2ZmZWYxMWIwIiwiaWF0IjoxNzMzODQ0OTQ5fQ.i9xDN3p41j7fI9uacgYY67GYjQHu06rz8VA_ZAYRKHI
+Content-Type: application/json
+
+{
+ "contest_id":"675860e2b3d6d502c81389d9"
+}
