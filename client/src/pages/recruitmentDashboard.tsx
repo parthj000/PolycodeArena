@@ -91,17 +91,11 @@ const RecruitmentDashboard: React.FC = () => {
     return (
         <div
             className="min-h-screen p-6 flex items-center justify-center"
-            style={{
-                background: "linear-gradient(to right, #9b5de5, #f15bb5)",
-                color: "#fff",
-            }}
+           
         >
             <div
                 className="container mx-auto rounded-lg shadow-lg p-6"
-                style={{
-                    background: "linear-gradient(to bottom, #111, #222)",
-                    boxShadow: "0 0 10px rgba(0, 255, 255, 0.2)",
-                }}
+               
             >
                 {recruitmentDrive ? (
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -189,18 +183,13 @@ const RecruitmentDashboard: React.FC = () => {
                                         >
                                             <div
                                                 className="w-full py-2 mb-2 text-lg font-semibold rounded-md"
-                                                style={{
-                                                    backgroundColor: "#111",
-                                                }}
+                                               
                                             >
                                                 {key}
                                             </div>
                                             <div
-                                                className="w-full py-2 px-4 rounded-md text-lg"
-                                                style={{
-                                                    backgroundColor: "#333",
-                                                    color: "#fff",
-                                                }}
+                                                className="w-full py-2 px-4 rounded-md text-lg bg-gray-800"
+                                                
                                             >
                                                 {value}
                                             </div>
@@ -210,20 +199,9 @@ const RecruitmentDashboard: React.FC = () => {
                             </div>
                             <button
                                 onClick={redirectToAddParticipants}
-                                className="mt-6 w-full px-6 py-3 rounded-lg font-bold"
-                                style={{
-                                    background: "linear-gradient(to right, #34d399, #059669)",
-                                    color: "#000",
-                                    border: "1px solid rgba(0, 255, 0, 0.4)",
-                                    boxShadow: "0 0 5px rgba(0, 255, 0, 0.4)",
-                                    transition: "all 0.3s ease-in-out",
-                                }}
-                                onMouseOver={(e) =>
-                                    (e.currentTarget.style.background = "linear-gradient(to right, #059669, #34d399)")
-                                }
-                                onMouseOut={(e) =>
-                                    (e.currentTarget.style.background = "linear-gradient(to right, #34d399, #059669)")
-                                }
+                                className="mt-6 w-full px-6 py-3 rounded-lg font-bold bg-purple-800 hover:bg-purple-900"
+                                
+                                
                             >
                                 Add Participant
                             </button>

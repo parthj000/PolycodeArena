@@ -1,12 +1,20 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import Tooltip from "./Tooltip";
 import SidePanel from "./SidePanel";
 import Notification from "./Notification";
+import { decodeToken } from "../ts/utils/decodeToken";
+
 
 const MainHeading = ({ data }: { data?: MainHeadingData }) => {
     const [sidePanelState, setSidePanelState] = useState<boolean>(false);
     const [notifDisplayState, setNotifDisplayState] = useState<boolean>(false);
+    const [userData,setUserData] = useState<any>({});
+
+    useEffect(()=>{
+        const decodeData = decodeToken();
+        setUserData(decodeData);
+    },[])
 
     return (
         <>
@@ -56,16 +64,22 @@ const MainHeading = ({ data }: { data?: MainHeadingData }) => {
                             className="inline-block relative p-[5px] text-[14px] text-[#808080] "
                             onClick={() => setSidePanelState(!sidePanelState)}
                         >
-                            <Tooltip text={data?.username || ""}>
-                                <div className="w-[32px] h-[32px] border border-borders rounded-[99px]"></div>
+                            <Tooltip text={data?.username || "navigation"}>
+                                <div className="w-[32px] h-[32px] border border-borders rounded-full overflow-hidden">
+                                    <img
+                                        src={"/profile.png"}
+                                        alt="Profile"
+                                        className="w-full h-full object-cover"
+                                    />
+                                </div>
                             </Tooltip>
                         </div>
                         <SidePanel
                             displayFn={setSidePanelState}
                             display={sidePanelState}
                             data={{
-                                username: data?.username || "",
-                                role:data?.role
+                                username: userData.name?`Hello, ${userData.name}`:"",
+                                role: userData.role,
                             }}
                         />
                     </div>

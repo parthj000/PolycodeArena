@@ -5,18 +5,37 @@ import { useEffect, useState } from "react";
 import axios, { AxiosError } from "axios";
 import { API_URL } from "../App";
 import Loading from "../components/Loading";
+import { decodeToken } from "../ts/utils/decodeToken";
 
 const LandingPage = () => {
     const [username, setUsername] = useState<string>("");
+    const [loggedIn,setLoggedIn] = useState<boolean>(false);
+
+    useEffect(()=>{
+
+            const token = localStorage.getItem("token");
+            
+            console.log(token);
+            if(token){
+                setLoggedIn(true);
+            }
+    },[])
+
     
     return (
         <div className="text-[14px] overflow-hidden h-screen">
-            <MainHeading
+            {loggedIn?<MainHeading
+                    data={{
+                        username: username,
+                        status: "loggedin",
+                    }}
+                />:<MainHeading
                     data={{
                         username: username,
                         status: "not-loggedin",
                     }}
-                />
+                />}
+            
             <div className="w-[100vw] overflow-hidden h-[calc(100vh-60px)] absolute">
     <div className="circle-1-gamified absolute top-[6%] left-[45%] -translate-x-1/2 w-[500px] h-[500px] rounded-full filter blur-[99px] bg-gradient-to-br from-transparent to-purple-800 opacity-70 z-10 animate-pulse-rotate"></div>
     <div className="absolute circle-2-gamified top-[8%] left-[40%] -translate-x-1/2 w-[550px] h-[550px] rounded-full filter blur-[99px] bg-gradient-to-br from-transparent to-yellow-500 opacity-70 z-10 animate-pulse-move"></div>
@@ -45,7 +64,7 @@ const LandingPage = () => {
                         />
                     </h1>
                     <p className="absolute md:w-1/2 w-3/4 text-center mx-auto mt-[50px] z-50 inset-0 md:top-[300px] top-[400px]">
-                        Ready to conquer the Placement Season!
+                        Ready to change the world with your code.
                     </p>
                     <div className="absolute md:top-[450px] top-[550px] left-1/2 -translate-x-1/2 z-50">
                         <Link

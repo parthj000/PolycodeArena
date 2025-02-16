@@ -86,7 +86,7 @@ const MarketplacePage = () => {
                     {products.map((product) => (
                         <div
                             key={product._id} // Use _id as the unique identifier
-                            className="w-60 p-4 bg-gray-800 text-white rounded-md shadow-md cursor-pointer"
+                            className="w-60 p-4 bg-[radial-gradient(ellipse_at_bottom,#32343756,black)] border-[#91919148] border text-white rounded-md shadow-md cursor-pointer"
                             onClick={() => handleProductClick(product)}
                         >
                             <img

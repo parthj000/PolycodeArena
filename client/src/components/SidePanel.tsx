@@ -1,8 +1,6 @@
 import React, { Dispatch, SetStateAction, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import ConfirmModal from "./ConfirmModal";
-import { TOKEN_STORAGE_KEY, ID_STORAGE_KEY } from "../App";
-import { deleteTokenAndId } from "../ts/utils/utils";
 
 // SidePanelItem component for rendering individual links
 const SidePanelItem = ({
@@ -39,8 +37,15 @@ const SidePanel = ({
     const [logoutState, setLogoutState] = useState<boolean>(false);
 
     const navigate = useNavigate();
-    const onLogout = () => {
-        deleteTokenAndId(TOKEN_STORAGE_KEY, ID_STORAGE_KEY);
+    const onLogout = async() => {
+        
+        const token = await localStorage.getItem("token");
+
+        if(token){
+            await localStorage.removeItem("token");
+        }
+
+
         navigate("/");
         window.location.reload();
     };
@@ -79,9 +84,20 @@ const SidePanel = ({
                 className={`fixed z-[90] ${display ? "translate-x-[-100%]" : "translate-x-[0]"} left-full top-[-1px] rounded-l-lg bg-black h-[calc(100vh+2px)] w-[320px] transition ease-in-out border border-borders border-r-0`}
             >
                 <div className="relative h-[100px]">
-                    <div className="absolute top-[13px] left-[16px] w-[32px] h-[32px] border border-borders rounded-[99px]"></div>
+                    <div className="absolute top-[13px] left-[16px] w-[32px] h-[32px] border border-borders rounded-[99px]">
+
+                    <div className="w-[32px] h-[32px] border border-borders rounded-full overflow-hidden">
+                                    <img
+                                        src={"/profile.png"}
+                                        alt="Profile"
+                                        className="w-full h-full object-cover"
+                                    />
+                                </div>
+
+
+                    </div>
                     <div className="absolute top-[17px] left-[64px] text-[14px]">
-                        {data.username}
+                        {data.username || "Hello friend"}
                     </div>
                     <button
                         onClick={() => displayFn(false)}

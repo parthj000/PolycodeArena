@@ -42,7 +42,7 @@ const ProductShowcase: React.FC<ProductProps> = ({ product, onClose }) => {
     }
     return (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-            <div className="bg-gray-900 text-white p-8 rounded-md w-1/3">
+            <div className="bg-[radial-gradient(ellipse_at_bottom,#32343756,black)] border-[#91919148] border text-white p-8 rounded-md w-1/3">
                 <img
                     src={product.imgUrl}
                     alt={product.name}

@@ -65,10 +65,13 @@ const QuizPageCommunity: React.FC = () => {
             <span className="text-3xl font-semibold text-gray-400">+ Create Quiz</span>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            
             {quizzes.map((quiz, index) => (
+              
+              
               <div
                 key={index}
-                className="border border-gray-700 rounded-lg shadow-md p-4 bg-gray-800 cursor-pointer hover:bg-gray-700"
+                className="border rounded-lg shadow-md p-4 bg-[radial-gradient(circle,#32343756,black)] border-[#91919148] cursor-pointer hover:border-red-300 hover:shadow-lg"
                 onClick={() => setSelectedQuiz(quiz)}
               >
                 <h2 className="text-xl font-semibold">{quiz.meta.quiz_name}</h2>

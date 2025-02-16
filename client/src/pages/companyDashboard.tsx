@@ -140,9 +140,9 @@ const CompanyDashboard = () => {
   };
 
   return (
-    <div className="flex min-h-screen bg-gray-900 text-white">
+    <div className="flex min-h-screen bg-[radial-gradient(ellipse_at_bottom,#32343756,black)] text-white">
       {/* Sidebar */}
-      <aside className="w-64 bg-gray-800 p-4">
+      <aside className="w-64 bg-black border border-r-1 border-l-0 border-t-0 border-b-0 border-[#9a9a9a30] p-4">
         <div className="text-center py-4 text-lg font-bold">MLVTEC</div>
         <ul className="space-y-4">
           <li className="text-orange-400 cursor-pointer" onClick={() => (window.location.href = "/community/dashboard")}>Dashboard</li>
