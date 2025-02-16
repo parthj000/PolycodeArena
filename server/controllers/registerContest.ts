@@ -3,7 +3,7 @@ import { RegisteredModel } from "../models/registered";
 import { CONTEST_SECRET } from "../server";
 import jwt from "jsonwebtoken";
 async function registerContest(req: any, res: any) {
-    // /contest/register/:contest_id
+    
 
     const { contest_id ,invitation_code} = req.body;
 
