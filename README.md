@@ -69,6 +69,44 @@
 
 ---
 
+## 🛠️ Tech Stack
+
+### Frontend
+- **React.js**
+- **Tailwind CSS**
+- **TypeScript**
+
+### Backend
+- **Node.js**
+- **TypeScript**
+- **AWS**
+
+---
+
+## 🚀 How to Run
+
+1. **Clone the repository:**
+   ```bash
+   git clone <repo-url>
+   cd <repo-folder>
+   ```
+
+2. **Start Backend:**
+   ```bash
+   cd backend
+   npm install
+   npm run dev
+   ```
+
+3. **Start Frontend:**
+   ```bash
+   cd frontend
+   npm install
+   npm start
+   ```
+
+---
+
 ## 🚀 Join the Arena
 Be part of the coding revolution where skills meet opportunities — all within **Polycode Arena**!
 
