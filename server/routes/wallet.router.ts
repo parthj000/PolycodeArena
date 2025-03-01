@@ -55,4 +55,17 @@ wallet.get("/:wallet_id",async(req,res)=>{
 
 })
 
+
+// this is being used for the general route babe
+
+
+
+// wallet.get("/:userId",(req,res)=>{
+
+
+
+// })
+
+// wallet.get("/:userId/:contestId",(req,res)=>)
+
 export {wallet}
