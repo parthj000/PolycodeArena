@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom";
 import SkillTags from "./SkillTagsPage";
 import axios from "axios";
 import { API_URL } from "../App";
+import { decodeToken } from "../ts/utils/decodeToken";
 
 // Define types for itemsBought
 interface Item {
@@ -57,25 +58,30 @@ const ProfilePage = () => {
     useEffect(() => {
         const fetchUserAssets = async () => {
             try {
+
+                const user = decodeToken();
+                console.log(user,"this is user");
                 const token = localStorage.getItem("token");
-                const response = await axios.get(`${API_URL}/api/user/assets`, {
+                const response = await fetch(`${API_URL}/api/wallet/user_in/${user.id}`, {
+                    method:"GET",
                     headers: {
                         Authorization: `Bearer ${token}`,
                     },
                 });
 
-                console.log(response.data);
-
-                const data = response.data;
+                
+                const r = await response.json()
+                const data = await r.user;
+                console.log(data);
 
                 // Set profile pic, resume, and certificates
-                setProfilePic(data.profilePic);
-                setResumeUrl(data.resumeUrl);
-                setUsername(data.username);
+                setProfilePic(data.profile_pic);
+                setResumeUrl(data.resume_url);
+                setUsername(data.name);
                 setTag(data.tag);
+                setCertificates(data.badges);
 
-                // If certificates is a single URL string, put it into an array
-                setCertificates([data.certificates]); // Wrap in array for consistency
+                // Wrap in array for consistency
             } catch (error) {
                 console.error("Error fetching user assets:", error);
             }
@@ -160,7 +166,7 @@ const ProfilePage = () => {
                 <div className="w-[calc(100%-72px)] mx-auto mt-8">
                     <div className="h-[auto] bg-black rounded-lg border border-borders">
                         <div className="text-[22px] font-bold mt-[40px] text-white ml-[50px]">
-                            Certificates
+                            Badges
                         </div>
                         <div className="grid grid-cols-4 gap-6 px-6 py-4 sm:grid-cols-2 xs:grid-cols-1">
                             {/* Map certificates from API */}
@@ -194,54 +200,10 @@ const ProfilePage = () => {
                     </div>
                 </div>
 
-                {/* Items Bought Section */}
-                <div className="w-[calc(100%-72px)] mx-auto mt-8 mb-8">
-                    <div className="bg-black rounded-lg border border-borders">
-                        <h2 className="text-2xl font-bold text-white mb-4 px-6 py-4">
-                            Items Bought
-                        </h2>
-                        <div className="bg-black p-6 rounded-lg border border-borders">
-                            {itemsBought.length > 0 ? (
-                                itemsBought.map((item, index) => (
-                                    <div key={index} className="mb-4">
-                                        <div
-                                            className="text-white text-lg cursor-pointer"
-                                            onClick={() => toggleItem(index)}
-                                        >
-                                            {item.name}
-                                        </div>
-                                        {selectedItem === index && (
-                                            <div className="bg-gray-900 p-4 rounded-lg mt-2">
-                                                <p>
-                                                    <strong>Amount:</strong>{" "}
-                                                    {item.amount}
-                                                </p>
-                                                <p>
-                                                    <strong>Date:</strong>{" "}
-                                                    {item.date}
-                                                </p>
-                                                <p>
-                                                    <strong>Invoice:</strong>{" "}
-                                                    <a
-                                                        href={item.image}
-                                                        target="_blank"
-                                                        rel="noopener noreferrer"
-                                                    >
-                                                        View PDF
-                                                    </a>
-                                                </p>
-                                            </div>
-                                        )}
-                                    </div>
-                                ))
-                            ) : (
-                                <p className="text-gray-400">
-                                    No items bought yet.
-                                </p>
-                            )}
-                        </div>
-                    </div>
-                </div>
+
+                
+
+                
             </>
         </div>
     );

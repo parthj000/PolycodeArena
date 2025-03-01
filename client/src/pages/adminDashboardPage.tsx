@@ -126,7 +126,7 @@ const Dashboard: React.FC = () => {
     <div className="relative min-h-screen">
       {/* Background Gradient */}
       <div
-        className="absolute inset-0 bg-gradient-to-r from-blue-500 via-purple-500 to-black"
+        className="absolute inset-0 "
         style={{
           clipPath: "polygon(0 0, 100% 0, 100% 100%, 0% 80%)",
           zIndex: -1,
@@ -173,7 +173,7 @@ const Dashboard: React.FC = () => {
         </div>
 
         {/* User List */}
-        <div className="bg-black text-white p-6 rounded-lg shadow-lg">
+        <div className="bg-[#3d3d3d9f] text-white p-6 rounded-lg shadow-lg">
           <h2 className="text-2xl font-semibold mb-4">Student List</h2>
           <div className="space-y-4">
             {sortedUsers.map((user, index) => (

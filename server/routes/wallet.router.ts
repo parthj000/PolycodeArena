@@ -60,11 +60,29 @@ wallet.get("/:wallet_id",async(req,res)=>{
 
 
 
-// wallet.get("/:userId",(req,res)=>{
+wallet.get("/user_in/:userId",async(req,res)=>{
+
+    console.log(req.params.userId,"kndfjkdnfkjdnfjfnjf");
 
 
+try{
+    const user = await UserModel.findOne({_id:req.params.userId});
+    console.log(user,"this is userrrr");
+    if(!user){
+            return res.status(404).json({message:"User not found!"})
 
-// })
+    }
+    return res.status(200).json({user:user});
+        
+    } catch (error) {
+
+            return res.status(500).json({message:"Something went wrong!"});
+
+        
+    }
+
+
+})
 
 // wallet.get("/:userId/:contestId",(req,res)=>)
 
