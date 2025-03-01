@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { API_URL } from "../App";
+import { notify } from "../ts/utils/toast";
 
 interface TestCase {
   input: string;
@@ -193,13 +194,14 @@ const AdminPage: React.FC = () => {
     console.log(responseData, "this is the response");
 
     if (response.ok) {
-      alert("Contest created successfully!");
+      notify("Contest created succesfully");
     } else {
-      alert("Error creating contest.");
+      notify("Error creating contest !");
+      
     }
   } catch (error) {
     console.error("Error:", error);
-    alert("Error creating contest.");
+    notify("Error creating contest !");
   }
 };
 

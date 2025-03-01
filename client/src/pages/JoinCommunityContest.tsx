@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { API_URL } from "../App";
 import Leaderboard from "../components/LeaderBoard";
+import { notify } from "../ts/utils/toast";
 
 interface Ranking {
     user_id: string;
@@ -84,7 +85,7 @@ const JoinContestCommunity: React.FC = () => {
             const k = await response.json();
             console.log(k);
 
-            alert(k.message);
+            notify(k.message);
         } catch (error) {
             console.error("Network Error:", error);
         }
@@ -111,7 +112,7 @@ const JoinContestCommunity: React.FC = () => {
             const k = await response.json();
             console.log(k);
 
-            alert(k.message);
+            notify(k.message);
         } catch (error) {
             console.error("Network Error:", error);
         }

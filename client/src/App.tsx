@@ -32,6 +32,7 @@ import UserRecruitmentPage from "./pages/userRecruitmentPage";
 import Dashboard from "./pages/adminDashboardPage";
 import UserRecruitmentDashboard from "./pages/userRecruitmentDashboardPage";
 import CompanyDashboard from "./pages/companyDashboard";
+import { Toaster } from "react-hot-toast";
 
 export const TOKEN_STORAGE_KEY = "authToken";
 export const ID_STORAGE_KEY = "id";
@@ -63,6 +64,7 @@ function App() {
 
     return (
         <div className="App">
+            <Toaster />
             <BrowserRouter>
                 <Routes>
                     <Route path="/" element={<LandingPage />} />

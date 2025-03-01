@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { API_URL } from "../App";
 import { useNavigate } from "react-router-dom";
 import CodeBlock from "../components/CodeBlock";
+import { notify } from "../ts/utils/toast";
 
 // Modal Component for Invitation Code
 const Modal: React.FC<{
@@ -13,7 +14,8 @@ const Modal: React.FC<{
 
     const handleSubmit = () => {
         if (invitationCode.trim() === "") {
-            alert("Please enter an invitation code.");
+            
+            notify("Please enter cool invitation code.")
             return;
         }
         onSubmit(invitationCode);
@@ -135,11 +137,11 @@ const ContestPage: React.FC = () => {
             } else {
                 console.error("Registration failed");
             }
-
-            alert(data.message);
+            notify(data.message);
+            
         } catch (error) {
             console.error("Error registering contest:", error);
-            alert("An error occurred. Please try again.");
+            notify("An error occurred. Please try again.");
         }
     };
 

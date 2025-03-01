@@ -1,5 +1,8 @@
-import React from "react";
+import React, { useState } from "react";
 import { API_URL } from "../App";
+import { notify } from "../ts/utils/toast";
+import ConfirmModal from "./ConfirmModal";
+
 
 interface ProductProps {
     product: any;
@@ -7,6 +10,8 @@ interface ProductProps {
 }
 
 const ProductShowcase: React.FC<ProductProps> = ({ product, onClose }) => {
+
+    const [showModal,setShowModal] = useState<boolean>(false);
 
     const buyProduct = async ()=>{
         let b = {
@@ -18,7 +23,7 @@ const ProductShowcase: React.FC<ProductProps> = ({ product, onClose }) => {
         }
         console.log(product);
 
-    alert("Confirm buy ?")
+    
 
         
 
@@ -35,8 +40,9 @@ const ProductShowcase: React.FC<ProductProps> = ({ product, onClose }) => {
 
         const data = await res.json();
         console.log(data);
+        notify(data.message);
+        setShowModal(false);
         onClose();
-        alert(data.message);
 
 
     }
@@ -53,10 +59,18 @@ const ProductShowcase: React.FC<ProductProps> = ({ product, onClose }) => {
                 <p className="mb-4">Price: {product.price}</p>
                 <button
                     className="bg-blue-600 py-2 px-4 rounded-md"
-                    onClick={() => buyProduct()}
+                    onClick={() => setShowModal(true)}
                 >
                     Buy
                 </button>
+                <ConfirmModal
+            display={showModal}
+            displayFn={setShowModal}
+            onOkFn={buyProduct}
+            title="You want to buy this product?"
+            message="Are you sure you want to delete this item?"
+            />
+
                 <button className="ml-4 text-red-500" onClick={onClose}>
                     Close
                 </button>

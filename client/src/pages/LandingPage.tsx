@@ -6,6 +6,7 @@ import axios, { AxiosError } from "axios";
 import { API_URL } from "../App";
 import Loading from "../components/Loading";
 import { decodeToken } from "../ts/utils/decodeToken";
+import { notify } from "../ts/utils/toast";
 
 const LandingPage = () => {
     const [username, setUsername] = useState<string>("");
@@ -14,6 +15,7 @@ const LandingPage = () => {
     useEffect(()=>{
 
             const token = localStorage.getItem("token");
+            
             
             console.log(token);
             if(token){

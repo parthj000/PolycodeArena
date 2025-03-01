@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { API_URL } from "../App";
+import { notify } from "../ts/utils/toast";
 
 interface Product {
     name: string;
@@ -75,13 +76,13 @@ const ListProductPage = () => {
                     image: "",
                     description: "",
                 });
-                alert("Product listed successfully!");
+                notify("Product listed successfully!");
             } else {
-                alert("Error creating product.");
+                notify("Error creating product.");
             }
         } catch (error) {
             console.error("Error:", error);
-            alert("Error creating product.");
+            notify("Error creating product.");
         } finally {
             setIsLoading(false);
         }
