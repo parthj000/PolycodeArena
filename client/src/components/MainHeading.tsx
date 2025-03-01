@@ -5,16 +5,15 @@ import SidePanel from "./SidePanel";
 import Notification from "./Notification";
 import { decodeToken } from "../ts/utils/decodeToken";
 
-
 const MainHeading = ({ data }: { data?: MainHeadingData }) => {
     const [sidePanelState, setSidePanelState] = useState<boolean>(false);
     const [notifDisplayState, setNotifDisplayState] = useState<boolean>(false);
-    const [userData,setUserData] = useState<any>({});
+    const [userData, setUserData] = useState<any>({});
 
-    useEffect(()=>{
+    useEffect(() => {
         const decodeData = decodeToken();
         setUserData(decodeData);
-    },[])
+    }, []);
 
     return (
         <>
@@ -24,7 +23,7 @@ const MainHeading = ({ data }: { data?: MainHeadingData }) => {
                         id="logo-cont"
                         className="inline-block text-[24px] font-bold italic mx-[36px] mt-[12px]"
                     >
-                        <span className="font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-purple-500 to-yellow-600 px-[1px]">
+                        <span className="font-extrabold text-transparent text-orange-200 px-[1px]">
                             PolyCode
                         </span>
                         <span>Arena</span>
@@ -78,7 +77,9 @@ const MainHeading = ({ data }: { data?: MainHeadingData }) => {
                             displayFn={setSidePanelState}
                             display={sidePanelState}
                             data={{
-                                username: userData.name?`Hello, ${userData.name}`:"",
+                                username: userData.name
+                                    ? `Hello, ${userData.name}`
+                                    : "",
                                 role: userData.role,
                             }}
                         />

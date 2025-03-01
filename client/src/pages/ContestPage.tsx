@@ -14,8 +14,7 @@ const Modal: React.FC<{
 
     const handleSubmit = () => {
         if (invitationCode.trim() === "") {
-            
-            notify("Please enter cool invitation code.")
+            notify("Please enter cool invitation code.");
             return;
         }
         onSubmit(invitationCode);
@@ -138,7 +137,6 @@ const ContestPage: React.FC = () => {
                 console.error("Registration failed");
             }
             notify(data.message);
-            
         } catch (error) {
             console.error("Error registering contest:", error);
             notify("An error occurred. Please try again.");
@@ -156,7 +154,7 @@ const ContestPage: React.FC = () => {
                         {contests.map((contest, index) => (
                             <div
                                 key={index}
-                                className="border border-gray-700 rounded-lg shadow-md p-4 bg-gray-800 cursor-pointer hover:bg-gray-700"
+                                className="bg-[radial-gradient(circle,#32343756,black)] border-[#91919148] border p-4 rounded-lg mb-4 shadow-lg"
                                 onClick={() => setSelectedContest(contest)} // Set selected contest
                             >
                                 <h2 className="text-xl font-semibold">

@@ -21,16 +21,11 @@ const WalletPage = () => {
         setWalletId(k.wallet_id);
 
         const fetchWallet = async () => {
-            const res = await fetch(
-                `${API_URL}/api/wallet/${k.wallet_id}`,
-                {
-                    headers: {
-                        Authorization: `Bearer ${localStorage.getItem(
-                            "token"
-                        )}`,
-                    },
-                }
-            );
+            const res = await fetch(`${API_URL}/api/wallet/${k.wallet_id}`, {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem("token")}`,
+                },
+            });
             const data = await res.json();
             const mainJson = data.data;
             if (!mainJson) {
@@ -81,12 +76,11 @@ const WalletPage = () => {
                     {/* Pay Button */}
                     <button
                         onClick={() => setModalOpen(true)}
-                        style={styles.payButton}
+                        // style={styles.payButton}
+                        className="mt-4 py-2 px-4 rounded-md text-2xl transition-transform duration-300 bg-[#64666b56] hover:scale-95"
                     >
                         Pay
                     </button>
-
-                    
 
                     {/* Bottom Section: Transactions */}
                     <div style={styles.transactionsSection}>
@@ -96,7 +90,7 @@ const WalletPage = () => {
                                 data.transactions.map((tx, index) => (
                                     <div
                                         key={index}
-                                        style={styles.transactionBlock}
+                                        className="bg-[radial-gradient(circle,#32343756,black)] border-[#91919148] border p-4 rounded-lg mb-4 shadow-lg"
                                     >
                                         <p>
                                             <strong>Head:</strong> {tx.head}
@@ -118,7 +112,7 @@ const WalletPage = () => {
             {/* Modal */}
             {isModalOpen && (
                 <div style={styles.overlay}>
-                    <div style={styles.modal}>
+                    <div className="bg-[radial-gradient(circle,#32343756,black)] border-[#91919148] border p-10 rounded-lg mb-4 shadow-lg ">
                         <h3 style={styles.modalHeading}>Enter Wallet ID</h3>
                         <input
                             type="text"
@@ -132,19 +126,13 @@ const WalletPage = () => {
                         <div style={styles.modalButtons}>
                             <button
                                 onClick={handlePay}
-                                style={{
-                                    ...styles.button,
-                                    ...styles.confirmButton,
-                                }}
+                                className="py-2 px-4 rounded-md text-xl transition-transform duration-300 bg-[#64666b56] hover:scale-95"
                             >
                                 Pay
                             </button>
                             <button
                                 onClick={() => setModalOpen(false)}
-                                style={{
-                                    ...styles.button,
-                                    ...styles.cancelButton,
-                                }}
+                                className="py-2 px-4 rounded-md text-red-800 text-xl transition-transform duration-300 bg-[#64666b56] hover:scale-95"
                             >
                                 Cancel
                             </button>
@@ -197,7 +185,7 @@ const styles = {
         color: "white",
         border: "dashed",
         borderRadius: "6px",
-        borderWidth:"0.5px",
+        borderWidth: "0.5px",
         fontSize: "32px",
         cursor: "pointer",
         marginTop: "20px",
@@ -213,12 +201,6 @@ const styles = {
         display: "flex",
         flexDirection: "column",
         gap: "10px",
-    },
-    transactionBlock: {
-        backgroundColor: "#222",
-        padding: "10px",
-        borderRadius: "5px",
-        boxShadow: "0 2px 4px rgba(0, 0, 0, 0.5)",
     },
     overlay: {
         position: "fixed",
