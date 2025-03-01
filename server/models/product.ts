@@ -19,6 +19,7 @@ const productSchema = new Schema({
         type: String,
         required: true,
     },
+    assetType:String,
 });
 
 // Define the Product interface extending Document
@@ -27,6 +28,7 @@ interface IProduct extends Document {
     price: number;
     imgUrl: string;
     description: string;
+    assetType:string;
 }
 
 // Create the Product model

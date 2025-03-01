@@ -14,14 +14,16 @@ const ProductShowcase: React.FC<ProductProps> = ({ product, onClose }) => {
     const [showModal,setShowModal] = useState<boolean>(false);
 
     const buyProduct = async ()=>{
+
         let b = {
             id:product._id,
             name:product.storeName,
             url:product.imgUrl,
-            price:product.price
+            price:product.price,
+            assetType:product.assetType
 
         }
-        console.log(product);
+        
 
     
 

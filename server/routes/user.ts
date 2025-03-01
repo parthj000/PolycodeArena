@@ -21,6 +21,7 @@ import { joinPrivateContest } from "../controllers/joinPrivateContest";
 import { RecruitmentDriveModel } from "../models/recruitmentDrive";
 import { specialTransactions, transaction } from "../controllers/transaction";
 import { sendMailBuyTicket } from "../controllers/mailerCert";
+import { createBadge } from "../utils/createBadge";
 
 require("dotenv");
 
@@ -34,7 +35,7 @@ user.post("/signup", async (req, res) => {
 user.get("/product/list", getProducts);
 
 user.post("/buy",async (req:any,res:any)=>{
-    const {id,name,url,price} = req.body;
+    const {id,name,url,price,assetType} = req.body;
 
     const ticketmessage = `You have purchased this ${id},
     user_id:${req.decoded.id},
@@ -44,12 +45,20 @@ user.post("/buy",async (req:any,res:any)=>{
     
     `
 
+    console.log(req.body);
+
 
     try {
         await specialTransactions("U",req.decoded.wallet_id,Number(price),req,res);
     await sendMailBuyTicket(req.decoded.email,req.decoded.name,ticketmessage,generateRandomString(10),url);
-            return res.status(200).json({message:"Product purchase complete."})
+    if(assetType==="software"){
+                await createBadge(req,res);
 
+
+            }
+            return res.status(200).json({message:"Product purchase complete."})
+            
+            
         
     } catch (error) {
         return res.status(500).json({message:"Something went wrong."})

@@ -7,6 +7,7 @@ interface Product {
     price: number;
     image: string;
     description: string;
+    assetType: string;
 }
 
 const ListProductPage = () => {
@@ -15,170 +16,137 @@ const ListProductPage = () => {
         price: 0,
         image: "",
         description: "",
+        assetType: "physical",
     });
-    const [submittedProduct, setSubmittedProduct] = useState<Product | null>(
-        null
-    );
+    const [submittedProduct, setSubmittedProduct] = useState<Product | null>(null);
     const [isLoading, setIsLoading] = useState(false);
     const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
-    // Handle input changes
-    const handleChange = (
-        e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-    ) => {
-        setProductDetails({
-            ...productDetails,
-            [e.target.name]: e.target.value,
-        });
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+        setProductDetails({ ...productDetails, [e.target.name]: e.target.value });
     };
 
-    // Handle product submission using fetch
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-
-        // Start loading state and reset error message
         setIsLoading(true);
         setErrorMessage(null);
 
-        const payload = [
-            {
-                storeName: productDetails.name,
-                price: productDetails.price,
-                imgUrl: productDetails.image,
-                description: productDetails.description,
-            },
-        ];
+        const payload = [{
+            storeName: productDetails.name,
+            price: productDetails.price,
+            imgUrl: productDetails.image,
+            description: productDetails.description,
+            assetType: productDetails.assetType,
+        }];
 
         try {
-            const response = await fetch(
-                `${API_URL}/api/community/product/list`,
-                {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
-                        authorization: `BEARER ${localStorage.getItem(
-                            "token"
-                        )}`,
-                    },
-                    body: JSON.stringify(payload),
-                }
-            );
+            const response = await fetch(`${API_URL}/api/community/product/list`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    authorization: `BEARER ${localStorage.getItem("token")}`,
+                },
+                body: JSON.stringify(payload),
+            });
 
             const data = await response.json();
-            console.log(data, "this is the response");
 
             if (response.ok) {
-                // Assuming the backend returns the product data
                 setSubmittedProduct(data.data);
-                setProductDetails({
-                    name: "",
-                    price: 0,
-                    image: "",
-                    description: "",
-                });
+                setProductDetails({ name: "", price: 0, image: "", description: "", assetType: "physical" });
                 notify("Product listed successfully!");
             } else {
                 notify("Error creating product.");
+                setErrorMessage(data.message || "Failed to list product.");
             }
         } catch (error) {
-            console.error("Error:", error);
             notify("Error creating product.");
+            setErrorMessage("An unexpected error occurred.");
         } finally {
             setIsLoading(false);
         }
     };
 
     return (
-        <div className="min-h-screen bg-black text-white">
-            <div className="container mx-auto py-8 flex justify-center">
-                <div className="w-full max-w-lg p-6 border-4 border-neon-blue rounded-lg space-y-4 text-center">
-                    <h2 className="text-2xl font-bold mb-4 text-purple-400">
-                        List a New Product
-                    </h2>
-
-                    <form onSubmit={handleSubmit} className="space-y-4">
-                        <div>
-                            <label className="block mb-2 text-purple-400">
-                                Product Name
-                            </label>
-                            <input
-                                type="text"
-                                name="name"
-                                value={productDetails.name}
-                                onChange={handleChange}
-                                className="w-full p-2 border border-gray-300 rounded-lg bg-black text-white"
-                                required
-                            />
-                        </div>
-                        <div>
-                            <label className="block mb-2 text-purple-400">
-                                Price (in credits)
-                            </label>
-                            <input
-                                type="number"
-                                name="price"
-                                value={productDetails.price}
-                                onChange={handleChange}
-                                className="w-full p-2 border border-gray-300 rounded-lg bg-black text-white"
-                                required
-                            />
-                        </div>
-                        <div>
-                            <label className="block mb-2 text-purple-400">
-                                Product Image URL
-                            </label>
-                            <input
-                                type="text"
-                                name="image"
-                                value={productDetails.image}
-                                onChange={handleChange}
-                                className="w-full p-2 border border-gray-300 rounded-lg bg-black text-white"
-                            />
-                        </div>
-                        <div>
-                            <label className="block mb-2 text-purple-400">
-                                Description
-                            </label>
-                            <textarea
-                                name="description"
-                                value={productDetails.description}
-                                onChange={handleChange}
-                                className="w-full p-2 border border-gray-300 rounded-lg bg-black text-white"
-                            ></textarea>
-                        </div>
-                        <button
-                            type="submit"
-                            className="bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600"
-                            disabled={isLoading}
+        <div className="min-h-screen bg-gradient-to-b from-black to-gray-900 text-white flex items-center justify-center">
+            <div className="w-full max-w-2xl p-8 rounded-lg shadow-xl bg-black border border-neon-blue">
+                <h2 className="text-3xl font-bold text-center text-purple-400 mb-6">List a New Product</h2>
+                <form onSubmit={handleSubmit} className="space-y-6">
+                    <div>
+                        <label className="block text-purple-400 mb-2">Product Name</label>
+                        <input
+                            type="text"
+                            name="name"
+                            value={productDetails.name}
+                            onChange={handleChange}
+                            className="w-full p-3 rounded-lg bg-gray-800 text-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-purple-400"
+                            required
+                        />
+                    </div>
+                    <div>
+                        <label className="block text-purple-400 mb-2">Price (in credits)</label>
+                        <input
+                            type="number"
+                            name="price"
+                            value={productDetails.price}
+                            onChange={handleChange}
+                            className="w-full p-3 rounded-lg bg-gray-800 text-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-purple-400"
+                            required
+                        />
+                    </div>
+                    <div>
+                        <label className="block text-purple-400 mb-2">Product Image URL</label>
+                        <input
+                            type="text"
+                            name="image"
+                            value={productDetails.image}
+                            onChange={handleChange}
+                            className="w-full p-3 rounded-lg bg-gray-800 text-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-purple-400"
+                        />
+                    </div>
+                    <div>
+                        <label className="block text-purple-400 mb-2">Description</label>
+                        <textarea
+                            name="description"
+                            value={productDetails.description}
+                            onChange={handleChange}
+                            className="w-full p-3 rounded-lg bg-gray-800 text-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-purple-400"
+                            rows={4}
+                        ></textarea>
+                    </div>
+                    <div>
+                        <label className="block text-purple-400 mb-2">Asset Type</label>
+                        <select
+                            name="assetType"
+                            value={productDetails.assetType}
+                            onChange={handleChange}
+                            className="w-full p-3 rounded-lg bg-gray-800 text-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-purple-400"
                         >
-                            {isLoading ? "Listing Product..." : "List Product"}
-                        </button>
-                    </form>
+                            <option value="physical">Physical</option>
+                            <option value="software">Software</option>
+                        </select>
+                    </div>
+                    <button
+                        type="submit"
+                        className={`w-full py-3 rounded-lg text-white ${isLoading ? "bg-purple-600" : "bg-purple-500 hover:bg-purple-600"} transition duration-300`}
+                        disabled={isLoading}
+                    >
+                        {isLoading ? "Listing Product..." : "List Product"}
+                    </button>
+                </form>
 
-                    {submittedProduct && (
-                        <div className="mt-8 border-4 border-neon-blue rounded-lg p-4">
-                            <h3 className="text-xl font-bold text-purple-400">
-                                Submitted Product:
-                            </h3>
-                            <img
-                                src={submittedProduct.image}
-                                alt={submittedProduct.name}
-                                className="w-15 h-48 object-cover mb-4 mx-auto"
-                            />
-                            <h4 className="text-lg font-bold">
-                                {submittedProduct.name}
-                            </h4>
-                            <p>Price: {submittedProduct.price} credits</p>
-                            <p>{submittedProduct.description}</p>
-                        </div>
-                    )}
+                {submittedProduct && (
+                    <div className="mt-8 p-6 bg-gray-800 rounded-lg border border-neon-blue text-center">
+                        <h3 className="text-xl font-bold text-purple-400 mb-4">Submitted Product:</h3>
+                        <img src={submittedProduct.image} alt={submittedProduct.name} className="w-48 h-48 object-cover mx-auto rounded-lg shadow-md mb-4" />
+                        <h4 className="text-lg font-bold">{submittedProduct.name}</h4>
+                        <p className="text-gray-400">Price: {submittedProduct.price} credits</p>
+                        <p className="text-gray-400">Type: {submittedProduct.assetType}</p>
+                        <p className="text-gray-400 mt-2">{submittedProduct.description}</p>
+                    </div>
+                )}
 
-                    {errorMessage && (
-                        <div className="mt-4 text-red-500">
-                            <p>{errorMessage}</p>
-                        </div>
-                    )}
-                </div>
+                {errorMessage && <p className="mt-4 text-red-500 text-center">{errorMessage}</p>}
             </div>
         </div>
     );

@@ -19,8 +19,10 @@ export const addProducts = async (
         return;
     }
 
+
+    console.log(req.body);
     // Define required fields for each product
-    const requiredFields = ["storeName", "price", "imgUrl", "description"];
+    const requiredFields = ["storeName", "price", "imgUrl", "description","assetType"];
 
     // Validate that all required fields are present for each product
     for (const product of products) {
@@ -29,7 +31,7 @@ export const addProducts = async (
                 res.status(400).json({
                     success: false,
                     message:
-                        "All fields (storeName, price, imgUrl, description) are required.",
+                        "All fields (storeName, price, imgUrl, description,assetType) are required.",
                 });
                 return;
             }

@@ -43,8 +43,9 @@ const userSchema = new mongoose.Schema<DUser>({
         required: false,
     },
     badges: {
-        type: String, // Array of binary data for storing images
+        type: [String], // Array of binary data for storing images
         required: false,
+        default:[],
     },
     profile_pic: {
         type: String, // Array of binary data for storing images
