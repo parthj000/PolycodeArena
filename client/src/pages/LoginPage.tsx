@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { motion, AnimatePresence } from "framer-motion";
 import Loading from "../components/Loading";
 
 const LoginPage = () => {
@@ -69,87 +70,162 @@ const LoginPage = () => {
     };
 
     return (
-        <>
+        <div className="min-h-screen bg-[#111111] p-4 sm:p-6 md:p-8 font-['Inter'] relative overflow-hidden">
+            {/* Animated background elements */}
+            <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 0.1 }}
+                transition={{ duration: 2, repeat: Infinity, repeatType: "reverse" }}
+                className="absolute inset-0 bg-gradient-to-br from-purple-900/20 to-transparent"
+            />
+            <motion.div
+                initial={{ opacity: 0, scale: 0.8 }}
+                animate={{ opacity: 0.05, scale: 1 }}
+                transition={{ duration: 3, repeat: Infinity, repeatType: "reverse" }}
+                className="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-purple-500/10 via-transparent to-transparent"
+            />
+
             <Link to={"/"}>
-                <div
-                    id="logo-cont"
-                    className="inline-block relative text-[24px] left-1/2 -translate-x-1/2 font-bold italic mx-auto mt-[12px]"
+                <motion.div
+                    initial={{ opacity: 0, y: -20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.6, ease: "easeOut" }}
+                    className="text-center mb-8 relative z-10"
                 >
-                    <span className="font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-purple-500 to-orange-600 px-[1px]">
-                        Polycode
-                    </span>
-                    <span>Arena</span>
-                </div>
+                    <motion.h1
+                        initial={{ backgroundPosition: "200% 0" }}
+                        animate={{ backgroundPosition: "0% 0" }}
+                        transition={{ duration: 1.5, ease: "easeInOut" }}
+                        className="text-4xl font-bold bg-gradient-to-r from-purple-500 via-purple-300 to-purple-500 bg-clip-text text-transparent bg-[length:200%_auto]"
+                    >
+                        PolyCode Arena
+                    </motion.h1>
+                </motion.div>
             </Link>
-            <div className="min-h-fit w-[300px] mx-auto text-[14px]">
-                <div className="relative bg-black shadow-md rounded px-8 pt-6 pb-8 mb-4">
-                    <h2 className="text-[34px] font-bold mb-[30px] text-center mt-[60px]">
-                        Log In
-                    </h2>
-                    <div className="mb-4">
-                        <input
-                            className="appearance-none border w-full py-2 px-3 placeholder:text-text_2 focus:placeholder:text-orange-500 bg-black rounded border-borders leading-tight focus:outline-none focus:border-orange-500"
-                            type="text"
-                            placeholder="Username or Email"
-                            value={usernameOrEmail}
-                            onChange={(e) => setUsernameOrEmail(e.target.value)}
-                            required
-                        />
-                    </div>
-                    <div className="mb-4">
-                        <input
-                            className="appearance-none border w-full py-2 px-3 placeholder:text-text_2 focus:placeholder:text-orange-500 bg-black rounded border-borders leading-tight focus:outline-none focus:border-orange-500"
-                            type="password"
-                            placeholder="Password"
-                            value={password}
-                            onChange={(e) => setPassword(e.target.value)}
-                            required
-                        />
-                    </div>
-                    <div className="mb-6">
-                        <select
-                            className="appearance-none border w-full py-2 px-3 text-text_2 bg-black rounded border-borders focus:outline-none focus:border-orange-500"
-                            value={role}
-                            onChange={(e) => setRole(e.target.value)}
+
+            <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 0.2 }}
+                className="max-w-md mx-auto relative z-10"
+            >
+                <motion.div
+                    whileHover={{ boxShadow: "0 8px 40px rgba(147, 51, 234, 0.1)" }}
+                    className="bg-gradient-to-r from-[#ffffff0a] to-[#ffffff05] backdrop-blur-xl border border-[#ffffff20] rounded-xl p-8 shadow-[0_8px_30px_rgb(0,0,0,0.12)]"
+                >
+                    <motion.h2
+                        initial={{ opacity: 0, y: -10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.4, delay: 0.3 }}
+                        className="text-3xl font-bold bg-gradient-to-r from-purple-400 to-purple-200 bg-clip-text text-transparent text-center mb-8"
+                    >
+                        Login
+                    </motion.h2>
+
+                    <div className="space-y-6">
+                        <motion.div
+                            initial={{ opacity: 0, x: -20 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            transition={{ duration: 0.4, delay: 0.4 }}
                         >
-                            <option value="C">Admin</option>
-                            <option value="U">Participant</option>
-                        </select>
-                    </div>
-                    <div className="flex items-center justify-between">
-                        <button
-                            className="bg-orange-500 hover:bg-red-600 text-black font-bold py-[6px] px-4 rounded focus:outline-none focus:shadow-outline w-full transition"
-                            type="button"
+                            <input
+                                type="text"
+                                placeholder="Username or Email"
+                                value={usernameOrEmail}
+                                onChange={(e) => setUsernameOrEmail(e.target.value)}
+                                className="w-full bg-[#ffffff0a] border border-[#ffffff20] rounded-xl p-3 text-white placeholder-gray-400 focus:outline-none focus:border-purple-500/50 focus:bg-[#ffffff15] transition-all duration-300"
+                            />
+                        </motion.div>
+
+                        <motion.div
+                            initial={{ opacity: 0, x: -20 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            transition={{ duration: 0.4, delay: 0.5 }}
+                        >
+                            <input
+                                type="password"
+                                placeholder="Password"
+                                value={password}
+                                onChange={(e) => setPassword(e.target.value)}
+                                className="w-full bg-[#ffffff0a] border border-[#ffffff20] rounded-xl p-3 text-white placeholder-gray-400 focus:outline-none focus:border-purple-500/50 focus:bg-[#ffffff15] transition-all duration-300"
+                            />
+                        </motion.div>
+
+                        <motion.div
+                            initial={{ opacity: 0, x: -20 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            transition={{ duration: 0.4, delay: 0.6 }}
+                        >
+                            <select
+                                value={role}
+                                onChange={(e) => setRole(e.target.value)}
+                                className="w-full bg-[#ffffff0a] border border-[#ffffff20] rounded-xl p-3 text-white focus:outline-none focus:border-purple-500/50 focus:bg-[#ffffff15] transition-all duration-300"
+                            >
+                                <option value="C" className="bg-[#111111]">Admin</option>
+                                <option value="U" className="bg-[#111111]">Participant</option>
+                            </select>
+                        </motion.div>
+
+                        <motion.button
+                            whileHover={{ scale: 1.02, boxShadow: "0 5px 20px rgba(147, 51, 234, 0.3)" }}
+                            whileTap={{ scale: 0.98 }}
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            transition={{ duration: 0.4, delay: 0.7 }}
                             onClick={handleLogin}
+                            disabled={isLoading}
+                            className="w-full py-3 bg-gradient-to-r from-purple-600 to-purple-400 text-white font-medium rounded-xl hover:shadow-lg transition-all duration-300 relative overflow-hidden group"
                         >
+                            <motion.div
+                                initial={false}
+                                animate={{ x: "100%" }}
+                                transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+                                className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -skew-x-12 group-hover:opacity-100 opacity-0"
+                            />
                             {isLoading ? (
-                                <div className="w-full block h-[21px]">
-                                    <div className="absolute left-1/2 -translate-x-1/2">
-                                        <Loading />
-                                    </div>
+                                <div className="flex justify-center items-center">
+                                    <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-white"></div>
                                 </div>
                             ) : (
                                 "Login"
                             )}
-                        </button>
+                        </motion.button>
+
+                        <AnimatePresence mode="wait">
+                            {message && (
+                                <motion.div
+                                    initial={{ opacity: 0, y: -10 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    exit={{ opacity: 0, y: -10 }}
+                                    className={`text-center text-sm ${
+                                        message.includes("successful")
+                                            ? "text-green-400"
+                                            : "text-red-400"
+                                    }`}
+                                >
+                                    {message}
+                                </motion.div>
+                            )}
+                        </AnimatePresence>
                     </div>
-                    <div className="flex items-center justify-between mt-[20px]">
-                        <span className="text-text_2">
-                            Don't have an account?{" "}
-                        </span>
-                        <Link
-                            to="/signup"
-                            className="text-orange-500 hover:text-red-600"
-                        >
-                            Signup
-                        </Link>
-                    </div>
-                    <div className="text-center mt-[20px] text-red-600 w-full overflow-hidden">
-                        {message}
-                    </div>
-                </div>
-            </div>
-        </>
+                </motion.div>
+
+                <motion.div
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ duration: 0.4, delay: 0.8 }}
+                    className="text-center mt-6"
+                >
+                    <span className="text-gray-400">Don't have an account? </span>
+                    <Link
+                        to="/signup"
+                        className="text-purple-400 hover:text-purple-300 font-medium transition-colors duration-300"
+                    >
+                        Sign up
+                    </Link>
+                </motion.div>
+            </motion.div>
+        </div>
     );
 };
 

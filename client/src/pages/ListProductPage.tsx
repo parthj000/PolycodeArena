@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { API_URL } from "../App";
+import { motion, AnimatePresence } from "framer-motion";
 
 interface Product {
     name: string;
@@ -15,59 +16,44 @@ const ListProductPage = () => {
         image: "",
         description: "",
     });
-    const [submittedProduct, setSubmittedProduct] = useState<Product | null>(
-        null
-    );
+    const [submittedProduct, setSubmittedProduct] = useState<Product | null>(null);
     const [isLoading, setIsLoading] = useState(false);
     const [errorMessage, setErrorMessage] = useState<string | null>(null);
+    const [successMessage, setSuccessMessage] = useState<string | null>(null);
 
-    // Handle input changes
-    const handleChange = (
-        e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-    ) => {
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         setProductDetails({
             ...productDetails,
             [e.target.name]: e.target.value,
         });
     };
 
-    // Handle product submission using fetch
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-
-        // Start loading state and reset error message
         setIsLoading(true);
         setErrorMessage(null);
+        setSuccessMessage(null);
 
-        const payload = [
-            {
-                storeName: productDetails.name,
-                price: productDetails.price,
-                imgUrl: productDetails.image,
-                description: productDetails.description,
-            },
-        ];
+        const payload = [{
+            storeName: productDetails.name,
+            price: productDetails.price,
+            imgUrl: productDetails.image,
+            description: productDetails.description,
+        }];
 
         try {
-            const response = await fetch(
-                `${API_URL}/api/community/product/list`,
-                {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
-                        authorization: `BEARER ${localStorage.getItem(
-                            "token"
-                        )}`,
-                    },
-                    body: JSON.stringify(payload),
-                }
-            );
+            const response = await fetch(`${API_URL}/api/community/product/list`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    authorization: `BEARER ${localStorage.getItem("token")}`,
+                },
+                body: JSON.stringify(payload),
+            });
 
             const data = await response.json();
-            console.log(data, "this is the response");
 
             if (response.ok) {
-                // Assuming the backend returns the product data
                 setSubmittedProduct(data.data);
                 setProductDetails({
                     name: "",
@@ -75,110 +61,181 @@ const ListProductPage = () => {
                     image: "",
                     description: "",
                 });
-                alert("Product listed successfully!");
+                setSuccessMessage("Product listed successfully!");
             } else {
-                alert("Error creating product.");
+                setErrorMessage(data.message || "Error creating product.");
             }
         } catch (error) {
             console.error("Error:", error);
-            alert("Error creating product.");
+            setErrorMessage("Failed to create product. Please try again.");
         } finally {
             setIsLoading(false);
         }
     };
 
     return (
-        <div className="min-h-screen bg-black text-white">
-            <div className="container mx-auto py-8 flex justify-center">
-                <div className="w-full max-w-lg p-6 border-4 border-neon-blue rounded-lg space-y-4 text-center">
-                    <h2 className="text-2xl font-bold mb-4 text-purple-400">
+        <div className="min-h-screen bg-gradient-to-br from-[#0f1535] to-[#111c44] p-8 font-['Inter']">
+            <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="max-w-4xl mx-auto"
+            >
+                <div className="text-center mb-12">
+                    <motion.h1
+                        initial={{ opacity: 0, y: -20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        className="text-4xl font-bold bg-gradient-to-r from-[#0075ff] to-[#00a3ff] bg-clip-text text-transparent"
+                    >
                         List a New Product
-                    </h2>
+                    </motion.h1>
+                    <p className="text-gray-400 mt-2">Create and list your product in the marketplace</p>
+                </div>
 
-                    <form onSubmit={handleSubmit} className="space-y-4">
+                <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="bg-[#ffffff10] backdrop-blur-xl border border-[#ffffff20] rounded-xl p-8"
+                >
+                    <form onSubmit={handleSubmit} className="space-y-6">
                         <div>
-                            <label className="block mb-2 text-purple-400">
+                            <label className="block text-white font-medium mb-2">
                                 Product Name
                             </label>
-                            <input
+                            <motion.input
+                                whileFocus={{ scale: 1.01 }}
                                 type="text"
                                 name="name"
                                 value={productDetails.name}
                                 onChange={handleChange}
-                                className="w-full p-2 border border-gray-300 rounded-lg bg-black text-white"
+                                className="w-full px-4 py-3 bg-[#ffffff10] border border-[#ffffff20] rounded-xl text-white placeholder-gray-400 focus:outline-none focus:border-[#0075ff] transition-all duration-300"
+                                placeholder="Enter product name"
                                 required
                             />
                         </div>
+
                         <div>
-                            <label className="block mb-2 text-purple-400">
+                            <label className="block text-white font-medium mb-2">
                                 Price (in credits)
                             </label>
-                            <input
+                            <motion.input
+                                whileFocus={{ scale: 1.01 }}
                                 type="number"
                                 name="price"
                                 value={productDetails.price}
                                 onChange={handleChange}
-                                className="w-full p-2 border border-gray-300 rounded-lg bg-black text-white"
+                                className="w-full px-4 py-3 bg-[#ffffff10] border border-[#ffffff20] rounded-xl text-white placeholder-gray-400 focus:outline-none focus:border-[#0075ff] transition-all duration-300"
+                                placeholder="Enter price"
                                 required
                             />
                         </div>
+
                         <div>
-                            <label className="block mb-2 text-purple-400">
+                            <label className="block text-white font-medium mb-2">
                                 Product Image URL
                             </label>
-                            <input
+                            <motion.input
+                                whileFocus={{ scale: 1.01 }}
                                 type="text"
                                 name="image"
                                 value={productDetails.image}
                                 onChange={handleChange}
-                                className="w-full p-2 border border-gray-300 rounded-lg bg-black text-white"
+                                className="w-full px-4 py-3 bg-[#ffffff10] border border-[#ffffff20] rounded-xl text-white placeholder-gray-400 focus:outline-none focus:border-[#0075ff] transition-all duration-300"
+                                placeholder="Enter image URL"
                             />
                         </div>
+
                         <div>
-                            <label className="block mb-2 text-purple-400">
+                            <label className="block text-white font-medium mb-2">
                                 Description
                             </label>
-                            <textarea
+                            <motion.textarea
+                                whileFocus={{ scale: 1.01 }}
                                 name="description"
                                 value={productDetails.description}
                                 onChange={handleChange}
-                                className="w-full p-2 border border-gray-300 rounded-lg bg-black text-white"
-                            ></textarea>
+                                className="w-full px-4 py-3 bg-[#ffffff10] border border-[#ffffff20] rounded-xl text-white placeholder-gray-400 focus:outline-none focus:border-[#0075ff] transition-all duration-300 min-h-[120px]"
+                                placeholder="Enter product description"
+                            />
                         </div>
-                        <button
+
+                        <motion.button
+                            whileHover={{ scale: 1.02 }}
+                            whileTap={{ scale: 0.98 }}
                             type="submit"
-                            className="bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600"
                             disabled={isLoading}
+                            className="w-full px-6 py-3 bg-gradient-to-r from-[#0075ff] to-[#00a3ff] rounded-xl text-white font-medium hover:shadow-lg transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
                         >
-                            {isLoading ? "Listing Product..." : "List Product"}
-                        </button>
+                            {isLoading ? (
+                                <div className="flex items-center justify-center">
+                                    <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-white"></div>
+                                </div>
+                            ) : (
+                                "List Product"
+                            )}
+                        </motion.button>
                     </form>
 
-                    {submittedProduct && (
-                        <div className="mt-8 border-4 border-neon-blue rounded-lg p-4">
-                            <h3 className="text-xl font-bold text-purple-400">
-                                Submitted Product:
-                            </h3>
-                            <img
-                                src={submittedProduct.image}
-                                alt={submittedProduct.name}
-                                className="w-15 h-48 object-cover mb-4 mx-auto"
-                            />
-                            <h4 className="text-lg font-bold">
-                                {submittedProduct.name}
-                            </h4>
-                            <p>Price: {submittedProduct.price} credits</p>
-                            <p>{submittedProduct.description}</p>
-                        </div>
-                    )}
+                    <AnimatePresence>
+                        {successMessage && (
+                            <motion.div
+                                initial={{ opacity: 0, y: 10 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                exit={{ opacity: 0, y: -10 }}
+                                className="mt-6 p-4 bg-green-500/20 border border-green-500/50 rounded-xl text-green-400 text-center"
+                            >
+                                {successMessage}
+                            </motion.div>
+                        )}
 
-                    {errorMessage && (
-                        <div className="mt-4 text-red-500">
-                            <p>{errorMessage}</p>
-                        </div>
-                    )}
-                </div>
-            </div>
+                        {errorMessage && (
+                            <motion.div
+                                initial={{ opacity: 0, y: 10 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                exit={{ opacity: 0, y: -10 }}
+                                className="mt-6 p-4 bg-red-500/20 border border-red-500/50 rounded-xl text-red-400 text-center"
+                            >
+                                {errorMessage}
+                            </motion.div>
+                        )}
+                    </AnimatePresence>
+
+                    <AnimatePresence>
+                        {submittedProduct && (
+                            <motion.div
+                                initial={{ opacity: 0, height: 0 }}
+                                animate={{ opacity: 1, height: "auto" }}
+                                exit={{ opacity: 0, height: 0 }}
+                                className="mt-8 bg-[#ffffff10] backdrop-blur-xl border border-[#ffffff20] rounded-xl p-6"
+                            >
+                                <h3 className="text-xl font-bold text-white mb-4">Product Preview</h3>
+                                <div className="flex flex-col md:flex-row gap-6">
+                                    <motion.div
+                                        whileHover={{ scale: 1.05 }}
+                                        className="w-full md:w-1/3 aspect-square rounded-xl overflow-hidden border border-[#ffffff20]"
+                                    >
+                                        <img
+                                            src={submittedProduct.image}
+                                            alt={submittedProduct.name}
+                                            className="w-full h-full object-cover"
+                                        />
+                                    </motion.div>
+                                    <div className="flex-1 space-y-4">
+                                        <h4 className="text-xl font-bold bg-gradient-to-r from-[#0075ff] to-[#00a3ff] bg-clip-text text-transparent">
+                                            {submittedProduct.name}
+                                        </h4>
+                                        <p className="text-white font-medium">
+                                            {submittedProduct.price} credits
+                                        </p>
+                                        <p className="text-gray-400">
+                                            {submittedProduct.description}
+                                        </p>
+                                    </div>
+                                </div>
+                            </motion.div>
+                        )}
+                    </AnimatePresence>
+                </motion.div>
+            </motion.div>
         </div>
     );
 };

@@ -3,6 +3,7 @@ import QRCode from "react-qr-code";
 import { decodeToken } from "../ts/utils/decodeToken";
 import { useNavigate } from "react-router-dom";
 import { API_URL } from "../App";
+import { motion, AnimatePresence } from "framer-motion";
 
 const WalletPage = () => {
     const navigate = useNavigate();
@@ -13,24 +14,18 @@ const WalletPage = () => {
 
     useEffect(() => {
         const decoded = decodeToken();
-        const k = decoded;
         if (!decoded.wallet_id) {
             navigate("Login");
         }
 
-        setWalletId(k.wallet_id);
+        setWalletId(decoded.wallet_id);
 
         const fetchWallet = async () => {
-            const res = await fetch(
-                `${API_URL}/api/wallet/${k.wallet_id}`,
-                {
-                    headers: {
-                        Authorization: `Bearer ${localStorage.getItem(
-                            "token"
-                        )}`,
-                    },
-                }
-            );
+            const res = await fetch(`${API_URL}/api/wallet/${decoded.wallet_id}`, {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem("token")}`,
+                },
+            });
             const data = await res.json();
             const mainJson = data.data;
             if (!mainJson) {
@@ -47,232 +42,136 @@ const WalletPage = () => {
             alert("Wallet ID cannot be empty!");
             return;
         }
-
-        const first = window.location.pathname.split("/")[1];
-        console.log(first);
-        navigate(`/${first}/pay/${receiverWalletId}`);
+        navigate(`/${window.location.pathname.split("/")[1]}/pay/${receiverWalletId}`);
     };
 
     return (
-        <>
+        <div className="min-h-screen bg-gradient-to-br from-[#0f1535] to-[#111c44] p-8 font-['Inter']">
             {data && (
-                <div style={styles.container}>
+                <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="max-w-7xl mx-auto"
+                >
                     {/* Top Section */}
-                    <div style={styles.topSection}>
-                        {/* Left Side: Balance and Wallet ID */}
-                        <div style={styles.leftPanel}>
-                            <h1 style={styles.balance}>
+                    <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-8">
+                        {/* Balance Card */}
+                        <motion.div
+                            whileHover={{ scale: 1.02 }}
+                            className="lg:col-span-2 bg-[#ffffff10] backdrop-blur-xl border border-[#ffffff20] rounded-xl p-8"
+                        >
+                            <h2 className="text-4xl font-bold bg-gradient-to-r from-[#0075ff] to-[#00a3ff] bg-clip-text text-transparent mb-2">
                                 {data.current_balance} arena_coins
-                            </h1>
-                            <p style={styles.walletId}>Wallet ID: {walletId}</p>
-                        </div>
-
-                        {/* Right Side: QR Code */}
-                        <div style={styles.rightPanel}>
-                            <QRCode
-                                value={`${window.location.origin}/user/pay/${walletId}`}
-                                bgColor="#000"
-                                fgColor="#FFF"
-                                size={200}
-                            />
-                        </div>
-                    </div>
-
-                    {/* Pay Button */}
-                    <button
-                        onClick={() => setModalOpen(true)}
-                        style={styles.payButton}
-                    >
-                        Pay
-                    </button>
-
-                    
-
-                    {/* Bottom Section: Transactions */}
-                    <div style={styles.transactionsSection}>
-                        <h2 style={styles.transactionsTitle}>Transactions</h2>
-                        <div style={styles.transactionsList}>
-                            {data.transactions &&
-                                data.transactions.map((tx, index) => (
-                                    <div
-                                        key={index}
-                                        style={styles.transactionBlock}
-                                    >
-                                        <p>
-                                            <strong>Head:</strong> {tx.head}
-                                        </p>
-                                        <p>
-                                            <strong>Tail:</strong> {tx.tail}
-                                        </p>
-                                        <p>
-                                            <strong>Amount:</strong> $
-                                            {tx.amount.toFixed(2)}
-                                        </p>
-                                    </div>
-                                ))}
-                        </div>
-                    </div>
-                </div>
-            )}
-
-            {/* Modal */}
-            {isModalOpen && (
-                <div style={styles.overlay}>
-                    <div style={styles.modal}>
-                        <h3 style={styles.modalHeading}>Enter Wallet ID</h3>
-                        <input
-                            type="text"
-                            value={receiverWalletId}
-                            onChange={(e) =>
-                                setReceiverWalletId(e.target.value)
-                            }
-                            placeholder="Enter Wallet ID"
-                            style={styles.modalInput}
-                        />
-                        <div style={styles.modalButtons}>
-                            <button
-                                onClick={handlePay}
-                                style={{
-                                    ...styles.button,
-                                    ...styles.confirmButton,
-                                }}
+                            </h2>
+                            <p className="text-gray-400">Wallet ID: {walletId}</p>
+                            <motion.button
+                                whileHover={{ scale: 1.02 }}
+                                whileTap={{ scale: 0.98 }}
+                                onClick={() => setModalOpen(true)}
+                                className="mt-6 px-6 py-3 bg-gradient-to-r from-[#0075ff] to-[#00a3ff] rounded-xl text-white font-medium hover:shadow-lg transition-all duration-300"
                             >
                                 Pay
-                            </button>
-                            <button
-                                onClick={() => setModalOpen(false)}
-                                style={{
-                                    ...styles.button,
-                                    ...styles.cancelButton,
-                                }}
-                            >
-                                Cancel
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            )}
-        </>
-    );
-};
+                            </motion.button>
+                        </motion.div>
 
-// Inline Styles
-const styles = {
-    container: {
-        fontFamily: "Arial, sans-serif",
-        backgroundColor: "#000",
-        color: "#FFF",
-        minHeight: "100vh",
-        padding: "5rem",
-        boxSizing: "border-box",
-    },
-    topSection: {
-        display: "flex",
-        justifyContent: "space-around",
-        alignItems: "center",
-        marginBottom: "20px",
-    },
-    leftPanel: {
-        flex: 1,
-        paddingRight: "20px",
-    },
-    balance: {
-        fontSize: "36px",
-        fontWeight: "bold",
-        color: "#4CAF50",
-        marginBottom: "10px",
-    },
-    walletId: {
-        fontSize: "16px",
-        color: "#AAA",
-    },
-    rightPanel: {
-        flexShrink: 0,
-        width: "200px",
-        height: "200px",
-    },
-    payButton: {
-        padding: "10px 20px",
-        backgroundColor: "black",
-        color: "white",
-        border: "dashed",
-        borderRadius: "6px",
-        borderWidth:"0.5px",
-        fontSize: "32px",
-        cursor: "pointer",
-        marginTop: "20px",
-    },
-    transactionsSection: {
-        marginTop: "20px",
-    },
-    transactionsTitle: {
-        fontSize: "24px",
-        marginBottom: "10px",
-    },
-    transactionsList: {
-        display: "flex",
-        flexDirection: "column",
-        gap: "10px",
-    },
-    transactionBlock: {
-        backgroundColor: "#222",
-        padding: "10px",
-        borderRadius: "5px",
-        boxShadow: "0 2px 4px rgba(0, 0, 0, 0.5)",
-    },
-    overlay: {
-        position: "fixed",
-        top: 0,
-        left: 0,
-        width: "100vw",
-        height: "100vh",
-        backgroundColor: "rgba(0, 0, 0, 0.8)",
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        zIndex: 1000,
-    },
-    modal: {
-        backgroundColor: "#1a1a1a",
-        color: "#ffffff",
-        padding: "20px 30px",
-        borderRadius: "8px",
-        boxShadow: "0 4px 10px rgba(0, 0, 0, 0.6)",
-        width: "400px",
-        textAlign: "center",
-    },
-    modalHeading: {
-        marginBottom: "20px",
-    },
-    modalInput: {
-        width: "100%",
-        padding: "10px",
-        fontSize: "16px",
-        border: "1px solid #444",
-        borderRadius: "4px",
-        backgroundColor: "#333",
-        color: "#fff",
-        marginBottom: "20px",
-    },
-    modalButtons: {
-        display: "flex",
-        justifyContent: "space-between",
-    },
-    button: {
-        padding: "10px 20px",
-        border: "none",
-        borderRadius: "4px",
-        fontSize: "16px",
-        cursor: "pointer",
-    },
-    confirmButton: {
-        backgroundColor: "blue",
-        color: "white",
-    },
-    cancelButton: {
-        backgroundColor: "blue",
-        color: "white",
-    },
+                        {/* QR Code Card */}
+                        <motion.div
+                            whileHover={{ scale: 1.02 }}
+                            className="bg-[#ffffff10] backdrop-blur-xl border border-[#ffffff20] rounded-xl p-8 flex items-center justify-center"
+                        >
+                            <QRCode
+                                value={`${window.location.origin}/user/pay/${walletId}`}
+                                bgColor="#0f1535"
+                                fgColor="#fff"
+                                size={200}
+                            />
+                        </motion.div>
+                    </div>
+
+                    {/* Transactions Section */}
+                    <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        className="bg-[#ffffff10] backdrop-blur-xl border border-[#ffffff20] rounded-xl p-8"
+                    >
+                        <h2 className="text-2xl font-bold text-white mb-6">Transactions</h2>
+                        <div className="space-y-4">
+                            {data.transactions && data.transactions.map((tx, index) => (
+                                <motion.div
+                                    key={index}
+                                    whileHover={{ scale: 1.02 }}
+                                    className="bg-[#ffffff10] backdrop-blur-xl border border-[#ffffff20] rounded-xl p-4"
+                                >
+                                    <div className="grid grid-cols-3 gap-4">
+                                        <div>
+                                            <p className="text-gray-400">From</p>
+                                            <p className="text-white font-medium truncate">{tx.head}</p>
+                                        </div>
+                                        <div>
+                                            <p className="text-gray-400">To</p>
+                                            <p className="text-white font-medium truncate">{tx.tail}</p>
+                                        </div>
+                                        <div>
+                                            <p className="text-gray-400">Amount</p>
+                                            <p className="text-white font-medium">${tx.amount.toFixed(2)}</p>
+                                        </div>
+                                    </div>
+                                </motion.div>
+                            ))}
+                        </div>
+                    </motion.div>
+                </motion.div>
+            )}
+
+            {/* Payment Modal */}
+            <AnimatePresence>
+                {isModalOpen && (
+                    <motion.div
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50"
+                        onClick={() => setModalOpen(false)}
+                    >
+                        <motion.div
+                            initial={{ scale: 0.9, opacity: 0 }}
+                            animate={{ scale: 1, opacity: 1 }}
+                            exit={{ scale: 0.9, opacity: 0 }}
+                            className="bg-[#ffffff10] backdrop-blur-xl border border-[#ffffff20] rounded-xl p-8 max-w-md w-full mx-4"
+                            onClick={e => e.stopPropagation()}
+                        >
+                            <h3 className="text-2xl font-bold text-white mb-6">Enter Wallet ID</h3>
+                            <input
+                                type="text"
+                                value={receiverWalletId}
+                                onChange={(e) => setReceiverWalletId(e.target.value)}
+                                placeholder="Enter Wallet ID"
+                                className="w-full px-4 py-3 bg-[#ffffff10] border border-[#ffffff20] rounded-xl text-white placeholder-gray-400 focus:outline-none focus:border-[#0075ff] transition-all duration-300 mb-6"
+                            />
+                            <div className="flex space-x-4">
+                                <motion.button
+                                    whileHover={{ scale: 1.02 }}
+                                    whileTap={{ scale: 0.98 }}
+                                    onClick={() => setModalOpen(false)}
+                                    className="flex-1 px-6 py-3 bg-[#ffffff20] rounded-xl text-white font-medium hover:bg-[#ffffff30] transition-all duration-300"
+                                >
+                                    Cancel
+                                </motion.button>
+                                <motion.button
+                                    whileHover={{ scale: 1.02 }}
+                                    whileTap={{ scale: 0.98 }}
+                                    onClick={handlePay}
+                                    className="flex-1 px-6 py-3 bg-gradient-to-r from-[#0075ff] to-[#00a3ff] rounded-xl text-white font-medium hover:shadow-lg transition-all duration-300"
+                                >
+                                    Pay
+                                </motion.button>
+                            </div>
+                        </motion.div>
+                    </motion.div>
+                )}
+            </AnimatePresence>
+        </div>
+    );
 };
 
 export default WalletPage;

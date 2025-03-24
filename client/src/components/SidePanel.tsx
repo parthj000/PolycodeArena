@@ -1,26 +1,34 @@
 import React, { Dispatch, SetStateAction, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import ConfirmModal from "./ConfirmModal";
+import { motion, AnimatePresence } from "framer-motion";
 
 // SidePanelItem component for rendering individual links
 const SidePanelItem = ({
     text,
     to,
+    icon,
     style,
 }: {
     text: string;
     to: string;
+    icon: string;
     style?: React.CSSProperties;
-    
 }) => {
     return (
-        <Link
-            to={to}
-            className="block w-[88%] mx-auto my-[8px] rounded-md hover:bg-borders py-[6px] px-[10px] text-[14px] text-text_2 hover:text-white"
-            style={style}
+        <motion.div
+            whileHover={{ x: 5, backgroundColor: "rgba(255, 255, 255, 0.1)" }}
+            className="w-full"
         >
-            <div>{text}</div>
-        </Link>
+            <Link
+                to={to}
+                className="flex items-center space-x-3 w-[88%] mx-auto my-[8px] rounded-xl hover:bg-[#ffffff10] py-[10px] px-[16px] text-[14px] text-gray-400 hover:text-white transition-all duration-300"
+                style={style}
+            >
+                <span className="text-xl">{icon}</span>
+                <span>{text}</span>
+            </Link>
+        </motion.div>
     );
 };
 
@@ -35,90 +43,93 @@ const SidePanel = ({
     data: SidePanelData;
 }) => {
     const [logoutState, setLogoutState] = useState<boolean>(false);
-
     const navigate = useNavigate();
-    const onLogout = async() => {
-        
-        const token = await localStorage.getItem("token");
 
-        if(token){
+    const onLogout = async () => {
+        const token = await localStorage.getItem("token");
+        if (token) {
             await localStorage.removeItem("token");
         }
-
-
         navigate("/");
         window.location.reload();
     };
 
-    // Mock links for admin and user
+    // Mock links for admin and user with icons
     const adminLinks = [
-        { text: "Leaderboard", to: "/community/dashboard" },
-        { text: "Contests", to: "/community/contest" },
-        { text: "Quizzes", to: "/community/quizzes" },
-        { text: "Marketplace", to: "/community/marketplace" },
-        { text: "Wallet", to: "/community/wallet" },
-        
+        { text: "Leaderboard", to: "/community/dashboard", icon: "🏆" },
+        { text: "Contests", to: "/community/contest", icon: "🎯" },
+        { text: "Quizzes", to: "/community/quizzes", icon: "❓" },
+        { text: "Marketplace", to: "/community/marketplace", icon: "🏪" },
+        { text: "Wallet", to: "/community/wallet", icon: "💰" },
     ];
 
     const userLinks = [
-        { text: "Leaderboard", to: "/leaderboard" },
-        { text: "Wallet", to: "/user/wallet" },
-        { text: "Contests", to: "/user/contests" },
-        { text: "Quizzes", to: "/user/quiz" },
-        { text: "Profile", to: "/user/profile" },
-        
+        { text: "Leaderboard", to: "/leaderboard", icon: "🏆" },
+        { text: "Wallet", to: "/user/wallet", icon: "💰" },
+        { text: "Contests", to: "/user/contests", icon: "🎯" },
+        { text: "Quizzes", to: "/user/quiz", icon: "❓" },
+        { text: "Profile", to: "/user/profile", icon: "👤" },
     ];
 
-    // Conditionally select links based on user role
-
-    {console.log(data.role)};
-    const links = data.role ==="C" ? adminLinks : userLinks;
+    const links = data.role === "C" ? adminLinks : userLinks;
 
     return (
         <>
-            <div
+            <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: display ? 1 : 0 }}
                 onClick={() => displayFn(false)}
-                className={`w-screen h-screen ${display ? "fixed" : "hidden"} top-0 left-0 z-[80] backdrop-blur-sm`}
-            ></div>
-            <div
-                className={`fixed z-[90] ${display ? "translate-x-[-100%]" : "translate-x-[0]"} left-full top-[-1px] rounded-l-lg bg-black h-[calc(100vh+2px)] w-[320px] transition ease-in-out border border-borders border-r-0`}
+                className={`w-screen h-screen ${display ? "fixed" : "hidden"} top-0 left-0 z-[80] backdrop-blur-sm bg-black/50`}
+            />
+            <motion.div
+                initial={{ x: 320 }}
+                animate={{ x: display ? 0 : 320 }}
+                transition={{ type: "spring", damping: 20 }}
+                className="fixed z-[90] right-0 top-0 h-screen w-[320px] bg-gradient-to-b from-[#0f1535] to-[#111c44] border-l border-[#ffffff10] backdrop-blur-xl"
             >
-                <div className="relative h-[100px]">
-                    <div className="absolute top-[13px] left-[16px] w-[32px] h-[32px] border border-borders rounded-[99px]">
-
-                    <div className="w-[32px] h-[32px] border border-borders rounded-full overflow-hidden">
-                                    <img
-                                        src={"/profile.png"}
-                                        alt="Profile"
-                                        className="w-full h-full object-cover"
-                                    />
-                                </div>
-
-
+                <div className="relative h-[100px] border-b border-[#ffffff10]">
+                    <div className="absolute top-[24px] left-[24px] flex items-center space-x-4">
+                        <div className="w-[40px] h-[40px] rounded-xl border border-[#ffffff20] overflow-hidden bg-[#ffffff10]">
+                            <img
+                                src={"/profile.png"}
+                                alt="Profile"
+                                className="w-full h-full object-cover"
+                            />
+                        </div>
+                        <div className="text-[16px] font-medium text-white">
+                            {data.username || "Hello friend"}
+                        </div>
                     </div>
-                    <div className="absolute top-[17px] left-[64px] text-[14px]">
-                        {data.username || "Hello friend"}
-                    </div>
-                    <button
+                    <motion.button
+                        whileHover={{ scale: 1.1 }}
+                        whileTap={{ scale: 0.9 }}
                         onClick={() => displayFn(false)}
-                        className="relative w-[30px] h-[30px] text-borders hover:text-white hover:bg-borders rounded-md left-[274px] top-[13px]"
+                        className="absolute right-[24px] top-[24px] w-[32px] h-[32px] flex items-center justify-center text-gray-400 hover:text-white hover:bg-[#ffffff10] rounded-xl transition-all duration-300"
                     >
                         <i className="bi bi-x-lg"></i>
-                    </button>
+                    </motion.button>
                 </div>
-                <hr className="border-borders w-[88%] mx-auto" />
 
-                {/* Render the appropriate links based on user role */}
-                {links.map((link, index) => (
-                    <SidePanelItem key={index} text={link.text} to={link.to} />
-                ))}
+                <div className="py-6 space-y-2">
+                    {links.map((link) => (
+                        <SidePanelItem
+                            key={link.text}
+                            text={link.text}
+                            to={link.to}
+                            icon={link.icon}
+                        />
+                    ))}
+                </div>
 
-                <hr className="border-borders w-[88%] mx-auto" />
-                <div
-                    className="block w-[88%] mx-auto my-[8px] rounded-md hover:bg-borders py-[6px] px-[10px] text-[14px] text-text_2 hover:text-white hover:bg-red-600 cursor-pointer"
-                    onClick={() => setLogoutState(!logoutState)}
-                >
-                    Log out
+                <div className="absolute bottom-0 w-full p-6 border-t border-[#ffffff10]">
+                    <motion.button
+                        whileHover={{ scale: 1.02 }}
+                        whileTap={{ scale: 0.98 }}
+                        className="w-full py-[10px] px-[16px] bg-red-500/20 hover:bg-red-500/30 text-red-500 rounded-xl transition-all duration-300"
+                        onClick={() => setLogoutState(true)}
+                    >
+                        Log out
+                    </motion.button>
                 </div>
 
                 <ConfirmModal
@@ -128,7 +139,7 @@ const SidePanel = ({
                     title="Log Out"
                     message={`Are you sure you want to log out of ${data.username}?`}
                 />
-            </div>
+            </motion.div>
         </>
     );
 };

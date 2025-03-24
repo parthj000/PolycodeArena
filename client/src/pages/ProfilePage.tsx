@@ -1,81 +1,94 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import SkillTags from "./SkillTagsPage";
-import axios from "axios";
+import QRCode from "react-qr-code";
+import { motion, AnimatePresence } from "framer-motion";
 import { API_URL } from "../App";
+import { decodeToken } from "../ts/utils/decodeToken";
 
-// Define types for itemsBought
-interface Item {
+interface Transaction {
+    head: string;
+    tail: string;
+    amount: number;
+    description: string;
+    timestamp: string;
+}
+
+interface Contest {
+    contest_id: string;
+    contest_name: string;
+}
+
+interface UserData {
     name: string;
-    amount: string;
-    date: string;
-    image: string;
+    profile_pic: string;
+    resume_url: string;
+    tag: string;
+    badges: string[];
+    wallet_id: string;
+}
+
+interface WalletData {
+    current_balance: number;
+    transactions: Transaction[];
+}
+
+interface WalletResponse {
+    data: WalletData;
+    message: string;
 }
 
 const ProfilePage = () => {
-    const [username, setUsername] = useState<string>("");
-    const [verified, setVerified] = useState<boolean>(true);
-    const [skills, setSkills] = useState<string[]>([]);
-    const [user, setUser] = useState<any>({
-        // name: username,
-        // rank: "Beginner",
-        views: 1200,
-        solution_count: 25,
-        reputation_count: 350,
-        problems_solved_count: 50,
-        easy_problems_count: 100,
-        medium_problems_count: 50,
-        hard_problems_count: 30,
-        problems_solved_easy: 45,
-        problems_solved_medium: 30,
-        problems_solved_hard: 20,
+    const [userData, setUserData] = useState<UserData>({
+        name: "",
+        profile_pic: "",
+        resume_url: "",
+        tag: "",
+        badges: [],
+        wallet_id: "",
     });
-    const [certificates, setCertificates] = useState<string[]>([]);
-    const [profilePic, setProfilePic] = useState<string>("");
-    const [resumeUrl, setResumeUrl] = useState<string>("");
-    const [tag, setTag] = useState<string>("");
+    const [contests, setContests] = useState<Contest[]>([]);
+    const [showAllBadges, setShowAllBadges] = useState<boolean>(false);
+    const [walletData, setWalletData] = useState<WalletData>({
+        current_balance: 0,
+        transactions: [],
+    });
 
-    const { name } = useParams();
-    const [itemsBought, setItemsBought] = useState<Item[]>([
-        {
-            name: "Premium Membership",
-            amount: "$50",
-            date: "2024-12-05",
-            image: "https://example.com/item1.pdf",
-        },
-        {
-            name: "Exclusive Contest Access",
-            amount: "$20",
-            date: "2024-11-20",
-            image: "https://example.com/item2.pdf",
-        },
-    ]);
-    const [selectedItem, setSelectedItem] = useState<number | null>(null);
-    const [showAll, setShowAll] = useState<boolean>(false);
-
-    // Fetch user assets from the API
     useEffect(() => {
         const fetchUserAssets = async () => {
             try {
+                const user = decodeToken();
                 const token = localStorage.getItem("token");
-                const response = await axios.get(`${API_URL}/api/user/assets`, {
+                if (!token || !user?.id) return;
+
+                const response = await fetch(`${API_URL}/api/wallet/user_in/${user.id}`, {
+                    method: "GET",
                     headers: {
                         Authorization: `Bearer ${token}`,
                     },
                 });
 
-                console.log(response.data);
+                const responseData = await response.json();
+                const { user: userData, contest: contestData } = responseData;
 
-                const data = response.data;
+                setUserData({
+                    name: userData.name,
+                    profile_pic: userData.profile_pic,
+                    resume_url: userData.resume_url,
+                    tag: userData.tag,
+                    badges: userData.badges || [],
+                    wallet_id: userData.wallet_id,
+                });
 
-                // Set profile pic, resume, and certificates
-                setProfilePic(data.profilePic);
-                setResumeUrl(data.resumeUrl);
-                setUsername(data.username);
-                setTag(data.tag);
+                setContests(contestData || []);
 
-                // If certificates is a single URL string, put it into an array
-                setCertificates([data.certificates]); // Wrap in array for consistency
+                // Fetch wallet data
+                const walletResponse = await fetch(`${API_URL}/api/wallet/${userData.wallet_id}`, {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                });
+                const walletResponseData: WalletResponse = await walletResponse.json();
+                setWalletData(walletResponseData.data);
             } catch (error) {
                 console.error("Error fetching user assets:", error);
             }
@@ -85,164 +98,244 @@ const ProfilePage = () => {
     }, []);
 
     const handleResumeDownload = () => {
-        window.open(resumeUrl, "_blank");
-    };
-
-    const handleSeeMore = () => {
-        setShowAll(!showAll);
-    };
-
-    const toggleItem = (index: number) => {
-        if (selectedItem === index) {
-            setSelectedItem(null);
-        } else {
-            setSelectedItem(index);
+        if (userData.resume_url) {
+            window.open(userData.resume_url, "_blank");
         }
     };
 
-    function handleRemoveSkill(skill: string): void {
-        // Placeholder implementation
-    }
-
-    function handleAddSkill(skill: string): void {
-        // Placeholder implementation
-    }
-
     return (
-        <div>
-            <>
-                <div>
-                    <SkillTags
-                        skills={skills}
-                        onRemoveSkill={handleRemoveSkill}
-                        onAddSkill={handleAddSkill}
-                    />
-                </div>
-
-                {/* User Profile Section */}
-                <div className="w-[calc(100%-72px)] h-[260px] sm:h-[160px] bg-black mx-auto mt-[8px] rounded-lg border border-borders">
-                    <div id="main" className="flex flex-col sm:flex-row h-fit">
-                        <div id="profile-pic">
-                            <div className="w-[80px] h-[80px] mt-[40px] border border-borders sm:ml-[50px] mx-auto rounded-lg">
-                                <img
-                                    src={profilePic}
-                                    alt="Profile Pic"
-                                    className="w-full h-full object-cover rounded-lg"
-                                />
-                            </div>
-                        </div>
-                        <div className="flex flex-col w-[280px] text-center sm:text-left mx-auto sm:ml-0">
-                            <div
-                                id="username"
-                                className="text-[28px] font-bold mt-[20px] sm:mt-[40px] text-white sm:ml-[30px] ml-0"
-                            >
-                                {username}
-                            </div>
-                            <div
-                                id="rank"
-                                className="text-[18px] mt-[6px] text-text_2 sm:ml-[30px] ml-0"
-                            >
-                                Tag : {tag}
-                            </div>
-                        </div>
-                        <div className="right-[45px] justify-centre mt-[10px] flex flex-col relative ml-[8px] font-bold inline-block rounded-md text-black text-[18px]">
-                            <button
-                                className="py-2 px-6 mt-[50px] mb-[50px] rounded-lg bg-white text-black py-[6px] px-[16px] rounded-[6px] border border-black hover:bg-[#00000000] hover:border-[#00000000] hover:text-black transition active:bg-red-700 hover:bg-gradient-to-r from-orange-500 to-purple-600"
+        <div className="min-h-screen bg-gradient-to-br from-[#0f1535] to-[#111c44] p-6 text-white">
+            <div className="max-w-7xl mx-auto space-y-8">
+                {/* Profile Header */}
+                <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="bg-gradient-to-br from-[#ffffff0a] to-[#ffffff05] backdrop-blur-xl border border-[#ffffff20] rounded-xl p-6"
+                >
+                    <div className="flex flex-col md:flex-row items-center gap-6">
+                        <motion.img
+                            initial={{ scale: 0.9 }}
+                            animate={{ scale: 1 }}
+                            whileHover={{ scale: 1.05 }}
+                            src={userData.profile_pic}
+                            alt="Profile"
+                            className="w-32 h-32 rounded-xl border border-[#ffffff30] object-cover shadow-lg"
+                        />
+                        <div className="text-center md:text-left">
+                            <h2 className="text-3xl font-bold bg-gradient-to-r from-indigo-400 to-indigo-200 bg-clip-text text-transparent">
+                                {userData.name}
+                            </h2>
+                            <p className="text-lg text-gray-400 mt-2">Tag: {userData.tag}</p>
+                            <motion.button
+                                whileHover={{ scale: 1.02 }}
+                                whileTap={{ scale: 0.98 }}
                                 onClick={handleResumeDownload}
+                                className="mt-4 px-6 py-2 bg-gradient-to-r from-indigo-600 to-indigo-400 rounded-xl text-white font-medium hover:from-indigo-500 hover:to-indigo-300 transition-all duration-300"
                             >
                                 Download Resume
-                            </button>
+                            </motion.button>
                         </div>
                     </div>
-                </div>
+                </motion.div>
 
-                {/* Certificates Section */}
-                <div className="w-[calc(100%-72px)] mx-auto mt-8">
-                    <div className="h-[auto] bg-black rounded-lg border border-borders">
-                        <div className="text-[22px] font-bold mt-[40px] text-white ml-[50px]">
-                            Certificates
-                        </div>
-                        <div className="grid grid-cols-4 gap-6 px-6 py-4 sm:grid-cols-2 xs:grid-cols-1">
-                            {/* Map certificates from API */}
-                            {certificates
-                                .slice(0, showAll ? certificates.length : 6)
-                                .map((certificate, index) => (
-                                    <div
-                                        key={index}
-                                        className="w-full h-[200px] sm:h-[180px] xs:h-[150px] border border-borders rounded-lg p-2"
-                                    >
-                                        <img
-                                            src={certificate}
-                                            alt={`Certificate ${index + 1}`}
-                                            className="w-full h-full object-cover rounded-lg"
-                                        />
-                                    </div>
-                                ))}
-                        </div>
-
-                        {/* See More Button */}
-                        {certificates.length > 6 && !showAll && (
-                            <div className="text-center mb-4">
-                                <button
-                                    onClick={handleSeeMore}
-                                    className="text-white text-lg font-semibold py-2 px-4 border border-borders rounded-lg hover:bg-borders transition duration-300"
+                {/* Badges Section */}
+                {/* <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="bg-gradient-to-br from-[#ffffff0a] to-[#ffffff05] backdrop-blur-xl border border-[#ffffff20] rounded-xl p-6"
+                >
+                    <h3 className="text-2xl font-bold bg-gradient-to-r from-indigo-400 to-indigo-200 bg-clip-text text-transparent mb-6">
+                        Badges & Achievements
+                    </h3>
+                    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+                        <AnimatePresence>
+                            {userData.badges.slice(0, showAllBadges ? undefined : 6).map((badge, index) => (
+                                <motion.div
+                                    key={index}
+                                    initial={{ opacity: 0, scale: 0.8 }}
+                                    animate={{ opacity: 1, scale: 1 }}
+                                    exit={{ opacity: 0, scale: 0.8 }}
+                                    transition={{ delay: index * 0.1 }}
+                                    className="aspect-square relative group"
                                 >
-                                    See More
-                                </button>
-                            </div>
+                                    <img
+                                        src={badge}
+                                        alt={`Badge ${index + 1}`}
+                                        className="w-full h-full rounded-xl object-cover border border-[#ffffff30] transition-transform duration-300 group-hover:scale-105"
+                                    />
+                                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-xl flex items-end p-4">
+                                        <p className="text-sm font-medium text-white">Badge #{index + 1}</p>
+                                    </div>
+                                </motion.div>
+                            ))}
+                        </AnimatePresence>
+                    </div>
+                    {userData.badges.length > 6 && (
+                        <motion.button
+                            whileHover={{ scale: 1.02 }}
+                            whileTap={{ scale: 0.98 }}
+                            onClick={() => setShowAllBadges(!showAllBadges)}
+                            className="mt-6 px-6 py-2 bg-[#ffffff15] rounded-xl text-white font-medium hover:bg-[#ffffff20] transition-all duration-300 mx-auto block"
+                        >
+                            {showAllBadges ? "Show Less" : "Show More"}
+                        </motion.button>
+                    )}
+                </motion.div> */}
+
+                {/* Contests Section */}
+                <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="bg-gradient-to-br from-[#ffffff0a] to-[#ffffff05] backdrop-blur-xl border border-[#ffffff20] rounded-xl p-6"
+                >
+                    <h3 className="text-2xl font-bold bg-gradient-to-r from-indigo-400 to-indigo-200 bg-clip-text text-transparent mb-6">
+                        Contest History
+                    </h3>
+                    <div className="grid gap-4">
+                        {contests.map((contest, index) => (
+                            <motion.div
+                                key={contest.contest_id}
+                                initial={{ opacity: 0, x: -20 }}
+                                animate={{ opacity: 1, x: 0 }}
+                                transition={{ delay: index * 0.1 }}
+                                className="bg-[#ffffff10] rounded-xl p-4 flex items-center justify-between"
+                            >
+                                <div className="flex items-center space-x-4">
+                                    <div className="w-10 h-10 rounded-lg bg-indigo-500/20 flex items-center justify-center text-xl font-bold text-indigo-400">
+                                        #{index + 1}
+                                    </div>
+                                    <h4 className="text-lg font-medium text-white">
+                                        {contest.contest_name}
+                                    </h4>
+                                </div>
+                            </motion.div>
+                        ))}
+                        {contests.length === 0 && (
+                            <p className="text-center text-gray-400 py-4">No contests participated yet</p>
                         )}
                     </div>
-                </div>
+                </motion.div>
 
-                {/* Items Bought Section */}
-                <div className="w-[calc(100%-72px)] mx-auto mt-8 mb-8">
-                    <div className="bg-black rounded-lg border border-borders">
-                        <h2 className="text-2xl font-bold text-white mb-4 px-6 py-4">
-                            Items Bought
-                        </h2>
-                        <div className="bg-black p-6 rounded-lg border border-borders">
-                            {itemsBought.length > 0 ? (
-                                itemsBought.map((item, index) => (
-                                    <div key={index} className="mb-4">
-                                        <div
-                                            className="text-white text-lg cursor-pointer"
-                                            onClick={() => toggleItem(index)}
-                                        >
-                                            {item.name}
-                                        </div>
-                                        {selectedItem === index && (
-                                            <div className="bg-gray-900 p-4 rounded-lg mt-2">
-                                                <p>
-                                                    <strong>Amount:</strong>{" "}
-                                                    {item.amount}
-                                                </p>
-                                                <p>
-                                                    <strong>Date:</strong>{" "}
-                                                    {item.date}
-                                                </p>
-                                                <p>
-                                                    <strong>Invoice:</strong>{" "}
-                                                    <a
-                                                        href={item.image}
-                                                        target="_blank"
-                                                        rel="noopener noreferrer"
-                                                    >
-                                                        View PDF
-                                                    </a>
-                                                </p>
-                                            </div>
-                                        )}
-                                    </div>
-                                ))
-                            ) : (
-                                <p className="text-gray-400">
-                                    No items bought yet.
+                {/* Wallet Section */}
+                <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="bg-gradient-to-br from-[#ffffff0a] to-[#ffffff05] backdrop-blur-xl border border-[#ffffff20] rounded-xl p-6"
+                >
+                    <div className="flex items-center justify-between mb-6">
+                        <h3 className="text-2xl font-bold bg-gradient-to-r from-indigo-400 to-indigo-200 bg-clip-text text-transparent">
+                            Wallet Details
+                        </h3>
+                        <div className="bg-[#ffffff10] px-4 py-2 rounded-xl">
+                            <span className="text-gray-400">Status: </span>
+                            <span className="text-green-400">Active</span>
+                        </div>
+                    </div>
+
+                    <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                        {/* Balance Card */}
+                        <div className="bg-[#ffffff10] rounded-xl p-6 flex flex-col justify-between">
+                            <p className="text-gray-400 text-sm">Current Balance</p>
+                            <div className="mt-2">
+                                <p className="text-3xl font-bold text-green-400">
+                                    {walletData.current_balance}
                                 </p>
+                                <p className="text-sm text-gray-400 mt-1">arena_coins</p>
+                            </div>
+                        </div>
+
+                        {/* Wallet ID Card */}
+                        <div className="bg-[#ffffff10] rounded-xl p-6">
+                            <p className="text-gray-400 text-sm">Wallet ID</p>
+                            <div className="mt-2 font-mono flex items-center space-x-2">
+                                <p className="text-white text-sm truncate">{userData.wallet_id}</p>
+                                <motion.button
+                                    whileHover={{ scale: 1.1 }}
+                                    whileTap={{ scale: 0.9 }}
+                                    onClick={() => navigator.clipboard.writeText(userData.wallet_id)}
+                                    className="text-indigo-400 hover:text-indigo-300 transition-colors"
+                                >
+                                    <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
+                                        <path d="M8 3a1 1 0 011-1h2a1 1 0 110 2H9a1 1 0 01-1-1z" />
+                                        <path d="M6 3a2 2 0 00-2 2v11a2 2 0 002 2h8a2 2 0 002-2V5a2 2 0 00-2-2 3 3 0 01-3 3H9a3 3 0 01-3-3z" />
+                                    </svg>
+                                </motion.button>
+                            </div>
+                        </div>
+
+                        {/* QR Code Card */}
+                        <div className="bg-[#ffffff10] rounded-xl p-6 flex items-center justify-center">
+                            <QRCode
+                                value={`${window.location.origin}/user/pay/${userData.wallet_id}`}
+                                bgColor="#000000"
+                                fgColor="#ffffff"
+                                size={120}
+                                className="rounded-lg"
+                            />
+                        </div>
+                    </div>
+
+                    {/* Transactions Section */}
+                    <div className="mt-8">
+                        <div className="flex items-center justify-between mb-6">
+                            <h4 className="text-xl font-bold text-indigo-400">Recent Transactions</h4>
+                            <div className="bg-[#ffffff10] px-4 py-2 rounded-xl">
+                                <span className="text-gray-400">Total: </span>
+                                <span className="text-white">{walletData.transactions.length}</span>
+                            </div>
+                        </div>
+                        <div className="space-y-4">
+                            {walletData.transactions.map((tx, index) => (
+                                <motion.div
+                                    key={index}
+                                    initial={{ opacity: 0, y: 10 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    transition={{ delay: index * 0.1 }}
+                                    className="bg-[#ffffff10] rounded-xl p-6"
+                                >
+                                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                                        <div>
+                                            <p className="text-gray-400 text-sm">From</p>
+                                            <p className="font-mono text-white text-sm mt-1 truncate" title={tx.head}>
+                                                {tx.head === "U" ? "You" : tx.head}
+                                            </p>
+                                        </div>
+                                        <div>
+                                            <p className="text-gray-400 text-sm">To</p>
+                                            <p className="font-mono text-white text-sm mt-1 truncate" title={tx.tail}>
+                                                {tx.tail === "U" ? "You" : tx.tail}
+                                            </p>
+                                        </div>
+                                        <div>
+                                            <p className="text-gray-400 text-sm">Amount</p>
+                                            <p className="font-bold text-green-400 mt-1">
+                                                {tx.amount.toFixed(2)} coins
+                                            </p>
+                                        </div>
+                                        <div>
+                                            <p className="text-gray-400 text-sm">Date</p>
+                                            <p className="text-white text-sm mt-1">
+                                                {new Date(tx.timestamp).toLocaleDateString()} {new Date(tx.timestamp).toLocaleTimeString()}
+                                            </p>
+                                        </div>
+                                    </div>
+                                    {tx.description && (
+                                        <div className="mt-3 pt-3 border-t border-[#ffffff20]">
+                                            <p className="text-gray-400 text-sm">Description</p>
+                                            <p className="text-white text-sm mt-1">{tx.description}</p>
+                                        </div>
+                                    )}
+                                </motion.div>
+                            ))}
+                            {walletData.transactions.length === 0 && (
+                                <div className="text-center py-8">
+                                    <p className="text-gray-400">No transactions yet</p>
+                                </div>
                             )}
                         </div>
                     </div>
-                </div>
-            </>
+                </motion.div>
+            </div>
         </div>
     );
 };

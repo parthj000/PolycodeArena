@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams, useSearchParams } from "react-router-dom";
+import { motion, AnimatePresence } from "framer-motion";
 import { API_URL } from "../App";
 
 interface Stage {
@@ -81,136 +82,204 @@ const RecruitmentDashboard: React.FC = () => {
     };
 
     if (loading) {
-        return <div className="text-center text-gray-300">Loading recruitment drive data...</div>;
+        return (
+            <div className="min-h-screen bg-gradient-to-br from-[#0f1535] to-[#111c44] flex items-center justify-center">
+                <div className="w-16 h-16 border-4 border-indigo-500/20 border-t-indigo-500 rounded-full animate-spin" />
+            </div>
+        );
     }
 
     if (error) {
-        return <div className="text-red-500 text-center mt-4">{error}</div>;
+        return (
+            <div className="min-h-screen bg-gradient-to-br from-[#0f1535] to-[#111c44] flex items-center justify-center">
+                <motion.div
+                    initial={{ opacity: 0, y: -10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="bg-red-500/20 text-red-400 p-6 rounded-xl border border-red-500/20"
+                >
+                    {error}
+                </motion.div>
+            </div>
+        );
     }
 
     return (
-        <div
-            className="min-h-screen p-6 flex items-center justify-center"
-           
-        >
-            <div
-                className="container mx-auto rounded-lg shadow-lg p-6"
-               
+        <div className="min-h-screen bg-gradient-to-br from-[#0f1535] to-[#111c44] p-8">
+            <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="max-w-7xl mx-auto"
             >
+                {/* Animated Background Elements */}
+                <motion.div
+                    initial={{ opacity: 0 }}
+                    animate={{ 
+                        opacity: [0.1, 0.2, 0.1],
+                        scale: [1, 1.1, 1],
+                    }}
+                    transition={{ 
+                        duration: 5,
+                        repeat: Infinity,
+                        repeatType: "reverse"
+                    }}
+                    className="fixed inset-0 pointer-events-none"
+                    style={{
+                        background: "radial-gradient(circle at 50% 50%, rgba(99, 102, 241, 0.1) 0%, transparent 50%)",
+                        zIndex: 0
+                    }}
+                />
+
                 {recruitmentDrive ? (
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        {/* Stages Section */}
-                        <div>
-                            <h2 className="text-3xl font-bold mb-4">Stages</h2>
-                            <div className="accordion space-y-4">
-                                {recruitmentDrive.stages?.map((stage) => (
-                                    <div
-                                        key={stage.stage_id}
-                                        className="rounded-lg overflow-hidden shadow-md"
-                                        style={{
-                                            background: "linear-gradient(to right, #111, #333)",
-                                            border: "1px solid rgba(0, 255, 255, 0.2)",
-                                            boxShadow: "0 0 5px rgba(0, 255, 255, 0.2)",
-                                        }}
-                                    >
-                                        <div
-                                            className="p-4 font-semibold"
-                                            style={{
-                                                backgroundColor: "#000",
-                                                color: "#0ff",
-                                            }}
-                                        >
-                                            {stage.stage_name} - {stage.stage_type}
+                    <div className="space-y-8">
+                        {/* Header */}
+                        <motion.div
+                            initial={{ opacity: 0, y: -20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            className="bg-gradient-to-br from-[#0f1535] to-[#111c44] p-8 rounded-xl border border-[#ffffff10] backdrop-blur-xl"
+                        >
+                            <h1 className="text-4xl font-bold bg-gradient-to-r from-indigo-400 to-indigo-200 bg-clip-text text-transparent">
+                                {recruitmentDrive.drive_name}
+                            </h1>
+                            <p className="text-gray-400 mt-4">{recruitmentDrive.description || "No description available."}</p>
+                            
+                            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-8">
+                                <div className="bg-[#ffffff10] rounded-xl p-4">
+                                    <div className="flex items-center space-x-3">
+                                        <div className="w-10 h-10 rounded-lg bg-indigo-500/20 flex items-center justify-center">
+                                            🏢
                                         </div>
-                                        <div
-                                            className="p-4"
-                                            style={{
-                                                backgroundColor: "#222",
-                                                color: "#ccc",
-                                            }}
-                                        >
-                                            <p>{stage.description || "No description provided."}</p>
-                                            {stage.participants && stage.participants.length > 0 ? (
-                                                <div className="mt-4">
-                                                    <h4 style={{ color: "#0ff" }}>Participants:</h4>
-                                                    <ul className="list-disc list-inside">
-                                                        {stage.participants.map((participant) => (
-                                                            <li key={participant}>{participant}</li>
-                                                        ))}
-                                                    </ul>
-                                                </div>
-                                            ) : (
-                                                <p className="mt-4 text-gray-400">No participants yet.</p>
-                                            )}
+                                        <div>
+                                            <p className="text-gray-400 text-sm">Company</p>
+                                            <p className="text-white font-medium">{recruitmentDrive.company_id}</p>
                                         </div>
                                     </div>
-                                ))}
-                            </div>
-                        </div>
-
-                        {/* Recruitment Details Section */}
-                        <div>
-                            <h2 className="text-3xl font-bold mb-4">Recruitment Details</h2>
-                            <div
-                                className="rounded-lg overflow-hidden shadow-md"
-                                style={{
-                                    background: "linear-gradient(to right, #111, #333)",
-                                    border: "1px solid rgba(0, 255, 255, 0.2)",
-                                    boxShadow: "0 0 5px rgba(0, 255, 255, 0.2)",
-                                }}
-                            >
-                                <div
-                                    className="p-4"
-                                    style={{
-                                        backgroundColor: "#000",
-                                    }}
-                                >
-                                    {Object.entries({
-                                        "Drive Name": recruitmentDrive.drive_name,
-                                        "Invitation Code": recruitmentDrive.invitation_code,
-                                        "Company ID": recruitmentDrive.company_id,
-                                        "Start Date": new Date(recruitmentDrive.start_date * 1000).toLocaleDateString(),
-                                        "End Date": new Date(recruitmentDrive.end_date * 1000).toLocaleDateString(),
-                                        Description: recruitmentDrive.description || "N/A",
-                                    }).map(([key, value]) => (
-                                        <div
-                                            className="flex flex-col items-center py-2"
-                                            key={key}
-                                            style={{
-                                                color: "#0ff",
-                                                textAlign: "center",
-                                            }}
-                                        >
-                                            <div
-                                                className="w-full py-2 mb-2 text-lg font-semibold rounded-md"
-                                               
-                                            >
-                                                {key}
-                                            </div>
-                                            <div
-                                                className="w-full py-2 px-4 rounded-md text-lg bg-gray-800"
-                                                
-                                            >
-                                                {value}
-                                            </div>
+                                </div>
+                                <div className="bg-[#ffffff10] rounded-xl p-4">
+                                    <div className="flex items-center space-x-3">
+                                        <div className="w-10 h-10 rounded-lg bg-green-500/20 flex items-center justify-center">
+                                            📅
                                         </div>
-                                    ))}
+                                        <div>
+                                            <p className="text-gray-400 text-sm">Start Date</p>
+                                            <p className="text-white font-medium">
+                                                {new Date(recruitmentDrive.start_date * 1000).toLocaleDateString()}
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className="bg-[#ffffff10] rounded-xl p-4">
+                                    <div className="flex items-center space-x-3">
+                                        <div className="w-10 h-10 rounded-lg bg-red-500/20 flex items-center justify-center">
+                                            🎯
+                                        </div>
+                                        <div>
+                                            <p className="text-gray-400 text-sm">End Date</p>
+                                            <p className="text-white font-medium">
+                                                {new Date(recruitmentDrive.end_date * 1000).toLocaleDateString()}
+                                            </p>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                            <button
-                                onClick={redirectToAddParticipants}
-                                className="mt-6 w-full px-6 py-3 rounded-lg font-bold bg-purple-800 hover:bg-purple-900"
-                                
-                                
+                        </motion.div>
+
+                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                            {/* Stages Section */}
+                            <motion.div
+                                initial={{ opacity: 0, x: -20 }}
+                                animate={{ opacity: 1, x: 0 }}
+                                className="bg-gradient-to-br from-[#0f1535] to-[#111c44] p-6 rounded-xl border border-[#ffffff10] backdrop-blur-xl"
                             >
-                                Add Participant
-                            </button>
+                                <h2 className="text-2xl font-bold bg-gradient-to-r from-indigo-400 to-indigo-200 bg-clip-text text-transparent mb-6">
+                                    Stages
+                                </h2>
+                                <AnimatePresence>
+                                    {recruitmentDrive.stages?.map((stage, index) => (
+                                        <motion.div
+                                            key={stage.stage_id}
+                                            initial={{ opacity: 0, y: 20 }}
+                                            animate={{ 
+                                                opacity: 1, 
+                                                y: 0,
+                                                transition: { delay: index * 0.1 }
+                                            }}
+                                            className="bg-[#ffffff10] rounded-xl p-6 mb-4 last:mb-0 hover:bg-[#ffffff15] transition-all duration-300"
+                                        >
+                                            <div className="flex items-center justify-between mb-4">
+                                                <div className="flex items-center space-x-3">
+                                                    <div className="w-10 h-10 rounded-lg bg-indigo-500/20 flex items-center justify-center text-xl font-bold text-indigo-400">
+                                                        {index + 1}
+                                                    </div>
+                                                    <h3 className="text-xl font-bold text-white">
+                                                        {stage.stage_name}
+                                                    </h3>
+                                                </div>
+                                                <span className="px-3 py-1 bg-indigo-500/10 rounded-full text-indigo-400 text-sm">
+                                                    {stage.stage_type}
+                                                </span>
+                                            </div>
+                                            <p className="text-gray-400 text-sm mb-4">
+                                                {stage.description || "No description provided."}
+                                            </p>
+                                            {stage.participants && stage.participants.length > 0 && (
+                                                <div className="space-y-2">
+                                                    <h4 className="text-indigo-400 text-sm font-medium">Participants</h4>
+                                                    <div className="grid grid-cols-2 gap-2">
+                                                        {stage.participants.map((participant) => (
+                                                            <div 
+                                                                key={participant}
+                                                                className="text-gray-400 text-sm bg-indigo-500/5 rounded-lg p-2"
+                                                            >
+                                                                {participant}
+                                                            </div>
+                                                        ))}
+                                                    </div>
+                                                </div>
+                                            )}
+                                        </motion.div>
+                                    ))}
+                                </AnimatePresence>
+                            </motion.div>
+
+                            {/* Recruitment Details Section */}
+                            <motion.div
+                                initial={{ opacity: 0, x: 20 }}
+                                animate={{ opacity: 1, x: 0 }}
+                                className="space-y-6"
+                            >
+                                <div className="bg-gradient-to-br from-[#0f1535] to-[#111c44] p-6 rounded-xl border border-[#ffffff10] backdrop-blur-xl">
+                                    <h2 className="text-2xl font-bold bg-gradient-to-r from-indigo-400 to-indigo-200 bg-clip-text text-transparent mb-6">
+                                        Invitation Details
+                                    </h2>
+                                    <div className="bg-[#ffffff10] rounded-xl p-6">
+                                        <div className="flex items-center justify-between mb-4">
+                                            <span className="text-gray-400">Invitation Code</span>
+                                            <span className="text-indigo-400 font-mono bg-indigo-500/10 px-3 py-1 rounded-lg">
+                                                {recruitmentDrive.invitation_code}
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <motion.button
+                                    whileHover={{ 
+                                        scale: 1.02,
+                                        boxShadow: "0 8px 30px rgba(99, 102, 241, 0.2)"
+                                    }}
+                                    whileTap={{ scale: 0.98 }}
+                                    onClick={redirectToAddParticipants}
+                                    className="w-full px-6 py-4 bg-gradient-to-r from-indigo-600 to-indigo-400 rounded-xl text-white font-medium transition-all duration-300 flex items-center justify-center space-x-2"
+                                >
+                                    <span>Add Participant</span>
+                                    <span>→</span>
+                                </motion.button>
+                            </motion.div>
                         </div>
                     </div>
                 ) : (
-                    <div className="text-center text-gray-300">No recruitment drive data found.</div>
+                    <div className="text-center text-gray-400">No recruitment drive data found.</div>
                 )}
-            </div>
+            </motion.div>
         </div>
     );
 };
