@@ -13,7 +13,7 @@ interface UserRequest extends Request {
     allownext?: boolean;
 }
 
-export function authenticateToken(req: UserRequest, res: Response, next: NextFunction): void {
+export function authenticateToken(req: UserRequest, res: any, next: NextFunction): void {
     console.log("Request Path:", req.path);
 
     // Helper function to check specific paths

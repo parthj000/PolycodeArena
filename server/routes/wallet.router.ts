@@ -25,7 +25,7 @@ wallet.post("/pay",(req:any,res:any)=>{
 
 })
 
-wallet.get("/users", async (_req: Request, res: Response) => {
+wallet.get("/users", async (req: any, res:any ) => {
     try {
         // Fetch all users with all their fields
         const users = await UserModel.find(); // No projection, fetches all fields

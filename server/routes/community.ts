@@ -19,7 +19,7 @@ import { createQuiz } from "../controllers/createQuiz";
 import { addProducts, getProducts } from "./product";
 import { Document, Types } from "mongoose";
 import { populateQuiz } from "../middlewares/populateQuiz";
-import { addUserToStageParticipants, createRecruitmentDrive } from "../controllers/recruitmentDrive";
+import {  createRecruitmentDrive } from "../controllers/recruitmentDrive";
 import { RecruitmentDriveModel } from "../models/recruitmentDrive";
 import { generateCertificates } from "../controllers/certificate";
 import { RegisteredModel } from "../models/registered";
@@ -87,7 +87,7 @@ community.post(
             }
 
             // Find the first stage in the recruitment drive
-            const firstStage = recruitmentDrive.meta.stages[0];
+            const firstStage:any = recruitmentDrive.meta.stages[0];
 
             if (!firstStage) {
                 return res.status(404).json({ message: "No stages found in the recruitment drive." });
@@ -145,10 +145,10 @@ community.get("/recruitment/:recruitment_id", async (req: Request, res: Response
 
 // Quiz Rout
 
-community.post("/create/quiz", async (req: Request, res: Response) => {
+community.post("/create/quiz", async (req:any, res: any) => {
     try {
         // Default to a placeholder or null if `req.decoded` is not set
-        const communityId = req.decoded?.id || null;
+        const communityId :any = req.decoded?.id || null;
 
         // If you need community_id for the quiz, ensure it's in the request body
         if (communityId) {
@@ -234,7 +234,7 @@ community.post("/verify-user", async (req: Request, res: Response) => {
     }
 
     try {
-        const unverifiedUser = await UnverifiedUserModel.findById(userId);
+        const unverifiedUser:any = await UnverifiedUserModel.findById(userId);
         if (!unverifiedUser) {
             return res
                 .status(404)
@@ -273,7 +273,7 @@ community.post(
         // }
 
         const rankings = contest.rankings;
-        const valuesArray = Object.values(rankings);
+        const valuesArray:any = Object.values(rankings);
 
         try {
             for (let i = 0; i < 3; i++) {
@@ -324,7 +324,7 @@ community.post(
         }
 
         const rankings = contest.rankings;
-        const valuesArray = Object.values(rankings);
+        const valuesArray:any = Object.values(rankings);
 
         try {
             for (let i = 0; i < 3; i++) {
@@ -376,7 +376,7 @@ community.get("/unverified-users", async (_req: Request, res: Response) => {
 });
 
 // Join Contest by Token Route
-community.get("/join/:token", async (req: Request, res: Response) => {
+community.get("/join/:token", async (req: any, res: any) => {
     const { token } = req.params;
     try {
         const verify = jwt.verify(token, String(CONTEST_SECRET));
