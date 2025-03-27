@@ -85,10 +85,8 @@ export const inviteUsers = async (req: Request, res: Response) => {
             data: updatedDrive
         });
     } catch (error) {
-        console.error("Detailed error in inviteUsers:");
-        console.error("Error name:", error.name);
-        console.error("Error message:", error.message);
-        console.error("Error stack:", error.stack);
+        console.log("Detailed error in inviteUsers:");
+        
         return res.status(500).json({ message: "Internal server error" });
     }
 }; 
