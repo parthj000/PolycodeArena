@@ -2,12 +2,29 @@ import React, { useEffect, useState } from "react";
 import { API_URL } from "../App";
 import ProblemSet from "./ProblemSet";
 import { useNavigate } from "react-router-dom";
+import { motion, AnimatePresence } from "framer-motion";
 
 interface Contest {
     question_set: any[];
     start_time: number;
     end_time: number;
 }
+
+const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+        opacity: 1,
+        transition: {
+            staggerChildren: 0.1,
+            delayChildren: 0.2
+        }
+    }
+};
+
+const itemVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: { opacity: 1, y: 0 }
+};
 
 const UserQuestionDashBoard: React.FC = () => {
     const navigate = useNavigate();
@@ -17,6 +34,7 @@ const UserQuestionDashBoard: React.FC = () => {
     const [output, setOutput] = useState<string | any[]>(""); // Can be string or array
     const contestId = window.location.pathname.split("/").pop();
     const [error, setError] = useState<string | null>(null);
+    const [isLoading, setIsLoading] = useState<boolean>(true);
 
     const checkAuthentication = async () => {
         try {
@@ -40,6 +58,8 @@ const UserQuestionDashBoard: React.FC = () => {
             }
         } catch (error) {
             console.error("Error during authentication:", error);
+        } finally {
+            setIsLoading(false);
         }
     };
 
@@ -87,46 +107,100 @@ const UserQuestionDashBoard: React.FC = () => {
     }, [isAuthenticated, token]);
 
     return (
-        <>
-            {error ? (
-                <h1>{error}</h1>
-            ) : (
-                <div style={styles.container}>
-                    {/* Part 1: Sidebar */}
-                    <div style={styles.sidebar}>
-                        <h4 style={styles.sectionHeader}>Submission Results</h4>
-                        {output ? (
-                            Array.isArray(output) ? (
-                                output.map((out, index) => (
-                                    <div key={index} style={styles.outputBlock}>
-                                        <span style={styles.outputLabel}>
-                                            Output {index + 1}:
-                                        </span>
-                                        <pre style={styles.outputText}>
-                                            {JSON.stringify(out, null, 2)}
-                                        </pre>
-                                    </div>
-                                ))
-                            ) : (
-                                <div style={styles.outputBlock}>
-                                    <span style={styles.outputLabel}>
-                                        Output:
-                                    </span>
-                                    <pre style={styles.outputText}>
-                                        {output}
-                                    </pre>
-                                </div>
-                            )
-                        ) : (
-                            <p style={styles.noResults}>
-                                No results to display yet.
-                            </p>
-                        )}
-                    </div>
+        <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            className="min-h-screen bg-gradient-to-br from-[#0f1535] to-[#111c44] p-8 font-['Inter'] relative overflow-hidden"
+        >
+            {/* Animated background elements */}
+            <motion.div
+                initial={{ opacity: 0, scale: 1.2 }}
+                animate={{ opacity: 0.15, scale: 1 }}
+                transition={{ duration: 3, repeat: Infinity, repeatType: "mirror" }}
+                className="absolute inset-0 bg-gradient-to-br from-indigo-900/30 via-indigo-600/20 to-transparent"
+            />
+            <motion.div
+                initial={{ opacity: 0, scale: 0.8 }}
+                animate={{ opacity: 0.1, scale: 1.2 }}
+                transition={{ duration: 4, repeat: Infinity, repeatType: "mirror", delay: 0.5 }}
+                className="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-indigo-500/20 via-indigo-400/10 to-transparent"
+            />
 
-                    {/* Part 2 and 3: Main Content */}
-                    <div style={styles.mainContent}>
-                        <div style={styles.problemSet}>
+            <AnimatePresence mode="wait">
+                {isLoading ? (
+                    <motion.div
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        className="flex flex-col items-center justify-center h-64 space-y-4"
+                    >
+                        <motion.div
+                            animate={{ 
+                                scale: [1, 1.1, 1],
+                                opacity: [1, 0.8, 1]
+                            }}
+                            transition={{ 
+                                duration: 1.5,
+                                repeat: Infinity,
+                                ease: "easeInOut"
+                            }}
+                            className="relative"
+                        >
+                            <div className="w-16 h-16 border-4 border-indigo-500/20 border-t-indigo-500 rounded-full animate-spin" />
+                            <div className="absolute inset-0 rounded-full border-2 border-indigo-500/20"></div>
+                        </motion.div>
+                        <motion.p
+                            animate={{ 
+                                opacity: [1, 0.7, 1]
+                            }}
+                            transition={{ 
+                                duration: 1.5,
+                                repeat: Infinity,
+                                ease: "easeInOut"
+                            }}
+                            className="text-indigo-400"
+                        >
+                            Loading contest...
+                        </motion.p>
+                    </motion.div>
+                ) : error ? (
+                    <motion.div
+                        initial={{ opacity: 0, y: -10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: -10 }}
+                        className="bg-red-500/20 text-red-400 p-8 rounded-xl mb-6 border border-red-500/20 backdrop-blur-xl text-center"
+                    >
+                        <h2 className="text-2xl font-bold mb-4">Error</h2>
+                        <p>{error}</p>
+                        <motion.button
+                            whileHover={{ 
+                                scale: 1.02,
+                                backgroundColor: "rgba(239, 68, 68, 0.2)"
+                            }}
+                            whileTap={{ scale: 0.98 }}
+                            className="mt-6 px-6 py-2 bg-red-500/10 rounded-xl text-red-400 hover:bg-red-500/20 transition-all duration-300"
+                            onClick={() => navigate("/user/contests")}
+                        >
+                            Return to Contests
+                        </motion.button>
+                    </motion.div>
+                ) : (
+                    <motion.div
+                        variants={containerVariants}
+                        initial="hidden"
+                        animate="visible"
+                        className="relative z-10 grid grid-cols-1 lg:grid-cols-4 gap-8"
+                    >
+                        {/* Main Content */}
+                        <motion.div
+                            variants={itemVariants}
+                            className="lg:col-span-3 bg-gradient-to-br from-[#ffffff0a] to-[#ffffff05] backdrop-blur-xl border border-[#ffffff20] rounded-xl p-6 relative overflow-hidden"
+                        >
+                            <motion.div
+                                initial={{ opacity: 0 }}
+                                animate={{ opacity: [0.1, 0.2, 0.1] }}
+                                transition={{ duration: 3, repeat: Infinity }}
+                                className="absolute inset-0 bg-gradient-to-br from-indigo-900/20 via-indigo-600/10 to-transparent rounded-xl pointer-events-none"
+                            />
                             {contest && (
                                 <ProblemSet
                                     questions={contest.question_set || []}
@@ -134,68 +208,68 @@ const UserQuestionDashBoard: React.FC = () => {
                                     setOutput={setOutput}
                                 />
                             )}
-                        </div>
-                    </div>
-                </div>
-            )}
-        </>
-    );
-};
+                        </motion.div>
 
-const styles = {
-    container: {
-        display: "flex",
-        height: "100%",
-        backgroundColor: "#1f1f1f",
-        color: "#f9f9f9",
-    },
-    sidebar: {
-        flex: 1,
-        padding: "20px",
-        borderRight: "1px solid #333",
-        backgroundColor: "#252525",
-        overflowY: "auto" as const, // Explicitly specify the type
-    },
-    mainContent: {
-        flex: 3,
-        display: "flex",
-        flexDirection: "column" as const, // Specify flexDirection type
-        padding: "20px",
-    },
-    problemSet: {
-        flex: 2,
-        padding: "20px",
-        borderBottom: "1px solid #333",
-        backgroundColor: "#1f1f1f",
-    },
-    sectionHeader: {
-        fontSize: "22px",
-        fontWeight: "bold",
-        marginBottom: "15px",
-        color: "#22c55e",
-    },
-    outputBlock: {
-        padding: "10px",
-        backgroundColor: "#333",
-        borderRadius: "4px",
-        marginTop: "15px",
-    },
-    outputLabel: {
-        fontWeight: "bold",
-        fontSize: "16px",
-        color: "#808080",
-    },
-    outputText: {
-        marginTop: "10px",
-        fontSize: "14px",
-        color: "#f9f9f9",
-        whiteSpace: "pre-wrap" as const,
-        wordBreak: "break-word" as const,
-    },
-    noResults: {
-        fontSize: "14px",
-        color: "#808080",
-    },
+                        {/* Sidebar */}
+                        <motion.div
+                            variants={itemVariants}
+                            className="lg:col-span-1 space-y-6"
+                        >
+                            <div className="bg-gradient-to-br from-[#ffffff0a] to-[#ffffff05] backdrop-blur-xl border border-[#ffffff20] rounded-xl p-6">
+                                <h4 className="text-xl font-bold bg-gradient-to-r from-indigo-400 to-indigo-200 bg-clip-text text-transparent mb-6">
+                                    Submission Results
+                                </h4>
+                                <AnimatePresence mode="wait">
+                                    {output ? (
+                                        Array.isArray(output) ? (
+                                            output.map((out, index) => (
+                                                <motion.div
+                                                    key={index}
+                                                    initial={{ opacity: 0, y: 10 }}
+                                                    animate={{ opacity: 1, y: 0 }}
+                                                    exit={{ opacity: 0, y: -10 }}
+                                                    className="bg-[#ffffff10] rounded-xl p-4 mb-4"
+                                                >
+                                                    <span className="text-indigo-400 font-medium block mb-2">
+                                                        Output {index + 1}:
+                                                    </span>
+                                                    <pre className="text-gray-300 text-sm whitespace-pre-wrap break-words">
+                                                        {JSON.stringify(out, null, 2)}
+                                                    </pre>
+                                                </motion.div>
+                                            ))
+                                        ) : (
+                                            <motion.div
+                                                initial={{ opacity: 0, y: 10 }}
+                                                animate={{ opacity: 1, y: 0 }}
+                                                exit={{ opacity: 0, y: -10 }}
+                                                className="bg-[#ffffff10] rounded-xl p-4"
+                                            >
+                                                <span className="text-indigo-400 font-medium block mb-2">
+                                                    Output:
+                                                </span>
+                                                <pre className="text-gray-300 text-sm whitespace-pre-wrap break-words">
+                                                    {output}
+                                                </pre>
+                                            </motion.div>
+                                        )
+                                    ) : (
+                                        <motion.p
+                                            initial={{ opacity: 0 }}
+                                            animate={{ opacity: 1 }}
+                                            className="text-gray-400 text-center py-4"
+                                        >
+                                            No results to display yet.
+                                        </motion.p>
+                                    )}
+                                </AnimatePresence>
+                            </div>
+                        </motion.div>
+                    </motion.div>
+                )}
+            </AnimatePresence>
+        </motion.div>
+    );
 };
 
 export default UserQuestionDashBoard;

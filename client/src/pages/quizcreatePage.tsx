@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { API_URL } from "../App";
+import { motion, AnimatePresence } from "framer-motion";
 
 interface Question {
   question: string;
@@ -29,6 +30,7 @@ const QuizCreation: React.FC = () => {
       },
     ],
   });
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
@@ -37,30 +39,22 @@ const QuizCreation: React.FC = () => {
     questionIndex?: number,
     optionIndex?: number
   ) => {
-    const value = e.target.value; // Assume `value` is string by default
-  
+    const value = e.target.value;
     setQuizData((prevState) => {
       const newState = { ...prevState };
-  
       if (section === "quiz") {
-        // Cast key to keyof QuizData and ensure value matches the expected type
         newState[key as keyof QuizData] = value as any;
       } else if (section === "questions" && questionIndex !== undefined) {
         const question = newState.question_set[questionIndex];
-  
         if (optionIndex !== undefined) {
-          // Ensure options exist and assign value
           question.options[optionIndex] = value;
         } else {
-          // Assign to a property of Question, with proper type assertions
           question[key as keyof Question] = value as any;
         }
       }
-  
       return newState;
     });
   };
-  
 
   const handleAddQuestion = () => {
     setQuizData((prevState) => ({
@@ -81,13 +75,13 @@ const QuizCreation: React.FC = () => {
 
   const convertToUnixTimestamp = (dateString: string): number => {
     const date = new Date(dateString);
-    return Math.floor(date.getTime() / 1000); // Convert milliseconds to seconds
+    return Math.floor(date.getTime() / 1000);
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setIsLoading(true);
 
-    // Convert start and end times to Unix timestamps
     const startTimestamp = convertToUnixTimestamp(quizData.start_time);
     const endTimestamp = convertToUnixTimestamp(quizData.end_time);
 
@@ -96,8 +90,6 @@ const QuizCreation: React.FC = () => {
       start_time: startTimestamp,
       end_time: endTimestamp,
     };
-
-    console.log("Form data:", JSON.stringify(payload, null, 2));
 
     try {
       const response = await fetch(`${API_URL}/api/community/create/quiz`, {
@@ -120,118 +112,182 @@ const QuizCreation: React.FC = () => {
     } catch (error) {
       console.error("Error:", error);
       alert("An error occurred while creating the quiz.");
+    } finally {
+      setIsLoading(false);
     }
   };
 
   return (
-    <div className="bg-black text-white p-6 rounded-lg shadow-lg w-3/4 mx-auto mt-10">
-      <h1 className="text-3xl font-bold mb-6 text-center">Quiz Creation</h1>
-      <form onSubmit={handleSubmit}>
-        <div className="mb-4">
-          <label className="block text-lg mb-2">Quiz Name</label>
-          <input
-            type="text"
-            value={quizData.quiz_name}
-            onChange={(e) => handleChange(e, "quiz", "quiz_name")}
-            className="w-full p-3 bg-black border border-gray-600 text-white rounded-lg"
-            placeholder="Enter quiz name"
-          />
+    <div className="min-h-screen bg-gradient-to-br from-[#0f1535] to-[#111c44] p-8 font-['Inter']">
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="max-w-4xl mx-auto"
+      >
+        <div className="text-center mb-12">
+          <motion.h1
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="text-4xl font-bold bg-gradient-to-r from-[#0075ff] to-[#00a3ff] bg-clip-text text-transparent"
+          >
+            Create New Quiz
+          </motion.h1>
+          <p className="text-gray-400 mt-2">Design your quiz with questions and options</p>
         </div>
 
-        <div className="mb-4">
-          <label className="block text-lg mb-2">Description</label>
-          <textarea
-            value={quizData.description}
-            onChange={(e) => handleChange(e, "quiz", "description")}
-            className="w-full p-3 bg-black border border-gray-600 text-white rounded-lg"
-            placeholder="Enter quiz description"
-          />
-        </div>
-
-        <div className="mb-4">
-          <label className="block text-lg mb-2">Start Time</label>
-          <input
-            type="datetime-local"
-            value={quizData.start_time}
-            onChange={(e) => handleChange(e, "quiz", "start_time")}
-            className="w-full p-3 bg-black border border-gray-600 text-white rounded-lg"
-          />
-        </div>
-
-        <div className="mb-4">
-          <label className="block text-lg mb-2">End Time</label>
-          <input
-            type="datetime-local"
-            value={quizData.end_time}
-            onChange={(e) => handleChange(e, "quiz", "end_time")}
-            className="w-full p-3 bg-black border border-gray-600 text-white rounded-lg"
-          />
-        </div>
-
-        <div className="mb-6">
-          <h2 className="text-2xl font-semibold mb-4">Questions</h2>
-          {quizData.question_set.map((question, index) => (
-            <div key={index} className="mb-6 p-4 bg-gray-800 rounded-lg">
-              <label className="block text-lg mb-2">Question</label>
-              <input
-                type="text"
-                value={question.question}
-                onChange={(e) => handleChange(e, "questions", "question", index)}
-                className="w-full p-3 bg-black border border-gray-600 text-white rounded-lg"
-                placeholder="Enter question"
-              />
-
-              <div className="mt-4">
-                <label className="block text-lg mb-2">Options</label>
-                {question.options.map((option, optionIndex) => (
-                  <input
-                    key={optionIndex}
-                    type="text"
-                    value={option}
-                    onChange={(e) =>
-                      handleChange(e, "questions", "options", index, optionIndex)
-                    }
-                    className="w-full p-3 bg-black border border-gray-600 text-white rounded-lg mb-2"
-                    placeholder={`Option ${optionIndex + 1}`}
-                  />
-                ))}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="bg-[#ffffff10] backdrop-blur-xl border border-[#ffffff20] rounded-xl p-8"
+        >
+          <form onSubmit={handleSubmit} className="space-y-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div>
+                <label className="block text-white font-medium mb-2">Quiz Name</label>
+                <motion.input
+                  whileFocus={{ scale: 1.01 }}
+                  type="text"
+                  value={quizData.quiz_name}
+                  onChange={(e) => handleChange(e, "quiz", "quiz_name")}
+                  className="w-full px-4 py-3 bg-[#ffffff10] border border-[#ffffff20] rounded-xl text-white placeholder-gray-400 focus:outline-none focus:border-[#0075ff] transition-all duration-300"
+                  placeholder="Enter quiz name"
+                  required
+                />
               </div>
 
-              <label className="block text-lg mt-4">Correct Option</label>
-              <input
-                type="text"
-                value={question.correct_option}
-                onChange={(e) => handleChange(e, "questions", "correct_option", index)}
-                className="w-full p-3 bg-black border border-gray-600 text-white rounded-lg"
-                placeholder="Enter correct option"
-              />
+              <div>
+                <label className="block text-white font-medium mb-2">Description</label>
+                <motion.textarea
+                  whileFocus={{ scale: 1.01 }}
+                  value={quizData.description}
+                  onChange={(e) => handleChange(e, "quiz", "description")}
+                  className="w-full px-4 py-3 bg-[#ffffff10] border border-[#ffffff20] rounded-xl text-white placeholder-gray-400 focus:outline-none focus:border-[#0075ff] transition-all duration-300"
+                  placeholder="Enter quiz description"
+                />
+              </div>
 
-              <button
-                type="button"
-                onClick={() => handleRemoveQuestion(index)}
-                className="mt-4 bg-red-600 text-white py-2 px-4 rounded-lg hover:bg-red-700"
-              >
-                Remove Question
-              </button>
+              <div>
+                <label className="block text-white font-medium mb-2">Start Time</label>
+                <motion.input
+                  whileFocus={{ scale: 1.01 }}
+                  type="datetime-local"
+                  value={quizData.start_time}
+                  onChange={(e) => handleChange(e, "quiz", "start_time")}
+                  className="w-full px-4 py-3 bg-[#ffffff10] border border-[#ffffff20] rounded-xl text-white focus:outline-none focus:border-[#0075ff] transition-all duration-300"
+                  required
+                />
+              </div>
+
+              <div>
+                <label className="block text-white font-medium mb-2">End Time</label>
+                <motion.input
+                  whileFocus={{ scale: 1.01 }}
+                  type="datetime-local"
+                  value={quizData.end_time}
+                  onChange={(e) => handleChange(e, "quiz", "end_time")}
+                  className="w-full px-4 py-3 bg-[#ffffff10] border border-[#ffffff20] rounded-xl text-white focus:outline-none focus:border-[#0075ff] transition-all duration-300"
+                  required
+                />
+              </div>
             </div>
-          ))}
 
-          <button
-            type="button"
-            onClick={handleAddQuestion}
-            className="bg-purple-600 text-white py-2 px-6 rounded-lg hover:bg-purple-700"
-          >
-            Add Question
-          </button>
-        </div>
+            <div className="mt-12">
+              <div className="flex justify-between items-center mb-6">
+                <h2 className="text-2xl font-bold text-white">Questions</h2>
+                <motion.button
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                  type="button"
+                  onClick={handleAddQuestion}
+                  className="px-6 py-2 bg-gradient-to-r from-[#0075ff] to-[#00a3ff] rounded-xl text-white font-medium hover:shadow-lg transition-all duration-300"
+                >
+                  Add Question
+                </motion.button>
+              </div>
 
-        <button
-          type="submit"
-          className="w-full bg-green-600 text-white py-3 px-6 rounded-lg hover:bg-green-700"
-        >
-          Create Quiz
-        </button>
-      </form>
+              <AnimatePresence>
+                {quizData.question_set.map((question, index) => (
+                  <motion.div
+                    key={index}
+                    initial={{ opacity: 0, height: 0 }}
+                    animate={{ opacity: 1, height: "auto" }}
+                    exit={{ opacity: 0, height: 0 }}
+                    className="mb-8 p-6 bg-[#ffffff10] backdrop-blur-xl border border-[#ffffff20] rounded-xl"
+                  >
+                    <div className="flex justify-between items-center mb-4">
+                      <h3 className="text-xl font-semibold text-white">Question {index + 1}</h3>
+                      <motion.button
+                        whileHover={{ scale: 1.02 }}
+                        whileTap={{ scale: 0.98 }}
+                        type="button"
+                        onClick={() => handleRemoveQuestion(index)}
+                        className="px-4 py-2 bg-red-500/20 border border-red-500/50 rounded-xl text-red-400 hover:bg-red-500/30 transition-all duration-300"
+                      >
+                        Remove
+                      </motion.button>
+                    </div>
+
+                    <div className="space-y-4">
+                      <motion.input
+                        whileFocus={{ scale: 1.01 }}
+                        type="text"
+                        value={question.question}
+                        onChange={(e) => handleChange(e, "questions", "question", index)}
+                        className="w-full px-4 py-3 bg-[#ffffff10] border border-[#ffffff20] rounded-xl text-white placeholder-gray-400 focus:outline-none focus:border-[#0075ff] transition-all duration-300"
+                        placeholder="Enter question"
+                        required
+                      />
+
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        {question.options.map((option, optionIndex) => (
+                          <motion.input
+                            key={optionIndex}
+                            whileFocus={{ scale: 1.01 }}
+                            type="text"
+                            value={option}
+                            onChange={(e) =>
+                              handleChange(e, "questions", "options", index, optionIndex)
+                            }
+                            className="w-full px-4 py-3 bg-[#ffffff10] border border-[#ffffff20] rounded-xl text-white placeholder-gray-400 focus:outline-none focus:border-[#0075ff] transition-all duration-300"
+                            placeholder={`Option ${optionIndex + 1}`}
+                            required
+                          />
+                        ))}
+                      </div>
+
+                      <motion.input
+                        whileFocus={{ scale: 1.01 }}
+                        type="text"
+                        value={question.correct_option}
+                        onChange={(e) => handleChange(e, "questions", "correct_option", index)}
+                        className="w-full px-4 py-3 bg-[#ffffff10] border border-[#ffffff20] rounded-xl text-white placeholder-gray-400 focus:outline-none focus:border-[#0075ff] transition-all duration-300"
+                        placeholder="Enter correct option"
+                        required
+                      />
+                    </div>
+                  </motion.div>
+                ))}
+              </AnimatePresence>
+            </div>
+
+            <motion.button
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+              type="submit"
+              disabled={isLoading}
+              className="w-full mt-8 px-6 py-3 bg-gradient-to-r from-[#0075ff] to-[#00a3ff] rounded-xl text-white font-medium hover:shadow-lg transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              {isLoading ? (
+                <div className="flex items-center justify-center">
+                  <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-white"></div>
+                </div>
+              ) : (
+                "Create Quiz"
+              )}
+            </motion.button>
+          </form>
+        </motion.div>
+      </motion.div>
     </div>
   );
 };

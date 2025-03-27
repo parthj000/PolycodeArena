@@ -2,6 +2,7 @@ import express from "express";
 import { transaction } from "../controllers/transaction";
 import { WalletModel } from "../models/wallet";
 import { UserModel } from "../models/user";
+import { RegisteredModel } from "../models/registered";
 
 
 require("dotenv");
@@ -44,6 +45,35 @@ wallet.get("/:wallet_id",async(req,res)=>{
 
     }
     return res.status(200).json({data:{current_balance:wallet?.current_balance,transactions:wallet?.transactions},message:"Wallet found"})
+        
+    } catch (error) {
+
+            return res.status(500).json({message:"Something went wrong!"});
+
+        
+    }
+
+
+
+})
+
+wallet.get("/user_in/:userId",async(req,res)=>{
+
+    console.log(req.params.userId,"kndfjkdnfkjdnfjfnjf");
+
+
+try{
+    const user = await UserModel.findOne({_id:req.params.userId});
+    const contest = await RegisteredModel.find({user_id:req.params.userId});
+    console.log(user,"this is userrrr");
+    if(!user){
+            return res.status(404).json({message:"User not found!"})
+
+    }
+
+    console.log(contest,"this is contest.");
+   
+    return res.status(200).json({user:user,contest:contest});
         
     } catch (error) {
 

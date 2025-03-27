@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { API_URL } from "../App";
+import { motion, AnimatePresence } from "framer-motion";
 
 interface TestCase {
   input: string;
@@ -204,209 +205,273 @@ const AdminPage: React.FC = () => {
 };
 
   return (
-    <div className="bg-black text-white p-6 rounded-lg shadow-lg w-3/4 mx-auto mt-10">
-      <div className="text-center mb-6">
-        <h1 className="text-3xl font-bold">Contest Creation Form</h1>
-        <p className="text-gray-400 mt-2">Fill out the details to create a new coding contest.</p>
-      </div>
-
-      <form onSubmit={handleSubmit}>
-        {/* Contest Name and Description */}
-        <div className="mb-6">
-          <label htmlFor="contest-name" className="block text-lg mb-2">
-            Contest Name
-          </label>
-          <input
-            type="text"
-            id="contest-name"
-            value={contestData.contest_name}
-            onChange={(e) => handleChange(e, "contest", "contest_name")}
-            className="w-full p-3 bg-black border border-gray-600 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
-            placeholder="Enter Contest Name"
-          />
+    <div className="min-h-screen bg-gradient-to-br from-[#0f1535] to-[#111c44] p-8 font-['Inter']">
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="max-w-7xl mx-auto"
+      >
+        <div className="text-center mb-12">
+          <motion.h1
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="text-4xl font-bold bg-gradient-to-r from-[#0075ff] to-[#00a3ff] bg-clip-text text-transparent"
+          >
+            Contest Creation Form
+          </motion.h1>
+          <motion.p
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            className="text-gray-400 mt-2"
+          >
+            Fill out the details to create a new coding contest
+          </motion.p>
         </div>
 
-        <div className="mb-6">
-          <label htmlFor="description" className="block text-lg mb-2">
-            Description
-          </label>
-          <textarea
-            id="description"
-            value={contestData.description}
-            onChange={(e) => handleChange(e, "contest", "description")}
-            className="w-full p-3 bg-black border border-gray-600 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
-            placeholder="Enter Contest Description"
-          />
-        </div>
+        <form onSubmit={handleSubmit} className="space-y-8">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="bg-[#ffffff10] backdrop-blur-xl border border-[#ffffff20] rounded-xl p-8"
+          >
+            <div className="space-y-6">
+              <div>
+                <label className="block text-white text-lg font-medium mb-2">
+                  Contest Name
+                </label>
+                <input
+                  type="text"
+                  value={contestData.contest_name}
+                  onChange={(e) => handleChange(e, "contest", "contest_name")}
+                  className="w-full px-4 py-3 bg-[#ffffff08] border border-[#ffffff20] rounded-xl text-white placeholder-gray-400 focus:outline-none focus:border-[#0075ff] transition-all duration-300"
+                  placeholder="Enter contest name"
+                />
+              </div>
 
-        <div className="mb-6">
-          <label className="block text-lg mb-2">Private Contest</label>
-          <input
-            type="checkbox"
-            checked={contestData.private}
-            onChange={(e) => handleChange(e, "contest", "private")}
-            className="mr-2"
-          />
-          <span>{contestData.private ? "Yes" : "No"}</span>
-        </div>
+              <div>
+                <label className="block text-white text-lg font-medium mb-2">
+                  Description
+                </label>
+                <textarea
+                  value={contestData.description}
+                  onChange={(e) => handleChange(e, "contest", "description")}
+                  className="w-full px-4 py-3 bg-[#ffffff08] border border-[#ffffff20] rounded-xl text-white placeholder-gray-400 focus:outline-none focus:border-[#0075ff] transition-all duration-300 min-h-[100px]"
+                  placeholder="Enter contest description"
+                />
+              </div>
 
-        {/* Questions */}
-        <div className="mb-6">
-          <h2 className="text-2xl font-semibold mb-4">Questions</h2>
-          {contestData.question_set.map((question, questionIndex) => (
-            <div key={questionIndex} className="mb-4">
-              <label htmlFor={`question-text-${questionIndex}`} className="block text-lg mb-2">
-                Question {questionIndex + 1}
-              </label>
-              <input
-                type="text"
-                id={`question-text-${questionIndex}`}
-                value={question.question_text}
-                onChange={(e) => handleChange(e, "questions", "question_text", questionIndex)}
-                className="w-full p-3 bg-black border border-gray-600 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
-                placeholder="Enter Question Text"
-              />
+              <div className="flex items-center space-x-2">
+                <label className="text-white text-lg font-medium">Private Contest</label>
+                <input
+                  type="checkbox"
+                  checked={contestData.private}
+                  onChange={(e) => handleChange(e, "contest", "private")}
+                  className="w-5 h-5 rounded border-[#ffffff20] bg-[#ffffff08] checked:bg-[#0075ff] transition-all duration-300"
+                />
+              </div>
+            </div>
+          </motion.div>
 
-              <label htmlFor={`question-description-${questionIndex}`} className="block text-lg mt-4 mb-2">
-                Question Description
-              </label>
-              <textarea
-                id={`question-description-${questionIndex}`}
-                value={question.question_description}
-                onChange={(e) =>
-                  handleChange(e, "questions", "question_description", questionIndex)
-                }
-                className="w-full p-3 bg-black border border-gray-600 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
-                placeholder="Enter Question Description"
-              />
-
-              <label htmlFor={`max-marks-${questionIndex}`} className="block text-lg mt-4 mb-2">
-                Max Marks
-              </label>
-              <input
-                type="number"
-                id={`max-marks-${questionIndex}`}
-                value={question.max_marks}
-                onChange={(e) => handleChange(e, "questions", "max_marks", questionIndex)}
-                className="w-full p-3 bg-black border border-gray-600 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
-                placeholder="Enter Maximum Marks"
-              />
-
-              {/* Test Cases */}
-              {["public", "hidden"].map((type) => (
-                <div key={type} className="mt-4">
-                  <h3 className="text-lg font-semibold capitalize">
-                    {type} Test Cases
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="bg-[#ffffff10] backdrop-blur-xl border border-[#ffffff20] rounded-xl p-8"
+          >
+            <h2 className="text-2xl font-bold bg-gradient-to-r from-[#0075ff] to-[#00a3ff] bg-clip-text text-transparent mb-6">
+              Questions
+            </h2>
+            <AnimatePresence>
+              {contestData.question_set.map((question, questionIndex) => (
+                <motion.div
+                  key={questionIndex}
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: 20 }}
+                  className="bg-[#ffffff08] rounded-xl p-6 mb-6"
+                >
+                  <h3 className="text-xl font-bold text-white mb-4">
+                    Question {questionIndex + 1}
                   </h3>
-                  {question.test_cases[type as "public" | "hidden"].map((testCase, testCaseIndex) => (
-                    <div key={testCaseIndex} className="mb-4">
-                      <label className="block text-lg mb-2">Input</label>
+                  <div className="space-y-4">
+                    <div>
+                      <label className="block text-white text-lg mb-2">
+                        Question Text
+                      </label>
                       <input
                         type="text"
-                        value={testCase.input}
-                        onChange={(e) =>
-                          handleChange(e, "questions", "input", questionIndex, type as "public" | "hidden", testCaseIndex)
-                        }
-                        className="w-full p-3 bg-black border border-gray-600 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
-                        placeholder="Enter Input"
-                      />
-
-                      <label className="block text-lg mt-2 mb-2">Expected Output</label>
-                      <input
-                        type="text"
-                        value={testCase.expected_output}
-                        onChange={(e) =>
-                          handleChange(
-                            e,
-                            "questions",
-                            "expected_output",
-                            questionIndex,
-                            type as "public" | "hidden",
-                            testCaseIndex
-                          )
-                        }
-                        className="w-full p-3 bg-black border border-gray-600 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
-                        placeholder="Enter Expected Output"
+                        value={question.question_text}
+                        onChange={(e) => handleChange(e, "questions", "question_text", questionIndex)}
+                        className="w-full px-4 py-3 bg-[#ffffff08] border border-[#ffffff20] rounded-xl text-white placeholder-gray-400 focus:outline-none focus:border-[#0075ff] transition-all duration-300"
+                        placeholder="Enter question text"
                       />
                     </div>
-                  ))}
-                  <button
-                    type="button"
-                    onClick={() => handleTestCaseAdd(questionIndex, type as "public" | "hidden")}
-                    className="bg-purple-600 text-white py-2 px-6 rounded-lg hover:bg-purple-700 transition-all mt-4"
-                  >
-                    Add Another {type.charAt(0).toUpperCase() + type.slice(1)} Test Case
-                  </button>
+
+                    <div>
+                      <label className="block text-white text-lg mb-2">
+                        Question Description
+                      </label>
+                      <textarea
+                        value={question.question_description}
+                        onChange={(e) => handleChange(e, "questions", "question_description", questionIndex)}
+                        className="w-full px-4 py-3 bg-[#ffffff08] border border-[#ffffff20] rounded-xl text-white placeholder-gray-400 focus:outline-none focus:border-[#0075ff] transition-all duration-300 min-h-[100px]"
+                        placeholder="Enter question description"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-white text-lg mb-2">
+                        Max Marks
+                      </label>
+                      <input
+                        type="number"
+                        value={question.max_marks}
+                        onChange={(e) => handleChange(e, "questions", "max_marks", questionIndex)}
+                        className="w-full px-4 py-3 bg-[#ffffff08] border border-[#ffffff20] rounded-xl text-white placeholder-gray-400 focus:outline-none focus:border-[#0075ff] transition-all duration-300"
+                        placeholder="Enter maximum marks"
+                      />
+                    </div>
+
+                    {["public", "hidden"].map((type) => (
+                      <div key={type} className="mt-6">
+                        <h4 className="text-lg font-bold text-white capitalize mb-4">
+                          {type} Test Cases
+                        </h4>
+                        <AnimatePresence>
+                          {question.test_cases[type as "public" | "hidden"].map((testCase, testCaseIndex) => (
+                            <motion.div
+                              key={testCaseIndex}
+                              initial={{ opacity: 0, y: -10 }}
+                              animate={{ opacity: 1, y: 0 }}
+                              exit={{ opacity: 0, y: 10 }}
+                              className="bg-[#ffffff05] rounded-xl p-4 mb-4"
+                            >
+                              <div className="space-y-4">
+                                <div>
+                                  <label className="block text-white text-lg mb-2">
+                                    Input
+                                  </label>
+                                  <input
+                                    type="text"
+                                    value={testCase.input}
+                                    onChange={(e) => handleChange(e, "questions", "input", questionIndex, type as "public" | "hidden", testCaseIndex)}
+                                    className="w-full px-4 py-3 bg-[#ffffff08] border border-[#ffffff20] rounded-xl text-white placeholder-gray-400 focus:outline-none focus:border-[#0075ff] transition-all duration-300"
+                                    placeholder="Enter input"
+                                  />
+                                </div>
+                                <div>
+                                  <label className="block text-white text-lg mb-2">
+                                    Expected Output
+                                  </label>
+                                  <input
+                                    type="text"
+                                    value={testCase.expected_output}
+                                    onChange={(e) => handleChange(e, "questions", "expected_output", questionIndex, type as "public" | "hidden", testCaseIndex)}
+                                    className="w-full px-4 py-3 bg-[#ffffff08] border border-[#ffffff20] rounded-xl text-white placeholder-gray-400 focus:outline-none focus:border-[#0075ff] transition-all duration-300"
+                                    placeholder="Enter expected output"
+                                  />
+                                </div>
+                              </div>
+                            </motion.div>
+                          ))}
+                        </AnimatePresence>
+                        <motion.button
+                          whileHover={{ scale: 1.02 }}
+                          whileTap={{ scale: 0.98 }}
+                          type="button"
+                          onClick={() => handleTestCaseAdd(questionIndex, type as "public" | "hidden")}
+                          className="px-6 py-2 bg-[#ffffff15] rounded-xl text-white font-medium hover:bg-[#ffffff20] transition-all duration-300"
+                        >
+                          Add {type} Test Case
+                        </motion.button>
+                      </div>
+                    ))}
+                  </div>
+                </motion.div>
+              ))}
+            </AnimatePresence>
+            <motion.button
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+              type="button"
+              onClick={handleQuestionAdd}
+              className="px-6 py-3 bg-gradient-to-r from-[#0075ff] to-[#00a3ff] rounded-xl text-white font-medium hover:shadow-lg transition-all duration-300"
+            >
+              Add Question
+            </motion.button>
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="bg-[#ffffff10] backdrop-blur-xl border border-[#ffffff20] rounded-xl p-8"
+          >
+            <h2 className="text-2xl font-bold bg-gradient-to-r from-[#0075ff] to-[#00a3ff] bg-clip-text text-transparent mb-6">
+              Prize Distribution
+            </h2>
+            <div className="space-y-4">
+              {contestData.prize_distribution.map((prize, index) => (
+                <div key={index}>
+                  <label className="block text-white text-lg mb-2">
+                    Rank {index + 1} Prize
+                  </label>
+                  <input
+                    type="number"
+                    value={prize}
+                    onChange={(e) => handleChange(e, "prize", "prize_distribution", index)}
+                    className="w-full px-4 py-3 bg-[#ffffff08] border border-[#ffffff20] rounded-xl text-white placeholder-gray-400 focus:outline-none focus:border-[#0075ff] transition-all duration-300"
+                    placeholder={`Enter prize for rank ${index + 1}`}
+                  />
                 </div>
               ))}
             </div>
-          ))}
-          <button
-            type="button"
-            onClick={handleQuestionAdd}
-            className="bg-purple-600 text-white py-2 px-6 rounded-lg hover:bg-purple-700 transition-all mt-4"
-          >
-            Add Another Question
-          </button>
-        </div>
+          </motion.div>
 
-        {/* Prize Distribution */}
-        <div className="mb-6">
-          <h2 className="text-2xl font-semibold mb-4">Prize Distribution</h2>
-          {contestData.prize_distribution.map((prize, index) => (
-            <div key={index} className="mb-4">
-              <label htmlFor={`prize-${index}`} className="block text-lg mb-2">
-                Rank {index + 1} Prize
-              </label>
-              <input
-                type="number"
-                id={`prize-${index}`}
-                value={prize}
-                onChange={(e) => handleChange(e, "prize", "prize_distribution", index)}
-                className="w-full p-3 bg-black border border-gray-600 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
-                placeholder={`Enter Prize for Rank ${index + 1}`}
-              />
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="bg-[#ffffff10] backdrop-blur-xl border border-[#ffffff20] rounded-xl p-8"
+          >
+            <h2 className="text-2xl font-bold bg-gradient-to-r from-[#0075ff] to-[#00a3ff] bg-clip-text text-transparent mb-6">
+              Contest Schedule
+            </h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div>
+                <label className="block text-white text-lg mb-2">
+                  Start Time
+                </label>
+                <input
+                  type="datetime-local"
+                  value={contestData.start_time}
+                  onChange={(e) => handleChange(e, "contest", "start_time")}
+                  className="w-full px-4 py-3 bg-[#ffffff08] border border-[#ffffff20] rounded-xl text-white focus:outline-none focus:border-[#0075ff] transition-all duration-300"
+                />
+              </div>
+              <div>
+                <label className="block text-white text-lg mb-2">
+                  End Time
+                </label>
+                <input
+                  type="datetime-local"
+                  value={contestData.end_time}
+                  onChange={(e) => handleChange(e, "contest", "end_time")}
+                  className="w-full px-4 py-3 bg-[#ffffff08] border border-[#ffffff20] rounded-xl text-white focus:outline-none focus:border-[#0075ff] transition-all duration-300"
+                />
+              </div>
             </div>
-          ))}
-        </div>
+          </motion.div>
 
-        {/* Start and End Time */}
-        <div className="mb-6">
-          <label htmlFor="start-time" className="block text-lg mb-2">
-            Start Time
-          </label>
-          <input
-            type="datetime-local"
-            id="start-time"
-            value={contestData.start_time}
-            onChange={(e) => handleChange(e, "contest", "start_time")}
-            className="w-full p-3 bg-black border border-gray-600 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
-          />
-        </div>
-
-        <div className="mb-6">
-          <label htmlFor="end-time" className="block text-lg mb-2">
-            End Time
-          </label>
-          <input
-            type="datetime-local"
-            id="end-time"
-            value={contestData.end_time}
-            onChange={(e) => handleChange(e, "contest", "end_time")}
-            className="w-full p-3 bg-black border border-gray-600 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
-          />
-        </div>
-
-        {/* Submit Button */}
-        <div className="text-center mt-6">
-          <button
-            type="submit"
-            className="bg-purple-600 text-white py-2 px-6 rounded-lg hover:bg-purple-700 transition-all"
-          >
-            Create Contest
-          </button>
-        </div>
-      </form>
+          <div className="text-center">
+            <motion.button
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+              type="submit"
+              className="px-8 py-4 bg-gradient-to-r from-[#0075ff] to-[#00a3ff] rounded-xl text-white font-medium hover:shadow-lg transition-all duration-300"
+            >
+              Create Contest
+            </motion.button>
+          </div>
+        </form>
+      </motion.div>
     </div>
   );
 };

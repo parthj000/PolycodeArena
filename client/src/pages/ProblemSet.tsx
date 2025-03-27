@@ -3,6 +3,7 @@ import ReactCodeMirror from "@uiw/react-codemirror";
 import { loadLanguage } from "@uiw/codemirror-extensions-langs";
 import { tokyoNight } from "@uiw/codemirror-theme-tokyo-night";
 import { API_URL } from "../App";
+import { motion, AnimatePresence } from "framer-motion";
 
 interface TestCase {
     input: any;
@@ -15,6 +16,22 @@ interface Question {
     test_cases: {
         public: TestCase[];
     };
+}
+
+interface SubmissionOutput {
+    input: string;
+    expected_output: string;
+    actual_output: string;
+    is_correct: boolean;
+    execution_time: number;
+    error: string;
+}
+
+interface SubmissionResult {
+    message: string;
+    output: SubmissionOutput[];
+    iscorrect: boolean;
+    marks: number;
 }
 
 interface ProblemSetProps {
@@ -34,7 +51,7 @@ const ProblemSet = ({
     const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
     const [code, setCode] = useState<string>(initialCode);
     const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
-    const [submissionResult, setSubmissionResult] = useState<any | null>(null);
+    const [submissionResult, setSubmissionResult] = useState<SubmissionResult | null>(null);
 
     const handleSubmit = async () => {
         if (selectedQuestion === null) {
@@ -59,8 +76,8 @@ const ProblemSet = ({
             });
 
             const data = await response.json();
-            setSubmissionResult(data); // Save the submission result
-            setOutput(data.output || "No output provided");
+            setSubmissionResult(data);
+            setOutput(data.output?.[0]?.actual_output || "No output provided");
         } catch (error) {
             console.error("Submission Error:", error);
             alert("There was an error submitting your code.");
@@ -70,97 +87,254 @@ const ProblemSet = ({
     };
 
     return (
-        <div className="h-screen overflow-hidden bg-black text-white flex">
+        <div className="h-screen bg-gradient-to-br from-[#0f1535] to-[#111c44] text-white flex flex-col lg:flex-row overflow-hidden">
             {/* Left Side: Problem List or Problem Details */}
-            <div className="w-1/2 border-r border-gray-700 h-full flex flex-col">
-                {selectedQuestion === null ? (
-                    <div className="p-4">
-                        <h2 className="text-lg font-bold mb-4">Problem Statements</h2>
-                        <ul className="space-y-2">
-                            {questions.map((question, index) => (
-                                <li
-                                    key={index}
-                                    className={`p-4 bg-gray-800 rounded-lg shadow-md cursor-pointer transform transition-all duration-300 hover:scale-105 hover:bg-indigo-600 ${
-                                        hoveredIndex === index ? "shadow-lg" : ""
-                                    }`}
-                                    onMouseEnter={() => setHoveredIndex(index)}
-                                    onMouseLeave={() => setHoveredIndex(null)}
-                                    onClick={() => setSelectedQuestion(index)}
-                                >
-                                    {question.question_text}
-                                </li>
-                            ))}
-                        </ul>
-                    </div>
-                ) : (
-                    <div className="p-4">
-                        <button
-                            className="mb-4 text-sm bg-gray-700 px-3 py-1 rounded hover:bg-gray-600"
-                            onClick={() => setSelectedQuestion(null)}
+            <div className="w-full lg:w-1/2 border-r border-[#ffffff20] h-full flex flex-col overflow-hidden">
+                <AnimatePresence mode="wait">
+                    {selectedQuestion === null ? (
+                        <motion.div
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            exit={{ opacity: 0, y: -20 }}
+                            className="p-6 h-full overflow-y-auto"
                         >
-                            ← Back to Problems
-                        </button>
-                        <h2 className="text-xl font-bold mb-4">
-                            {questions[selectedQuestion].question_text}
-                        </h2>
-                        <p className="text-m mb-4">
-                            {questions[selectedQuestion].question_description}
-                        </p>
-                        <div className="mb-4">
-                            <h3 className="text-lg font-semibold">Test Cases</h3>
-                            <ul className="text-sm list-disc pl-5">
-                                {questions[selectedQuestion].test_cases.public.map(
-                                    (testCase, i) => (
-                                        <li key={i} className="mb-2">
-                                            <strong>Input:</strong> {JSON.stringify(testCase.input)} <br />
-                                            <strong>Output:</strong> {JSON.stringify(testCase.output)}
-                                        </li>
-                                    )
-                                )}
-                            </ul>
-                        </div>
-                    </div>
-                )}
+                            <h2 className="text-2xl font-bold bg-gradient-to-r from-indigo-400 to-indigo-200 bg-clip-text text-transparent mb-6">
+                                Problem Statements
+                            </h2>
+                            <div className="space-y-4">
+                                {questions.map((question, index) => (
+                                    <motion.div
+                                        key={index}
+                                        initial={{ opacity: 0, y: 20 }}
+                                        animate={{ opacity: 1, y: 0 }}
+                                        transition={{ delay: index * 0.1 }}
+                                        className={`bg-gradient-to-br from-[#ffffff0a] to-[#ffffff05] backdrop-blur-xl border border-[#ffffff20] rounded-xl p-6 cursor-pointer hover:border-indigo-500/30 transition-all duration-300 ${
+                                            hoveredIndex === index ? "transform scale-[1.02]" : ""
+                                        }`}
+                                        onMouseEnter={() => setHoveredIndex(index)}
+                                        onMouseLeave={() => setHoveredIndex(null)}
+                                        onClick={() => setSelectedQuestion(index)}
+                                    >
+                                        <div className="flex items-center space-x-4">
+                                            <div className="w-12 h-12 rounded-xl bg-indigo-500/20 flex items-center justify-center text-2xl font-bold text-indigo-400">
+                                                {index + 1}
+                                            </div>
+                                            <div>
+                                                <h3 className="text-xl font-bold text-white">
+                                                    {question.question_text}
+                                                </h3>
+                                            </div>
+                                        </div>
+                                    </motion.div>
+                                ))}
+                            </div>
+                        </motion.div>
+                    ) : (
+                        <motion.div
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            exit={{ opacity: 0, y: -20 }}
+                            className="p-6 h-full overflow-y-auto"
+                        >
+                            <motion.button
+                                whileHover={{ scale: 1.02 }}
+                                whileTap={{ scale: 0.98 }}
+                                className="mb-6 px-4 py-2 bg-[#ffffff15] rounded-xl text-white font-medium hover:bg-[#ffffff20] transition-all duration-300 flex items-center space-x-2"
+                                onClick={() => setSelectedQuestion(null)}
+                            >
+                                <span>←</span>
+                                <span>Back to Problems</span>
+                            </motion.button>
+
+                            <div className="bg-gradient-to-br from-[#ffffff0a] to-[#ffffff05] backdrop-blur-xl border border-[#ffffff20] rounded-xl p-6">
+                                <h2 className="text-2xl font-bold bg-gradient-to-r from-indigo-400 to-indigo-200 bg-clip-text text-transparent mb-4">
+                                    {questions[selectedQuestion].question_text}
+                                </h2>
+                                <div className="prose prose-invert max-w-none">
+                                    <p className="text-gray-300 mb-6">
+                                        {questions[selectedQuestion].question_description}
+                                    </p>
+                                </div>
+
+                                <div className="mt-8">
+                                    <h3 className="text-xl font-bold text-indigo-400 mb-4">Test Cases</h3>
+                                    <div className="space-y-4">
+                                        {questions[selectedQuestion].test_cases.public.map((testCase, i) => (
+                                            <motion.div
+                                                key={i}
+                                                initial={{ opacity: 0, x: -20 }}
+                                                animate={{ opacity: 1, x: 0 }}
+                                                transition={{ delay: i * 0.1 }}
+                                                className="bg-[#ffffff10] rounded-xl p-4"
+                                            >
+                                                <div className="mb-2">
+                                                    <span className="text-indigo-400 font-medium">Input:</span>
+                                                    <pre className="mt-1 p-2 bg-[#ffffff15] rounded-lg overflow-x-auto">
+                                                        {JSON.stringify(testCase.input, null, 2)}
+                                                    </pre>
+                                                </div>
+                                                <div>
+                                                    <span className="text-indigo-400 font-medium">Expected Output:</span>
+                                                    <pre className="mt-1 p-2 bg-[#ffffff15] rounded-lg overflow-x-auto">
+                                                        {JSON.stringify(testCase.output, null, 2)}
+                                                    </pre>
+                                                </div>
+                                            </motion.div>
+                                        ))}
+                                    </div>
+                                </div>
+                            </div>
+                        </motion.div>
+                    )}
+                </AnimatePresence>
             </div>
 
             {/* Right Side: Code Editor and Results */}
-            <div className="w-1/2 h-full flex flex-col">
-                <div className="flex-grow">
-                    <ReactCodeMirror
-                        value={code}
-                        extensions={[loadLanguage("javascript")!]}
-                        theme={tokyoNight}
-                        onChange={(value) => setCode(value)}
-                        width="100%"
-                        height="100%"
-                    />
+            <div className="w-full lg:w-1/2 h-full flex flex-col bg-[#0a0f2a]">
+                <div className="flex-grow relative">
+                    <div className="absolute inset-0 p-4">
+                        <div className="bg-gradient-to-br from-[#ffffff0a] to-[#ffffff05] backdrop-blur-xl border border-[#ffffff20] rounded-xl p-2 h-full">
+                            <ReactCodeMirror
+                                value={code}
+                                extensions={[loadLanguage("javascript")!]}
+                                theme={tokyoNight}
+                                onChange={(value) => setCode(value)}
+                                className="h-full rounded-lg overflow-hidden"
+                            />
+                        </div>
+                    </div>
                 </div>
-                <div className="p-4 bg-black border-t border-gray-700">
-                    <button
-                        className={`w-full py-2 rounded-md font-bold ${
+
+                <div className="p-4">
+                    <motion.button
+                        whileHover={{ scale: 1.02 }}
+                        whileTap={{ scale: 0.98 }}
+                        className={`w-full py-3 rounded-xl font-bold transition-all duration-300 ${
                             isSubmitting
                                 ? "bg-gray-600 cursor-not-allowed"
-                                : "bg-green-500 hover:bg-green-600"
+                                : "bg-gradient-to-r from-indigo-600 to-indigo-400 hover:from-indigo-500 hover:to-indigo-300"
                         }`}
                         onClick={handleSubmit}
                         disabled={isSubmitting}
                     >
-                        {isSubmitting ? "Submitting..." : "Submit Code"}
-                    </button>
-                </div>
-                {submissionResult && (
-                    <div className="p-4 bg-gray-800 mt-4 rounded-md">
-                        <h3 className="text-lg font-bold mb-2">Submission Results:</h3>
-                        <p><strong>Input:</strong> {submissionResult.input}</p>
-                        <p><strong>Expected Output:</strong> {submissionResult.expected_output}</p>
-                        <p><strong>Actual Output:</strong> {submissionResult.actual_output}</p>
-                        <p><strong>Is Correct:</strong> {submissionResult.is_correct ? "Yes" : "No"}</p>
-                        <p><strong>Execution Time:</strong> {submissionResult.execution_time}s</p>
-                        {submissionResult.error && (
-                            <p className="text-red-500"><strong>Error:</strong> {submissionResult.error}</p>
+                        {isSubmitting ? (
+                            <div className="flex items-center justify-center space-x-2">
+                                <div className="w-5 h-5 border-2 border-white/20 border-t-white rounded-full animate-spin" />
+                                <span>Submitting...</span>
+                            </div>
+                        ) : (
+                            "Submit Code"
                         )}
-                    </div>
-                )}
+                    </motion.button>
+
+                    <AnimatePresence>
+                        {submissionResult && (
+                            <motion.div
+                                initial={{ opacity: 0, y: 20 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                exit={{ opacity: 0, y: 20 }}
+                                className="mt-4 bg-gradient-to-br from-[#ffffff0a] to-[#ffffff05] backdrop-blur-xl border border-[#ffffff20] rounded-xl overflow-hidden"
+                            >
+                                {/* Submission Header */}
+                                <div className="p-4 border-b border-[#ffffff20]">
+                                    <div className="flex items-center justify-between mb-2">
+                                        <h3 className="text-xl font-bold bg-gradient-to-r from-indigo-400 to-indigo-200 bg-clip-text text-transparent">
+                                            Submission Results
+                                        </h3>
+                                        <div className="flex items-center space-x-2">
+                                            <div className={`w-2 h-2 rounded-full ${
+                                                submissionResult.iscorrect ? "bg-green-500" : "bg-red-500"
+                                            }`} />
+                                            <span className={`font-medium ${
+                                                submissionResult.iscorrect ? "text-green-400" : "text-red-400"
+                                            }`}>
+                                                {submissionResult.message}
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div className="flex items-center justify-between">
+                                        <div className="flex items-center space-x-4">
+                                            <div className="bg-indigo-500/20 px-3 py-1 rounded-full">
+                                                <span className="text-indigo-300 font-medium">
+                                                    Score: {submissionResult.marks.toFixed(2)}
+                                                </span>
+                                            </div>
+                                            <div className="bg-indigo-500/20 px-3 py-1 rounded-full">
+                                                <span className="text-indigo-300 font-medium">
+                                                    Test Cases: {submissionResult.output.length}
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {/* Test Cases */}
+                                <div className="divide-y divide-[#ffffff20]">
+                                    {submissionResult.output.map((result, index) => (
+                                        <motion.div
+                                            key={index}
+                                            initial={{ opacity: 0, y: 10 }}
+                                            animate={{ opacity: 1, y: 0 }}
+                                            transition={{ delay: index * 0.1 }}
+                                            className="p-4"
+                                        >
+                                            <div className="flex items-center justify-between mb-3">
+                                                <h4 className="text-lg font-medium text-indigo-300">
+                                                    Test Case #{index + 1}
+                                                </h4>
+                                                <div className="flex items-center space-x-4">
+                                                    <div className="flex items-center space-x-2">
+                                                        <div className={`w-2 h-2 rounded-full ${
+                                                            result.is_correct ? "bg-green-500" : "bg-red-500"
+                                                        }`} />
+                                                        <span className={`font-medium ${
+                                                            result.is_correct ? "text-green-400" : "text-red-400"
+                                                        }`}>
+                                                            {result.is_correct ? "Passed" : "Failed"}
+                                                        </span>
+                                                    </div>
+                                                    <div className="text-gray-400 text-sm">
+                                                        {result.execution_time.toFixed(3)}s
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+                                                <div>
+                                                    <p className="text-indigo-400 font-medium mb-1 text-sm">Input:</p>
+                                                    <pre className="bg-[#ffffff10] p-2 rounded-lg overflow-x-auto text-sm">
+                                                        {result.input}
+                                                    </pre>
+                                                </div>
+                                                <div>
+                                                    <p className="text-indigo-400 font-medium mb-1 text-sm">Expected:</p>
+                                                    <pre className="bg-[#ffffff10] p-2 rounded-lg overflow-x-auto text-sm">
+                                                        {result.expected_output}
+                                                    </pre>
+                                                </div>
+                                                <div>
+                                                    <p className="text-indigo-400 font-medium mb-1 text-sm">Actual:</p>
+                                                    <pre className="bg-[#ffffff10] p-2 rounded-lg overflow-x-auto text-sm">
+                                                        {result.actual_output}
+                                                    </pre>
+                                                </div>
+                                            </div>
+
+                                            {result.error && (
+                                                <div className="mt-3 bg-red-500/20 border border-red-500/30 rounded-lg p-3">
+                                                    <p className="text-red-400 font-medium text-sm">Error:</p>
+                                                    <pre className="text-red-300 mt-1 text-sm whitespace-pre-wrap">
+                                                        {result.error}
+                                                    </pre>
+                                                </div>
+                                            )}
+                                        </motion.div>
+                                    ))}
+                                </div>
+                            </motion.div>
+                        )}
+                    </AnimatePresence>
+                </div>
             </div>
         </div>
     );

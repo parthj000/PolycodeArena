@@ -4,30 +4,31 @@ import Tooltip from "./Tooltip";
 import SidePanel from "./SidePanel";
 import Notification from "./Notification";
 import { decodeToken } from "../ts/utils/decodeToken";
-
+import { motion } from "framer-motion";
 
 const MainHeading = ({ data }: { data?: MainHeadingData }) => {
     const [sidePanelState, setSidePanelState] = useState<boolean>(false);
     const [notifDisplayState, setNotifDisplayState] = useState<boolean>(false);
-    const [userData,setUserData] = useState<any>({});
+    const [userData, setUserData] = useState<any>({});
 
-    useEffect(()=>{
+    useEffect(() => {
         const decodeData = decodeToken();
         setUserData(decodeData);
-    },[])
+    }, []);
 
     return (
         <>
-            <div className="fixed w-full h-[60px] bg-black border-b border-borders flex felx-row z-[100]">
-                <Link to="/" className=" select-none">
-                    <div
-                        id="logo-cont"
-                        className="inline-block text-[24px] font-bold italic mx-[36px] mt-[12px]"
-                    >
-                        <span className="font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-purple-500 to-yellow-600 px-[1px]">
+            <motion.div 
+                initial={{ y: -100 }}
+                animate={{ y: 0 }}
+                className="fixed w-full h-[60px] bg-gradient-to-r from-[#0f1535] to-[#111c44] border-b border-[#ffffff10] flex flex-row z-[100] backdrop-blur-xl"
+            >
+                <Link to="/" className="select-none">
+                    <div className="inline-block text-[24px] font-bold italic mx-[36px] mt-[12px]">
+                        <span className="font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-[#0075ff] to-[#00a3ff]">
                             PolyCode
                         </span>
-                        <span>Arena</span>
+                        <span className="text-white">Arena</span>
                     </div>
                 </Link>
                 {data != undefined &&
@@ -37,35 +38,35 @@ const MainHeading = ({ data }: { data?: MainHeadingData }) => {
                     data.items.map((elem) => (
                         <Link
                             to={elem.link_path}
-                            className="mt-[14px] hidden md:inline-block text-[14px] h-fit p-[8px] text-[#808080] hover:text-white transition"
+                            className="mt-[14px] hidden md:inline-block text-[14px] h-fit p-[8px] text-gray-400 hover:text-white transition-all duration-300"
                         >
                             <div id={elem.text}>{elem.text}</div>
                         </Link>
                     ))}
                 {data?.status === "loggedin" || data?.status == undefined ? (
-                    <div className="fixed flex flex-row right-[36px] items-center h-[60px]">
-                        <div className="inline-block p-[5px] text-[14px] text-[#808080] md:hidden">
-                            <div className="group w-[32px] h-[32px] border border-borders rounded-[99px] relative hover:bg-[#222] cursor-pointer">
+                    <div className="fixed flex flex-row right-[36px] items-center h-[60px] space-x-4">
+                        <div className="inline-block p-[5px] text-[14px] text-gray-400 md:hidden">
+                            <motion.div 
+                                whileHover={{ scale: 1.05 }}
+                                className="w-[32px] h-[32px] border border-[#ffffff20] rounded-xl relative hover:bg-[#ffffff10] cursor-pointer transition-all duration-300"
+                            >
                                 <i className="bi bi-three-dots-vertical absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 group-hover:text-white"></i>
-                            </div>
+                            </motion.div>
                         </div>
 
-                        <div
-                            id="notification"
-                            className="inline-block p-[5px] text-[14px] text-[#808080] "
-                        >
+                        <div className="inline-block p-[5px] text-[14px] text-gray-400">
                             <Notification
                                 display={notifDisplayState}
                                 displayFn={setNotifDisplayState}
                             />
                         </div>
-                        <div
-                            id="profile-picture"
-                            className="inline-block relative p-[5px] text-[14px] text-[#808080] "
+                        <motion.div
+                            whileHover={{ scale: 1.05 }}
+                            className="inline-block relative p-[5px] text-[14px] text-gray-400"
                             onClick={() => setSidePanelState(!sidePanelState)}
                         >
                             <Tooltip text={data?.username || "navigation"}>
-                                <div className="w-[32px] h-[32px] border border-borders rounded-full overflow-hidden">
+                                <div className="w-[32px] h-[32px] border border-[#ffffff20] rounded-xl overflow-hidden bg-[#ffffff10]">
                                     <img
                                         src={"/profile.png"}
                                         alt="Profile"
@@ -73,27 +74,27 @@ const MainHeading = ({ data }: { data?: MainHeadingData }) => {
                                     />
                                 </div>
                             </Tooltip>
-                        </div>
+                        </motion.div>
                         <SidePanel
                             displayFn={setSidePanelState}
                             display={sidePanelState}
                             data={{
-                                username: userData.name?`Hello, ${userData.name}`:"",
+                                username: userData.name ? `Hello, ${userData.name}` : "",
                                 role: userData.role,
                             }}
                         />
                     </div>
                 ) : data?.status === "not-loggedin" ? (
-                    <div className="fixed flex flex-row right-[36px] items-center h-[60px]">
+                    <div className="fixed flex flex-row right-[36px] items-center h-[60px] space-x-4">
                         <Link
                             to="/login"
-                            className="inline-block font-bold py-[6px] px-[16px] bg-black hover:bg-borders border rounded-md border-borders text-white text-[14px]"
+                            className="inline-block font-medium py-[6px] px-[16px] bg-[#ffffff10] hover:bg-[#ffffff20] border border-[#ffffff20] rounded-xl text-white text-[14px] transition-all duration-300"
                         >
                             Log In
                         </Link>
                         <Link
                             to="/signup"
-                            className="ml-[8px] font-bold inline-block py-[6px] px-[16px] bg-gradient-to-r from-orange-500 to-purple-700 border rounded-md border-borders text-black text-[14px] hover:bg-red-800"
+                            className="inline-block font-medium py-[6px] px-[16px] bg-gradient-to-r from-[#0075ff] to-[#00a3ff] rounded-xl text-white text-[14px] hover:shadow-lg transition-all duration-300"
                         >
                             Sign Up
                         </Link>
@@ -101,7 +102,7 @@ const MainHeading = ({ data }: { data?: MainHeadingData }) => {
                 ) : (
                     <></>
                 )}
-            </div>
+            </motion.div>
             <div className="h-[60px]"></div>
         </>
     );

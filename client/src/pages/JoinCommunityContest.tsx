@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { API_URL } from "../App";
-import Leaderboard from "../components/LeaderBoard";
+import { motion, AnimatePresence } from "framer-motion";
 
 interface Ranking {
     user_id: string;
@@ -66,13 +66,7 @@ const JoinContestCommunity: React.FC = () => {
     const payReward = async () => {
         try {
             const url = `${API_URL}/api/community/contest/pay-reward`;
-
-            const data = {
-                contest_id: contest_id,
-            };
-
-            console.log("pahggg")
-
+            const data = { contest_id: contest_id };
             const response = await fetch(url, {
                 method: "POST",
                 headers: {
@@ -82,8 +76,6 @@ const JoinContestCommunity: React.FC = () => {
                 body: JSON.stringify(data),
             });
             const k = await response.json();
-            console.log(k);
-
             alert(k.message);
         } catch (error) {
             console.error("Network Error:", error);
@@ -93,13 +85,7 @@ const JoinContestCommunity: React.FC = () => {
     const distributeCerts = async () => {
         try {
             const url = `${API_URL}/api/community/generate-certificate`;
-
-            const data = {
-                contest_id: contest_id,
-            };
-
-            console.log("pahggg")
-
+            const data = { contest_id: contest_id };
             const response = await fetch(url, {
                 method: "POST",
                 headers: {
@@ -109,8 +95,6 @@ const JoinContestCommunity: React.FC = () => {
                 body: JSON.stringify(data),
             });
             const k = await response.json();
-            console.log(k);
-
             alert(k.message);
         } catch (error) {
             console.error("Network Error:", error);
@@ -129,9 +113,7 @@ const JoinContestCommunity: React.FC = () => {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json",
-                        Authorization: `Bearer ${localStorage.getItem(
-                            "token"
-                        )}`,
+                        Authorization: `Bearer ${localStorage.getItem("token")}`,
                     },
                     body: JSON.stringify({ contest_id }),
                 });
@@ -166,7 +148,6 @@ const JoinContestCommunity: React.FC = () => {
                 };
 
                 eventSource.onerror = () => {
-                    
                     eventSource.close();
                 };
 
@@ -183,97 +164,141 @@ const JoinContestCommunity: React.FC = () => {
     }, [contest_id]);
 
     return (
-        <div className="relative min-h-screen">
-            <div
-                className="absolute inset-0 bg-gradient-to-r from-pink-500 via-red-500 to-black"
-                style={{
-                    clipPath: "polygon(0 0, 100% 0, 100% 100%, 0% 80%)",
-                    zIndex: -1,
-                }}
-            ></div>
+        <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            className="min-h-screen bg-[#111111] p-8 font-['Inter'] relative overflow-hidden"
+        >
+            {/* Animated background elements */}
+            <motion.div
+                initial={{ opacity: 0, scale: 1.2 }}
+                animate={{ opacity: 0.15, scale: 1 }}
+                transition={{ duration: 3, repeat: Infinity, repeatType: "mirror" }}
+                className="absolute inset-0 bg-gradient-to-br from-purple-900/30 via-purple-600/20 to-transparent"
+            />
+            <motion.div
+                initial={{ opacity: 0, scale: 0.8 }}
+                animate={{ opacity: 0.1, scale: 1.2 }}
+                transition={{ duration: 4, repeat: Infinity, repeatType: "mirror", delay: 0.5 }}
+                className="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-purple-500/20 via-purple-400/10 to-transparent"
+            />
 
-            <div className="relative z-10 p-6">
-                <h6 className="text-3xl font-bold text-center mb-6 text-white">
-                    {error}
-                </h6>
-                <h1 className="text-3xl font-bold text-center mb-6 text-white">
+            <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="relative z-10 max-w-7xl mx-auto"
+            >
+                <AnimatePresence mode="wait">
+                    {error && (
+                        <motion.div
+                            initial={{ opacity: 0, y: -20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            exit={{ opacity: 0, y: -20 }}
+                            className="text-xl text-center mb-6 text-red-400 bg-red-500/10 border border-red-500/20 rounded-xl p-4"
+                        >
+                            {error}
+                        </motion.div>
+                    )}
+                </AnimatePresence>
+
+                <motion.h1
+                    className="text-3xl font-bold text-center mb-8 bg-gradient-to-r from-purple-400 to-purple-200 bg-clip-text text-transparent"
+                    initial={{ opacity: 0, y: -20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                >
                     Contest: {contest_id}
-                </h1>
+                </motion.h1>
 
-                <div className="flex space-x-8">
-                    <div className="w-1/3 bg-transparent text-white p-4 rounded-lg shadow-md">
-                        <h2 className="text-2xl font-semibold mb-4">
+                <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8"
+                >
+                    <motion.div
+                        className="bg-gradient-to-br from-[#ffffff0a] to-[#ffffff05] backdrop-blur-xl border border-[#ffffff20] rounded-xl p-6"
+                        whileHover={{ boxShadow: "0 8px 40px rgba(147, 51, 234, 0.2)" }}
+                    >
+                        <h2 className="text-2xl font-semibold mb-4 bg-gradient-to-r from-purple-400 to-purple-200 bg-clip-text text-transparent">
                             Leaderboard
                         </h2>
-                        <ul className="space-y-4">
+                        <motion.ul className="space-y-4">
                             {rankings.map((ranking, index) => (
-                                <li
+                                <motion.li
                                     key={ranking.user_id}
-                                    className="flex justify-between items-center border-b py-2"
+                                    initial={{ opacity: 0, x: -20 }}
+                                    animate={{ opacity: 1, x: 0 }}
+                                    transition={{ delay: index * 0.1 }}
+                                    className="flex justify-between items-center border-b border-[#ffffff10] py-2 text-gray-400"
                                 >
-                                    <span>
-                                        {index + 1}. {ranking.name}
+                                    <span className="flex items-center space-x-2">
+                                        <div className="w-6 h-6 rounded-full bg-gradient-to-r from-purple-600 to-purple-400 flex items-center justify-center text-white text-sm">
+                                            {index + 1}
+                                        </div>
+                                        <span>{ranking.name}</span>
                                     </span>
-                                    <span>
-                                        Total Marks: {ranking.total_marks}
+                                    <span className="text-purple-300">
+                                        {ranking.total_marks}
                                     </span>
-                                </li>
+                                </motion.li>
                             ))}
-                        </ul>
-                    </div>
+                        </motion.ul>
+                    </motion.div>
 
-                    <div className="w-2/3 bg-transparent text-white p-4 rounded-lg shadow-md">
-                        <h2 className="text-2xl font-semibold mb-4">
+                    <motion.div
+                        className="md:col-span-2 bg-gradient-to-br from-[#ffffff0a] to-[#ffffff05] backdrop-blur-xl border border-[#ffffff20] rounded-xl p-6"
+                        whileHover={{ boxShadow: "0 8px 40px rgba(147, 51, 234, 0.2)" }}
+                    >
+                        <h2 className="text-2xl font-semibold mb-4 bg-gradient-to-r from-purple-400 to-purple-200 bg-clip-text text-transparent">
                             Participants
                         </h2>
-                        <ul className="space-y-4">
-                            {participants.map((participant) => (
-                                <li
+                        <motion.ul className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            {participants.map((participant, index) => (
+                                <motion.li
                                     key={participant.user_id}
-                                    className="flex justify-between items-center border-b py-2"
+                                    initial={{ opacity: 0, x: -20 }}
+                                    animate={{ opacity: 1, x: 0 }}
+                                    transition={{ delay: index * 0.1 }}
+                                    className="flex items-center space-x-2 text-gray-400 bg-[#ffffff08] rounded-lg p-3"
                                 >
-                                    <span>User ID: {participant.user_id}</span>
-                                </li>
+                                    <div className="w-2 h-2 rounded-full bg-purple-400"></div>
+                                    <span>{participant.user_id}</span>
+                                </motion.li>
                             ))}
-                        </ul>
-                    </div>
-                </div>
+                        </motion.ul>
+                    </motion.div>
+                </motion.div>
 
-                {/* <Leaderboard data={leaderboardData} /> */}
-                <button
-                    onClick={() => {payReward()}}
-                    style={{
-                        padding: "40px",
-                        backgroundColor: "transparent",
-                        color: "white",
-                        border: "dashed",
-                        borderRadius: "6px",
-                        borderWidth: "0.5px",
-                        fontSize: "32px",
-                        cursor: "pointer",
-                        marginTop: "20px",
-                    }}
+                <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="flex flex-wrap justify-center gap-6"
                 >
-                    Pay
-                </button>
-                <button
-                    onClick={() => {distributeCerts()}}
-                    style={{
-                        padding: "40px",
-                        backgroundColor: "transparent",
-                        color: "white",
-                        border: "dashed",
-                        borderRadius: "6px",
-                        borderWidth: "0.5px",
-                        fontSize: "32px",
-                        cursor: "pointer",
-                        margin: "20px",
-                    }}
-                >
-                    Distribute Certificates
-                </button>
-            </div>
-        </div>
+                    <motion.button
+                        whileHover={{ 
+                            scale: 1.02,
+                            boxShadow: "0 8px 40px rgba(147, 51, 234, 0.2)"
+                        }}
+                        whileTap={{ scale: 0.98 }}
+                        onClick={payReward}
+                        className="px-8 py-4 bg-gradient-to-br from-[#ffffff0a] to-[#ffffff05] backdrop-blur-xl border border-[#ffffff20] rounded-xl text-2xl font-semibold bg-gradient-to-r from-purple-400 to-purple-200 bg-clip-text text-transparent hover:border-purple-500/30 transition-all duration-300"
+                    >
+                        Pay Reward
+                    </motion.button>
+
+                    <motion.button
+                        whileHover={{ 
+                            scale: 1.02,
+                            boxShadow: "0 8px 40px rgba(147, 51, 234, 0.2)"
+                        }}
+                        whileTap={{ scale: 0.98 }}
+                        onClick={distributeCerts}
+                        className="px-8 py-4 bg-gradient-to-br from-[#ffffff0a] to-[#ffffff05] backdrop-blur-xl border border-[#ffffff20] rounded-xl text-2xl font-semibold bg-gradient-to-r from-purple-400 to-purple-200 bg-clip-text text-transparent hover:border-purple-500/30 transition-all duration-300"
+                    >
+                        Distribute Certificates
+                    </motion.button>
+                </motion.div>
+            </motion.div>
+        </motion.div>
     );
 };
 
