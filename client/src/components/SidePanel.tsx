@@ -17,7 +17,7 @@ const SidePanelItem = ({
 }) => {
     return (
         <motion.div
-            whileHover={{ x: 5, backgroundColor: "rgba(255, 255, 255, 0.1)" }}
+            whileHover={{ x: 5 }}
             className="w-full"
         >
             <Link

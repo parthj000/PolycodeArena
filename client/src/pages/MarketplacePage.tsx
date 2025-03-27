@@ -62,7 +62,7 @@ const MarketplacePage = () => {
     };
 
     return (
-        <div className="min-h-screen bg-[#111111] p-4 sm:p-6 md:p-8 font-['Inter'] relative overflow-hidden">
+        <div className="min-h-screen bg-gradient-to-br from-[#0f1535] to-[#111c44] p-4 sm:p-6 md:p-8 font-['Inter'] relative overflow-hidden">
             {/* Enhanced animated background elements */}
             <motion.div
                 initial={{ opacity: 0, scale: 1.2 }}
@@ -84,40 +84,30 @@ const MarketplacePage = () => {
             />
 
             {/* Enhanced Header with floating effect */}
+            
             <motion.div
                 initial={{ opacity: 0, y: -20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8, ease: "easeOut" }}
-                className="text-center mb-12 relative z-10"
+                className="text-center mb-12 relative z-10 "
             >
-                <motion.div
-                    animate={{ 
-                        y: [0, -8, 0],
-                        scale: [1, 1.02, 1]
-                    }}
-                    transition={{ 
-                        duration: 6,
-                        repeat: Infinity,
-                        repeatType: "mirror"
-                    }}
+                <div
+                    
                 >
-                    <motion.h1
-                        initial={{ backgroundPosition: "200% 0" }}
-                        animate={{ backgroundPosition: "-200% 0" }}
-                        transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+                    <h1
+                        
+                        
                         className="text-5xl font-bold bg-gradient-to-r from-purple-500 via-purple-300 to-purple-500 bg-clip-text text-transparent bg-[length:200%_auto] mb-2 drop-shadow-[0_0_10px_rgba(168,85,247,0.3)]"
                     >
                         Marketplace
-                    </motion.h1>
-                    <motion.p
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        transition={{ delay: 0.3 }}
+                    </h1>
+                    <p
+                        
                         className="text-purple-300/60 text-lg"
                     >
                         Discover amazing products
-                    </motion.p>
-                </motion.div>
+                    </p>
+                </div>
             </motion.div>
 
             {/* Enhanced Loading State with pulsing effect */}
@@ -199,7 +189,7 @@ const MarketplacePage = () => {
                                         scale: 1.03,
                                         boxShadow: "0 8px 40px rgba(147, 51, 234, 0.2)"
                                     }}
-                                    className="bg-gradient-to-br from-[#ffffff0a] to-[#ffffff05] backdrop-blur-xl border border-[#ffffff20] rounded-xl overflow-hidden transition-all duration-300 cursor-pointer group hover:border-purple-500/30"
+                                    className="bg-gradient-to-br from-[#0f1535] to-[#111c44] backdrop-blur-xl border border-[#ffffff20] rounded-xl overflow-hidden transition-all duration-300 cursor-pointer group hover:border-purple-500/30"
                                     onClick={() => handleProductClick(product)}
                                 >
                                     <motion.div className="relative overflow-hidden">

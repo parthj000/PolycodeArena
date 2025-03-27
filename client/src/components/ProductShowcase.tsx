@@ -91,7 +91,7 @@ const ProductShowcase: React.FC<ProductProps> = ({ product, onClose }) => {
                 initial="hidden"
                 animate="visible"
                 exit="exit"
-                className="bg-[#111111] border border-[#ffffff20] rounded-xl p-6 max-w-2xl w-full max-h-[90vh] overflow-y-auto relative"
+                className="bg-[#111111] border border-[#ffffff20] rounded-xl p-6 max-w-2xl w-full max-h-[90vh]  overflow-hidden relative"
                 onClick={(e) => e.stopPropagation()}
             >
                 {/* Enhanced background gradients */}
