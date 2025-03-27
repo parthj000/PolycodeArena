@@ -38,6 +38,11 @@ app.use(cookieParser());
 app.use("/api", authenticateToken, router);
 
 // Start the server
-app.listen(port, () => {
+app.listen(port,()=> {
     console.log(`Server listening at port: ${port}`);
 });
+
+
+export default app;
+
+

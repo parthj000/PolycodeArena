@@ -15,7 +15,7 @@ async function submitProblems(req: any, res: any) {
     return res.status(400).json({ message: "All fields are required." });
   }
 
-  let verify;
+  let verify:any;
   try {
     verify = jwt.verify(contest_token, String(CONTEST_SECRET));
   } catch (error) {

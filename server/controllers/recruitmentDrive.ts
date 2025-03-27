@@ -1,16 +1,24 @@
 import mongoose from "mongoose";
 import { RecruitmentDriveModel } from "../models/recruitmentDrive";
 
+interface Stage {
+    stage_name: string;
+    stage_type: string; // e.g., "interview", "quiz", "assignment"
+    stage_id: string;
+    description?: string;
+    participants?: string[]; // Optional field
+}
+
+interface IRecruitmentDriveDocument extends mongoose.Document {
+    meta: RecruitmentDrive;
+    start_date: number;
+    end_date: number;
+}
+
 interface RecruitmentDrive {
     drive_name: string;
     invitation_code: string;
-    stages: {
-        stage_name: string;
-        stage_type: string; // e.g., "interview", "quiz", "assignment"
-        stage_id: string;
-        description?: string;
-        participants?: string[]; // Optional field
-    }[];
+    stages: Stage[];
     company_id: string;
     start_date: number;
     end_date: number;
@@ -76,7 +84,7 @@ function generateInvitationCode(length = 6): string {
     return code;
 }
 
-export async function addParticipantToStageOne(req, res) {
+export async function addParticipantToStageOne(req: any, res: any) {
     const { drive_id, user_id } = req.body;
 
     // Validate input
@@ -86,25 +94,29 @@ export async function addParticipantToStageOne(req, res) {
 
     try {
         // Find the recruitment drive by ID
-        const recruitmentDrive = await RecruitmentDriveModel.findById(drive_id);
+                const recruitmentDrive = await RecruitmentDriveModel.findById(drive_id).exec() as IRecruitmentDriveDocument | null;
+
 
         if (!recruitmentDrive) {
             return res.status(404).json({ message: "Recruitment drive not found" });
         }
 
         // Access the first stage (stage-1)
-        const stageOne = recruitmentDrive.meta.stages.find(stage => stage.stage_id === "stage-1");
+        const stageOne = recruitmentDrive.meta.stages.find((stage) => stage.stage_id === "stage-1");
 
         if (!stageOne) {
             return res.status(404).json({ message: "Stage-1 not found in the recruitment drive" });
         }
 
         // Check if the user is already a participant
-        if (stageOne.participants.includes(user_id)) {
+        if (stageOne.participants?.includes(user_id)) {
             return res.status(400).json({ message: "User is already a participant in Stage-1" });
         }
 
         // Add the user to the participants list
+        if (!stageOne.participants) {
+            stageOne.participants = [];
+        }
         stageOne.participants.push(user_id);
 
         // Save the updated recruitment drive
@@ -116,7 +128,5 @@ export async function addParticipantToStageOne(req, res) {
         return res.status(500).json({ message: "An error occurred while adding the participant." });
     }
 }
-
-
 
 export { createRecruitmentDrive };

@@ -216,7 +216,7 @@ user.get("/auth", (req, res) => {
     return res.status(200).json({ message: "Authenticated." });
 });
 
-user.get("/assets", async (req, res) => {
+user.get("/assets", async (req:any, res:any) => {
     try {
         const userId = req.decoded?.id;
         // Access userId from decoded token
@@ -271,10 +271,10 @@ user.get("/quiz/join/:token", (req, res) => {
     const { token } = req.params;
 
     try {
-        const verify = jwt.verify(
+        const verify:any = jwt.verify(
             token,
             String(CONTEST_SECRET)
-        ) as CustomJwtPayload;
+        ) 
 
         if (!verify || !verify.quiz_id) {
             return res
@@ -344,7 +344,7 @@ user.get("/join/:token", (req, res) => {
     const { token } = req.params;
 
     try {
-        const verify = jwt.verify(token, String(CONTEST_SECRET));
+        const verify:any = jwt.verify(token, String(CONTEST_SECRET));
         console.log(verify, "this is coolll");
 
         if (!verify) {
@@ -367,7 +367,7 @@ user.get("/join/:token", (req, res) => {
         res.write(`data: ${data}\n\n`);
 
         const sendEvent = async () => {
-            const contestRankings = await pollContest(verify.contest_id);
+            const contestRankings:any = await pollContest(verify.contest_id);
             const kapa = {
                 message: "Update from Stream 1",
                 rankings: contestRankings.rankings,
