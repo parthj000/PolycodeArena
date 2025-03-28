@@ -8,6 +8,7 @@ import { decodeToken } from "../ts/utils/decodeToken";
 const LandingPage = () => {
     const [username, setUsername] = useState<string>("");
     const [loggedIn, setLoggedIn] = useState<boolean>(false);
+    const [decoded,setDecoded] = useState<any>({});
     const { scrollYProgress } = useScroll();
 
     // Parallax and animation effects
@@ -22,6 +23,7 @@ const LandingPage = () => {
             const decoded = decodeToken();
             if (decoded && decoded.name) {
                 setUsername(decoded.name);
+                setDecoded(decoded);
             }
         }
     }, []);
@@ -144,7 +146,8 @@ const LandingPage = () => {
                         transition={{ delay: 0.6 }}
                     >
                         <Link
-                            to="/dashboard"
+                            to={decoded?.role === "C" ? "/community/dashboard" : "/user/profile"}
+
                             className="inline-block font-medium py-4 px-10 bg-gradient-to-r from-[#e0287d] to-[#1bc7fb] rounded-xl text-white text-lg transition-all duration-300 transform hover:-translate-y-1 font-inter relative overflow-hidden group"
                         >
                             <span className="relative z-10">Enter Arena</span>
@@ -308,7 +311,7 @@ const LandingPage = () => {
             </div>
 
             {/* Features Section */}
-            <div className="relative py-20 px-4 bg-gradient-to-b from-[#0a0b14] to-[#111c44]">
+            <div className="relative py-20 px-4 bg-gradient-to-b from-[#0a0b14] to-[#111c44] ">
                 <div className="max-w-7xl mx-auto">
                     <motion.h2 
                         className="text-3xl md:text-4xl font-bold text-center mb-16 bg-gradient-to-r from-[#0075ff] to-[#00a3ff] bg-clip-text text-transparent"
@@ -398,27 +401,7 @@ const LandingPage = () => {
                 </div>
             </div>
 
-            {/* Scroll Indicator */}
-            <motion.div 
-                className="fixed bottom-8 right-8 w-12 h-12 flex items-center justify-center"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 1 }}
-            >
-                <motion.div 
-                    className="w-3 h-3 rounded-full bg-gradient-to-r from-[#0075ff] to-[#00a3ff]"
-                    animate={{
-                        y: [0, 10, 0],
-                        scale: [1, 0.8, 1],
-                        opacity: [0.5, 1, 0.5]
-                    }}
-                    transition={{
-                        duration: 2,
-                        repeat: Infinity,
-                        ease: "easeInOut"
-                    }}
-                />
-            </motion.div>
+            
         </div>
     );
 };

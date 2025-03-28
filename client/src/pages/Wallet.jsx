@@ -11,8 +11,9 @@ const WalletPage = () => {
     const [data, setData] = useState();
     const [isModalOpen, setModalOpen] = useState(false);
     const [receiverWalletId, setReceiverWalletId] = useState("");
-
+    const [loading,setLoading] = useState(false);
     useEffect(() => {
+        setLoading(true);
         const decoded = decodeToken();
         if (!decoded.wallet_id) {
             navigate("Login");
@@ -21,17 +22,33 @@ const WalletPage = () => {
         setWalletId(decoded.wallet_id);
 
         const fetchWallet = async () => {
-            const res = await fetch(`${API_URL}api/wallet/${decoded.wallet_id}`, {
-                headers: {
-                    Authorization: `Bearer ${localStorage.getItem("token")}`,
-                },
-            });
-            const data = await res.json();
-            const mainJson = data.data;
-            if (!mainJson) {
-                console.log("Something went wrong!");
+            try {
+                const res = await fetch(
+                    `${API_URL}api/wallet/${decoded.wallet_id}`,
+                    {
+                        headers: {
+                            Authorization: `Bearer ${localStorage.getItem(
+                                "token"
+                            )}`,
+                        },
+                    }
+                );
+                const data = await res.json();
+                const mainJson = data.data;
+                if (!mainJson) {
+                    console.log("Something went wrong!");
+                }
+                setData(mainJson);
+                
+            } catch (error) {
+                setData({});
+
+                
             }
-            setData(mainJson);
+            finally{
+                setLoading(false);
+            }
+            
         };
 
         fetchWallet();
@@ -47,7 +64,7 @@ const WalletPage = () => {
 
     return (
         <div className="min-h-screen bg-gradient-to-br from-[#0f1535] to-[#111c44] p-8 font-['Inter']">
-            {data && (
+            {data ?
                 <motion.div
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
@@ -121,7 +138,14 @@ const WalletPage = () => {
                         </div>
                     </motion.div>
                 </motion.div>
-            )}
+            :
+            <motion.div
+                                    initial={{ opacity: 0 }}
+                                    animate={{ opacity: 1 }}
+                                    className="flex justify-center items-center h-64"
+                                >
+                                    <div className="w-16 h-16 border-4 border-indigo-500/20 border-t-indigo-500 rounded-full animate-spin" />
+                                </motion.div>}
 
             {/* Payment Modal */}
             <AnimatePresence>

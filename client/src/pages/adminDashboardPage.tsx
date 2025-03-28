@@ -91,6 +91,8 @@ const Leaderboard: React.FC = () => {
 
       {error && <p className="text-red-500">{error}</p>}
 
+      
+
       <div className="w-full max-w-2xl">
         {users
           .sort((a, b) => (walletBalances[b._id] || 0) - (walletBalances[a._id] || 0))
@@ -100,7 +102,7 @@ const Leaderboard: React.FC = () => {
               className="bg-gray-900 border-2 border-neon-purple p-4 mb-4 rounded-lg cursor-pointer"
               onClick={() => toggleUser(user._id)}
               whileHover={{ scale: 1.05 }}
-              transition={{ duration: 0.3 }}
+              transition={{ duration: 0.1 }}
             >
               <div className="flex justify-between items-center">
                 <span className="text-neon-blue text-xl font-bold">#{index + 1}</span>

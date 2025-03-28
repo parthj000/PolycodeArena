@@ -15,6 +15,8 @@ import {
   Filler,
 } from "chart.js";
 import { API_URL } from "../App";
+import { useNavigate } from "react-router-dom";
+
 
 ChartJS.register(
   CategoryScale,
@@ -75,6 +77,7 @@ const CompanyDashboard = () => {
   });
   const [unverifiedUserAlert, setUnverifiedUserAlert] = useState<{ _id: string; name: string; collegeYear: string }[]>([]);
   const [activeTab, setActiveTab] = useState("dashboard");
+  const navigation = useNavigate();
 
   useEffect(() => {
     const fetchStats = async () => {
@@ -227,7 +230,7 @@ const CompanyDashboard = () => {
       >
         <div className="text-center py-6">
           <h1 className="text-2xl font-bold bg-gradient-to-r from-[#0075ff] to-[#00a3ff] bg-clip-text text-transparent">
-            MLVTEC
+              Menu
           </h1>
         </div>
         <nav className="space-y-2">
@@ -246,7 +249,9 @@ const CompanyDashboard = () => {
               className={`flex items-center space-x-3 p-3 rounded-xl cursor-pointer transition-all duration-300 ${
                 activeTab === item.id ? 'bg-gradient-to-r from-[#0075ff] to-[#00a3ff] text-white' : 'text-gray-400 hover:text-white'
               }`}
-              onClick={() => setActiveTab(item.id)}
+              onClick={() => {setActiveTab(item.id)
+                navigation("/community/"+item.id);
+              }}
             >
               <span>{item.icon}</span>
               <span>{item.label}</span>
