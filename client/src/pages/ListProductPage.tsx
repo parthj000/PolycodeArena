@@ -42,7 +42,7 @@ const ListProductPage = () => {
         }];
 
         try {
-            const response = await fetch(`${API_URL}/api/community/product/list`, {
+            const response = await fetch(`${API_URL}api/community/product/list`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",

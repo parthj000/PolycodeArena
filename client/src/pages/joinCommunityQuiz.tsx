@@ -29,7 +29,7 @@ const JoinCommunityQuiz: React.FC = () => {
   useEffect(() => {
     const fetchQuiz = async () => {
       try {
-        const response = await fetch(`${API_URL}/api/community/quiz/${quiz_id}/questions`, {
+        const response = await fetch(`${API_URL}api/community/quiz/${quiz_id}/questions`, {
           headers: {
             Authorization: `BEARER ${localStorage.getItem("token")}`,
           },
@@ -95,7 +95,7 @@ const JoinCommunityQuiz: React.FC = () => {
     setIsSubmitting(true);
 
     try {
-      const response = await fetch(`${API_URL}/api/community/submit/quiz`, {
+      const response = await fetch(`${API_URL}api/community/submit/quiz`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

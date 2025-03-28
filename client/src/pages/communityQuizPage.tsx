@@ -13,7 +13,7 @@ const QuizPageCommunity: React.FC = () => {
   useEffect(() => {
     const fetchQuizzes = async () => {
       try {
-        const response = await fetch(`${API_URL}/api/community/quizzes`, {
+        const response = await fetch(`${API_URL}api/community/quizzes`, {
           headers: {
             "Content-Type": "application/json",
             Authorization: `BEARER ${localStorage.getItem("token")}`,

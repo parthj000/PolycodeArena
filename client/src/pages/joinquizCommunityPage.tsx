@@ -26,7 +26,7 @@ const QuizAdminDashboard: React.FC = () => {
     // Function to distribute rewards to quiz participants
     const distributeRewards = async () => {
         try {
-            const response = await fetch(`${API_URL}/api/admin/quiz/${quiz_id}/distribute-rewards`, {
+            const response = await fetch(`${API_URL}api/admin/quiz/${quiz_id}/distribute-rewards`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -55,7 +55,7 @@ const QuizAdminDashboard: React.FC = () => {
             }
 
             try {
-                const response = await fetch(`${API_URL}/api/community/quiz/${quiz_id}`, {
+                const response = await fetch(`${API_URL}api/community/quiz/${quiz_id}`, {
                     method: "GET",
                     headers: {
                         "Content-Type": "application/json",

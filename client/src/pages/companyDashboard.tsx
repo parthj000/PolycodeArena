@@ -86,11 +86,11 @@ const CompanyDashboard = () => {
 
         // Fetch all data concurrently
         const [usersRes, contestsRes, quizzesRes, recruitmentsRes, unverifiedRes] = await Promise.all([
-          fetch(`${API_URL}/api/community/users`, { headers }),
-          fetch(`${API_URL}/api/community/contest`, { headers }),
-          fetch(`${API_URL}/api/community/quizzes`, { headers }),
-          fetch(`${API_URL}/api/community/recruitment/all`, { headers }),
-          fetch(`${API_URL}/api/community/unverified-users`, { headers }),
+          fetch(`${API_URL}api/community/users`, { headers }),
+          fetch(`${API_URL}api/community/contest`, { headers }),
+          fetch(`${API_URL}api/community/quizzes`, { headers }),
+          fetch(`${API_URL}api/community/recruitment/all`, { headers }),
+          fetch(`${API_URL}api/community/unverified-users`, { headers }),
         ]);
 
         // Parse responses

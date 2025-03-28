@@ -62,7 +62,7 @@ const ProblemSet = ({
             const contest_token = token;
             const question_id = Number(selectedQuestion) + 1;
 
-            const response = await fetch(`${API_URL}/api/user/submit`, {
+            const response = await fetch(`${API_URL}api/user/submit`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",

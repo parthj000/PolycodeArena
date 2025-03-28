@@ -27,7 +27,7 @@ const Leaderboard: React.FC = () => {
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const response = await fetch(`${API_URL}/api/wallet/users`, {
+        const response = await fetch(`${API_URL}api/wallet/users`, {
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -53,7 +53,7 @@ const Leaderboard: React.FC = () => {
         users.map(async (user) => {
           if (user.wallet_id) {
             try {
-              const response = await fetch(`${API_URL}/api/wallet/${user.wallet_id}`, {
+              const response = await fetch(`${API_URL}api/wallet/${user.wallet_id}`, {
                 headers: {
                   "Content-Type": "application/json",
                   Authorization: `Bearer ${localStorage.getItem("token")}`,

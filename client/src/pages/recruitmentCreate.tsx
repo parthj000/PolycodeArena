@@ -46,7 +46,7 @@ const CreateRecruitmentDrive: React.FC = () => {
         stage_id: id,
       }));
 
-      const response = await fetch(`${API_URL}/api/community/create/drive`, {
+      const response = await fetch(`${API_URL}api/community/create/drive`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

@@ -24,7 +24,7 @@ const SettingPage = ({
         console.log("account deleted");
         axios
             .post(
-                `${API_URL}/api/accounts/delete/${id}`,
+                `${API_URL}api/accounts/delete/${id}`,
                 {},
                 {
                     headers: {
@@ -47,7 +47,7 @@ const SettingPage = ({
 
     useEffect(() => {
         axios
-            .get(`${API_URL}/api/accounts/id/${id}`, {
+            .get(`${API_URL}api/accounts/id/${id}`, {
                 headers: {
                     Authorization: token,
                 },

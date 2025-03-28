@@ -92,7 +92,7 @@ const QuizCreation: React.FC = () => {
     };
 
     try {
-      const response = await fetch(`${API_URL}/api/community/create/quiz`, {
+      const response = await fetch(`${API_URL}api/community/create/quiz`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

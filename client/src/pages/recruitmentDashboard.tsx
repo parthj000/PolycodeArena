@@ -32,7 +32,7 @@ const RecruitmentDashboard: React.FC = () => {
     useEffect(() => {
         const fetchRecruitmentDrive = async () => {
             try {
-                const response = await fetch(`${API_URL}/api/community/recruitment/${recruitment_id}`, {
+                const response = await fetch(`${API_URL}api/community/recruitment/${recruitment_id}`, {
                     method: "GET",
                     headers: {
                         Authorization: `Bearer ${localStorage.getItem("token")}`,

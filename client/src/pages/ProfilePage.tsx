@@ -60,7 +60,7 @@ const ProfilePage = () => {
                 const token = localStorage.getItem("token");
                 if (!token || !user?.id) return;
 
-                const response = await fetch(`${API_URL}/api/wallet/user_in/${user.id}`, {
+                const response = await fetch(`${API_URL}api/wallet/user_in/${user.id}`, {
                     method: "GET",
                     headers: {
                         Authorization: `Bearer ${token}`,
@@ -82,7 +82,7 @@ const ProfilePage = () => {
                 setContests(contestData || []);
 
                 // Fetch wallet data
-                const walletResponse = await fetch(`${API_URL}/api/wallet/${userData.wallet_id}`, {
+                const walletResponse = await fetch(`${API_URL}api/wallet/${userData.wallet_id}`, {
                     headers: {
                         Authorization: `Bearer ${token}`,
                     },

@@ -13,7 +13,7 @@ const UserQuestionDashBoard: React.FC = () => {
 
     const checkAuthentication = async () => {
         try {
-            const response = await fetch(`${API_URL}/api/user/auth`, {
+            const response = await fetch(`${API_URL}api/user/auth`, {
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json",
@@ -48,7 +48,7 @@ const UserQuestionDashBoard: React.FC = () => {
     useEffect(() => {
         if (isAuthenticated && token) {
             const eventSource = new EventSource(
-                `${API_URL}/api/user/join/${token}`
+                `${API_URL}api/user/join/${token}`
             );
 
             eventSource.onmessage = (event: MessageEvent) => {

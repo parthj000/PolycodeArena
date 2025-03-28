@@ -65,7 +65,7 @@ const JoinContestCommunity: React.FC = () => {
 
     const payReward = async () => {
         try {
-            const url = `${API_URL}/api/community/contest/pay-reward`;
+            const url = `${API_URL}api/community/contest/pay-reward`;
             const data = { contest_id: contest_id };
             const response = await fetch(url, {
                 method: "POST",
@@ -84,7 +84,7 @@ const JoinContestCommunity: React.FC = () => {
 
     const distributeCerts = async () => {
         try {
-            const url = `${API_URL}/api/community/generate-certificate`;
+            const url = `${API_URL}api/community/generate-certificate`;
             const data = { contest_id: contest_id };
             const response = await fetch(url, {
                 method: "POST",
@@ -109,7 +109,7 @@ const JoinContestCommunity: React.FC = () => {
             }
 
             try {
-                const response = await fetch(`${API_URL}/api/community/join`, {
+                const response = await fetch(`${API_URL}api/community/join`, {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json",
@@ -133,7 +133,7 @@ const JoinContestCommunity: React.FC = () => {
                 }
 
                 const eventSource = new EventSource(
-                    `${API_URL}/api/community/join/${token}`
+                    `${API_URL}api/community/join/${token}`
                 );
 
                 eventSource.onmessage = (event) => {

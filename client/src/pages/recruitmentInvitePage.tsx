@@ -29,7 +29,7 @@ const RecruitmentInvite: React.FC = () => {
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const response = await fetch(`${API_URL}/api/community/users`, {
+        const response = await fetch(`${API_URL}api/community/users`, {
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -64,7 +64,7 @@ const RecruitmentInvite: React.FC = () => {
     try {
       // First, get the recruitment drive details
       const driveResponse = await fetch(
-        `${API_URL}/api/community/recruitment/${recruitment_id}`,
+        `${API_URL}api/community/recruitment/${recruitment_id}`,
         {
           headers: {
             "Content-Type": "application/json",
@@ -84,7 +84,7 @@ const RecruitmentInvite: React.FC = () => {
 
       // Send the invite request
       const response = await fetch(
-        `${API_URL}/api/community/recruitment/${recruitment_id}/inviteusers`,
+        `${API_URL}api/community/recruitment/${recruitment_id}/inviteusers`,
         {
           method: "POST",
           headers: {

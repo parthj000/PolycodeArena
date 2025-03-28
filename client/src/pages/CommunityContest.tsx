@@ -32,7 +32,7 @@ const ContestPageCommunity: React.FC = () => {
     const fetchContests = async () => {
       setIsLoading(true);
       try {
-        const response = await fetch(`${API_URL}/api/community/contest`, {
+        const response = await fetch(`${API_URL}api/community/contest`, {
           headers: {
             "Content-Type": "application/json",
             authorization: `BEARER ${localStorage.getItem("token")}`,

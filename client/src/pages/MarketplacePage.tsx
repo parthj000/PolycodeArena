@@ -30,7 +30,7 @@ const MarketplacePage = () => {
         const fetchProducts = async () => {
             try {
                 const response = await fetch(
-                    `${API_URL}/api/community/product/list`,
+                    `${API_URL}api/community/product/list`,
                     {
                         method: "GET",
                         headers: {

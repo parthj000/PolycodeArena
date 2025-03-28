@@ -22,7 +22,7 @@ const UnverifiedUsersDashboard: React.FC = () => {
   useEffect(() => {
     const fetchUnverifiedUsers = async () => {
       try {
-        const response = await fetch(`${API_URL}/api/community/unverified-users`, {
+        const response = await fetch(`${API_URL}api/community/unverified-users`, {
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -50,7 +50,7 @@ const UnverifiedUsersDashboard: React.FC = () => {
 
   const handleVerify = async (userId: string) => {
     try {
-      const response = await fetch(`${API_URL}/api/community/verify-user`, {
+      const response = await fetch(`${API_URL}api/community/verify-user`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

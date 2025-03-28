@@ -54,7 +54,7 @@ const ProductShowcase: React.FC<ProductProps> = ({ product, onClose }) => {
             try {
                 setIsLoading(true);
                 setError(null);
-                const res = await fetch(`${API_URL}/api/user/buy`, {
+                const res = await fetch(`${API_URL}api/user/buy`, {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json",

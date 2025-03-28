@@ -26,7 +26,7 @@ const QuizSolving: React.FC = () => {
   useEffect(() => {
     const fetchQuiz = async () => {
       try {
-        const response = await fetch(`${API_URL}/api/user/quiz/${quiz_id}/questions`, {
+        const response = await fetch(`${API_URL}api/user/quiz/${quiz_id}/questions`, {
           method: "GET",
           headers: {
             Authorization: `BEARER ${localStorage.getItem("token")}`,
@@ -73,7 +73,7 @@ const QuizSolving: React.FC = () => {
     }
 
     try {
-      const response = await fetch(`${API_URL}/api/user/submit/quiz`, {
+      const response = await fetch(`${API_URL}api/user/submit/quiz`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

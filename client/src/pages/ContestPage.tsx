@@ -126,7 +126,7 @@ const ContestPage: React.FC = () => {
     useEffect(() => {
         const fetchContests = async () => {
             try {
-                const response = await fetch(`${API_URL}/api/user/contest`, {
+                const response = await fetch(`${API_URL}api/user/contest`, {
                     headers: {
                         "Content-Type": "application/json",
                         authorization: `BEARER ${localStorage.getItem("token")}`,

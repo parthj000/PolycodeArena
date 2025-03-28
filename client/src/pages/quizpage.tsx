@@ -15,7 +15,7 @@ const QuizPage: React.FC = () => {
     useEffect(() => {
         const fetchQuizzes = async () => {
             try {
-                const response = await fetch(`${API_URL}/api/user/quizzes`, {
+                const response = await fetch(`${API_URL}api/user/quizzes`, {
                     headers: {
                         "Content-Type": "application/json",
                         authorization: `BEARER ${localStorage.getItem("token")}`,
@@ -53,7 +53,7 @@ const QuizPage: React.FC = () => {
 
     const handleRegisterSubmit = async (invitationCode: string) => {
         try {
-            const response = await fetch(`${API_URL}/api/user/quiz/register`, {
+            const response = await fetch(`${API_URL}api/user/quiz/register`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",

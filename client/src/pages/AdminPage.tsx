@@ -180,7 +180,7 @@ const AdminPage: React.FC = () => {
 
   try {
     // Send the request to the backend
-    const response = await fetch(`${API_URL}/api/community/create/contest`, {
+    const response = await fetch(`${API_URL}api/community/create/contest`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

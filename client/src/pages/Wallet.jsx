@@ -21,7 +21,7 @@ const WalletPage = () => {
         setWalletId(decoded.wallet_id);
 
         const fetchWallet = async () => {
-            const res = await fetch(`${API_URL}/api/wallet/${decoded.wallet_id}`, {
+            const res = await fetch(`${API_URL}api/wallet/${decoded.wallet_id}`, {
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem("token")}`,
                 },
