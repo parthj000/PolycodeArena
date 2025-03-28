@@ -137,7 +137,7 @@ function sortRankingsByTotalMarks(rankings: { [key: string]: any }): { [key: str
 
 async function getMarksEngine(payload:any) {
   try {
-    const response = await fetch(" https://w8pax9lc8b.execute-api.us-east-1.amazonaws.com/prod/polycode", {
+    const response = await fetch("https://w8pax9lc8b.execute-api.us-east-1.amazonaws.com/prod/polycode", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

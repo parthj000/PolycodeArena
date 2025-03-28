@@ -54,6 +54,7 @@ const ProblemSet = ({
     const [submissionResult, setSubmissionResult] = useState<SubmissionResult | null>(null);
 
     const handleSubmit = async () => {
+        console.log("ksdnkdsjfdsklfndslkfsdlfkdsmf")
         if (selectedQuestion === null) {
             return;
         }
@@ -76,6 +77,8 @@ const ProblemSet = ({
             });
 
             const data = await response.json();
+            
+            console.log(data,"this is daaaatatatatat");
             setSubmissionResult(data);
             setOutput(data.output?.[0]?.actual_output || "No output provided");
         } catch (error) {
@@ -256,7 +259,7 @@ const ProblemSet = ({
                                         <div className="flex items-center space-x-4">
                                             <div className="bg-indigo-500/20 px-3 py-1 rounded-full">
                                                 <span className="text-indigo-300 font-medium">
-                                                    Score: {submissionResult.marks.toFixed(2)}
+                                                    Score: {submissionResult.marks}
                                                 </span>
                                             </div>
                                             <div className="bg-indigo-500/20 px-3 py-1 rounded-full">
@@ -269,8 +272,8 @@ const ProblemSet = ({
                                 </div>
 
                                 {/* Test Cases */}
-                                <div className="divide-y divide-[#ffffff20]">
-                                    {submissionResult.output.map((result, index) => (
+                                {/* <div className="divide-y divide-[#ffffff20]">
+                                    {submissionResult.output.length !==0 && submissionResult.output.map((result, index) => (
                                         <motion.div
                                             key={index}
                                             initial={{ opacity: 0, y: 10 }}
@@ -330,7 +333,7 @@ const ProblemSet = ({
                                             )}
                                         </motion.div>
                                     ))}
-                                </div>
+                                </div> */}
                             </motion.div>
                         )}
                     </AnimatePresence>
