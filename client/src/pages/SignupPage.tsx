@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
+import { API_URL } from "../App";
+
 
 const SignupPage = () => {
     const [username, setUsername] = useState("");
@@ -74,8 +76,8 @@ const SignupPage = () => {
         try {
             const url =
                 role === "community"
-                    ? "http://localhost:8080/api/community/signup"
-                    : "http://localhost:8080/api/user/unverified-signup";
+                    ? `${API_URL}api/community/signup`
+                    : `${API_URL}api/user/unverified-signup`;
 
             const res = await fetch(url, {
                 method: "POST",
@@ -180,15 +182,9 @@ const SignupPage = () => {
         <div className="min-h-screen bg-[#111111] p-4 sm:p-6 md:p-8 font-['Inter'] relative overflow-hidden">
             {/* Animated background elements */}
             <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 0.1 }}
-                transition={{ duration: 2, repeat: Infinity, repeatType: "reverse" }}
                 className="absolute inset-0 bg-gradient-to-br from-purple-900/20 to-transparent"
             />
             <motion.div
-                initial={{ opacity: 0, scale: 0.8 }}
-                animate={{ opacity: 0.05, scale: 1 }}
-                transition={{ duration: 3, repeat: Infinity, repeatType: "reverse" }}
                 className="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-purple-500/10 via-transparent to-transparent"
             />
 

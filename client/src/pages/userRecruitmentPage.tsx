@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
+import { API_URL } from "../App";
+
 
 const UserRecruitmentPage: React.FC = () => {
     const [recruitments, setRecruitments] = useState<any[]>([]);
@@ -11,7 +13,7 @@ const UserRecruitmentPage: React.FC = () => {
     useEffect(() => {
         const fetchRecruitments = async () => {
             try {
-                const response = await fetch("http://localhost:8080/api/user/recruitment/all", {
+                const response = await fetch(`${API_URL}api/user/recruitment/all`, {
                     headers: {
                         "Content-Type": "application/json",
                         Authorization: `Bearer ${localStorage.getItem("token")}`,

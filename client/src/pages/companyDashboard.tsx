@@ -14,6 +14,7 @@ import {
   ArcElement,
   Filler,
 } from "chart.js";
+import { API_URL } from "../App";
 
 ChartJS.register(
   CategoryScale,
@@ -28,7 +29,7 @@ ChartJS.register(
   Filler
 );
 
-const API_URL = "http://localhost:8080";
+
 
 // Vision UI themed Card Component
 const StatCard = ({ value, label, icon, trend }: { value: number | string; label: string; icon: string; trend?: { value: number; isPositive: boolean } }) => (

@@ -1,7 +1,8 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import Loading from "../components/Loading";
+import { API_URL } from "../App";
+
 
 const LoginPage = () => {
     const [usernameOrEmail, setUsernameOrEmail] = useState("");
@@ -34,8 +35,8 @@ const LoginPage = () => {
             // Simulate login request using POST
             let urlPoint ;
             role==="C"?urlPoint="community":urlPoint="user"
-            console.log(`http://localhost:8080/api/${urlPoint}/login`);
-            const res = await fetch(`http://localhost:8080/api/${urlPoint}/login`, {
+            
+            const res = await fetch(`${API_URL}api/${urlPoint}/login`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -73,15 +74,11 @@ const LoginPage = () => {
         <div className="min-h-screen bg-[#111111] p-4 sm:p-6 md:p-8 font-['Inter'] relative overflow-hidden">
             {/* Animated background elements */}
             <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 0.1 }}
-                transition={{ duration: 2, repeat: Infinity, repeatType: "reverse" }}
+                
                 className="absolute inset-0 bg-gradient-to-br from-purple-900/20 to-transparent"
             />
             <motion.div
-                initial={{ opacity: 0, scale: 0.8 }}
-                animate={{ opacity: 0.05, scale: 1 }}
-                transition={{ duration: 3, repeat: Infinity, repeatType: "reverse" }}
+                
                 className="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-purple-500/10 via-transparent to-transparent"
             />
 
