@@ -311,7 +311,7 @@ const LandingPage = () => {
             </div>
 
             {/* Features Section */}
-            <div className="relative py-20 px-4 bg-gradient-to-b from-[#0a0b14] to-[#111c44] ">
+            <div className="relative py-10 px-4 bg-gradient-to-b from-[#0a0b14] to-[#111c44] ">
                 <div className="max-w-7xl mx-auto">
                     <motion.h2 
                         className="text-3xl md:text-4xl font-bold text-center mb-16 bg-gradient-to-r from-[#0075ff] to-[#00a3ff] bg-clip-text text-transparent"
@@ -399,7 +399,21 @@ const LandingPage = () => {
                         </motion.div>
                     </div>
                 </div>
+                 <div className="bg-[#0f1a3d00] text-white  mt-8">
+      <div className="text-center">
+        <p className="text-sm">
+          &copy; 2025 <span className="font-semibold">PolycodeArena</span>. All rights reserved.
+        </p>
+      </div>
+    </div>
+                
             </div>
+
+
+            
+
+           
+            
 
             
         </div>
