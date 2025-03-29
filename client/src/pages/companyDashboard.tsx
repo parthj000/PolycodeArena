@@ -237,7 +237,7 @@ const CompanyDashboard = () => {
           {[
             { id: "dashboard", label: "Dashboard", icon: "📊" },
             { id: "leaderboard", label: "Leaderboard", icon: "🏆" },
-            { id: "contests", label: "Contests", icon: "🎯" },
+            { id: "contest", label: "Contests", icon: "🎯" },
             { id: "quizzes", label: "Quizzes", icon: "❓" },
             { id: "marketplace", label: "Marketplace", icon: "🏪" },
             { id: "wallet", label: "Wallet", icon: "💰" },
