@@ -32,7 +32,7 @@ export async function login(req:any,res:any,role:role){
     if(!loginEntry){
         return res.status(404).json({message:"Email doesnt exists"})
     }
-    else if(!unverifiedEntry){
+    else if(unverifiedEntry){
         return res.status(403).json({message:"Community admins will verify you first!"});
     }
 
