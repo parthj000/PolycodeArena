@@ -28,13 +28,13 @@ export async function login(req:any,res:any,role:role){
         loginEntry = await UserModel.findOne({email:email});
         unverifiedEntry = await UnverifiedUserModel.findOne({email:email});
     }
-
-    if(!loginEntry){
-        return res.status(404).json({message:"Email doesnt exists"})
-    }
-    else if(unverifiedEntry){
+    if(unverifiedEntry){
         return res.status(403).json({message:"Community admins will verify you first!"});
     }
+    else if(!loginEntry){
+        return res.status(404).json({message:"Email doesnt exists"})
+    }
+    
 
     console.log(loginEntry);
     let k = compare(password,loginEntry.password);
