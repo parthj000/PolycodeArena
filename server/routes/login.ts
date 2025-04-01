@@ -3,6 +3,7 @@ import { CommunityModel, UserModel } from "../models/user";
 import { compare } from "../utils/hash";
 import jwt from "jsonwebtoken"
 import { JWT_SECRET } from "../server";
+import { UnverifiedUserModel } from "../models/unverifiedUser";
 
 type role = "C" | "U";
 
@@ -17,7 +18,7 @@ export async function login(req:any,res:any,role:role){
 
     }
     let loginEntry:any;
-
+    let unverifiedEntry:any;
     try {
 
          if(role==="C"){
@@ -25,10 +26,14 @@ export async function login(req:any,res:any,role:role){
     }
     else{
         loginEntry = await UserModel.findOne({email:email});
+        unverifiedEntry = await UnverifiedUserModel.findOne({email:email});
     }
 
     if(!loginEntry){
         return res.status(404).json({message:"Email doesnt exists"})
+    }
+    else if(!unverifiedEntry){
+        return res.status(403).json({message:"Community admins will verify you first!"});
     }
 
     console.log(loginEntry);
