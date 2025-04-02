@@ -127,7 +127,7 @@ const LoginPage = () => {
                         >
                             <input
                                 type="text"
-                                placeholder="Username or Email"
+                                placeholder="Enter your Email"
                                 value={usernameOrEmail}
                                 onChange={(e) => setUsernameOrEmail(e.target.value)}
                                 className="w-full bg-[#ffffff0a] border border-[#ffffff20] rounded-xl p-3 text-white placeholder-gray-400 focus:outline-none focus:border-purple-500/50 focus:bg-[#ffffff15] transition-all duration-300"

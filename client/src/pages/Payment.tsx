@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
+import { API_URL } from "../App";
 
 const PaymentForm= () => {
   const { receiverid } = useParams<{ receiverid: string }>(); 
@@ -16,7 +17,7 @@ const PaymentForm= () => {
     }
 
     try {
-      const response = await fetch(`${process.env.REACT_APP_BACKEND_URI}/wallet/pay`, {
+      const response = await fetch(`${API_URL}/wallet/pay`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
