@@ -146,7 +146,7 @@ const SignupPage = () => {
                 }
 
                 await Promise.all(uploadPromises);
-                setMessage("Signup successful. Please Wait for Verification");
+                setMessage("Signup successful !");
             }
         } catch (error: any) {
             setMessage(error.message);

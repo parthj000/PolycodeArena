@@ -18,7 +18,7 @@ interface Result {
 export default function SubmissionResult({ result }: { result: Result }) {
   if (result.stderr) {
     return (
-      <div className="p-6 bg-gradient-to-br from-red-500/20 to-red-500/10 border border-red-400/30 text-red-300 rounded-xl backdrop-blur-md">
+      <div className="p-6 bg-gradient-to-br from-red-500/20 to-red-500/10 border border-red-400/30 text-red-300 rounded-xl backdrop-blur-md overflow-scroll">
         <h2 className="font-bold text-lg mb-2">Error</h2>
         <pre className="whitespace-pre-wrap text-sm">{result.stderr}</pre>
       </div>
