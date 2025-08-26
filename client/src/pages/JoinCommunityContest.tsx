@@ -76,6 +76,7 @@ const JoinContestCommunity: React.FC = () => {
                 body: JSON.stringify(data),
             });
             const k = await response.json();
+            console.log(k)
             alert(k.message);
         } catch (error) {
             console.error("Network Error:", error);
@@ -171,21 +172,13 @@ const JoinContestCommunity: React.FC = () => {
         >
             {/* Animated background elements */}
             <motion.div
-                initial={{ opacity: 0, scale: 1.2 }}
-                animate={{ opacity: 0.15, scale: 1 }}
-                transition={{ duration: 3, repeat: Infinity, repeatType: "mirror" }}
                 className="absolute inset-0 bg-gradient-to-br from-purple-900/30 via-purple-600/20 to-transparent"
             />
             <motion.div
-                initial={{ opacity: 0, scale: 0.8 }}
-                animate={{ opacity: 0.1, scale: 1.2 }}
-                transition={{ duration: 4, repeat: Infinity, repeatType: "mirror", delay: 0.5 }}
                 className="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-purple-500/20 via-purple-400/10 to-transparent"
             />
 
             <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
                 className="relative z-10 max-w-7xl mx-auto"
             >
                 <AnimatePresence mode="wait">
@@ -216,7 +209,7 @@ const JoinContestCommunity: React.FC = () => {
                 >
                     <motion.div
                         className="bg-gradient-to-br from-[#ffffff0a] to-[#ffffff05] backdrop-blur-xl border border-[#ffffff20] rounded-xl p-6"
-                        whileHover={{ boxShadow: "0 8px 40px rgba(147, 51, 234, 0.2)" }}
+                       
                     >
                         <h2 className="text-2xl font-semibold mb-4 bg-gradient-to-r from-purple-400 to-purple-200 bg-clip-text text-transparent">
                             Leaderboard
@@ -246,7 +239,7 @@ const JoinContestCommunity: React.FC = () => {
 
                     <motion.div
                         className="md:col-span-2 bg-gradient-to-br from-[#ffffff0a] to-[#ffffff05] backdrop-blur-xl border border-[#ffffff20] rounded-xl p-6"
-                        whileHover={{ boxShadow: "0 8px 40px rgba(147, 51, 234, 0.2)" }}
+                        
                     >
                         <h2 className="text-2xl font-semibold mb-4 bg-gradient-to-r from-purple-400 to-purple-200 bg-clip-text text-transparent">
                             Participants
@@ -280,7 +273,7 @@ const JoinContestCommunity: React.FC = () => {
                         }}
                         whileTap={{ scale: 0.98 }}
                         onClick={payReward}
-                        className="px-8 py-4 bg-gradient-to-br from-[#ffffff0a] to-[#ffffff05] backdrop-blur-xl border border-[#ffffff20] rounded-xl text-2xl font-semibold bg-gradient-to-r from-purple-400 to-purple-200 bg-clip-text text-transparent hover:border-purple-500/30 transition-all duration-300"
+                        className="px-8 py-4  backdrop-blur-xl border border-[#ffffff20] rounded-xl text-2xl font-semibold bg-gradient-to-r from-purple-400 to-purple-200 bg-clip-text text-transparent hover:border-purple-500/30 transition-all duration-300"
                     >
                         Pay Reward
                     </motion.button>
@@ -292,7 +285,7 @@ const JoinContestCommunity: React.FC = () => {
                         }}
                         whileTap={{ scale: 0.98 }}
                         onClick={distributeCerts}
-                        className="px-8 py-4 bg-gradient-to-br from-[#ffffff0a] to-[#ffffff05] backdrop-blur-xl border border-[#ffffff20] rounded-xl text-2xl font-semibold bg-gradient-to-r from-purple-400 to-purple-200 bg-clip-text text-transparent hover:border-purple-500/30 transition-all duration-300"
+                        className="px-8 py-4  backdrop-blur-xl border border-[#ffffff20] rounded-xl text-2xl font-semibold bg-gradient-to-r from-purple-400 to-purple-200 bg-clip-text text-transparent hover:border-purple-500/30 transition-all duration-300"
                     >
                         Distribute Certificates
                     </motion.button>
