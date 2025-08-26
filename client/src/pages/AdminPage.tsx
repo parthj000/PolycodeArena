@@ -61,6 +61,19 @@ const AdminPage: React.FC = () => {
     description: "",
     private: false,
   });
+  const [error,setError] = useState("");
+
+function isValidInput(input:any) {
+  
+  input = input.trim();
+
+  try {
+    const parsed = JSON.parse("[" + input + "]");
+    return { valid: true, parsed };
+  } catch {
+    return { valid: false, parsed: null };
+  }
+}
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>,
@@ -68,13 +81,27 @@ const AdminPage: React.FC = () => {
     key: string,
     index?: number,
     type?: "public" | "hidden",
-    testCaseIndex?: number
+    testCaseIndex?: number,
+    setError?:any
   ) => {
+
+    console.log(e.target.value,key)
     const value =
       e.target.type === "checkbox"
         ? (e.target as HTMLInputElement).checked
         : e.target.value;
-  
+    if(section==="questions" && setError){
+      let k = isValidInput(e.target.value);
+      if(!k.valid){
+        setError("This is not valid")
+        
+      }
+      else{
+        setError("")
+      }
+      
+      console.log(k);
+    }
     setContestData((prevState) => {
       const newState = { ...prevState };
   
@@ -85,7 +112,7 @@ const AdminPage: React.FC = () => {
         if (type && testCaseIndex !== undefined) {
           const testCases = newState.question_set[index!].test_cases[type];
           // Explicitly assert the type of the test case being modified
-          (testCases[testCaseIndex!] as unknown as Record<string, unknown>)[key] = value;
+        (testCases[testCaseIndex!] as unknown as Record<string, unknown>)[key] =value;
         } else {
           const question = newState.question_set[index!];
           // Ensure `key` maps to a valid property of `Question`
@@ -106,15 +133,27 @@ const AdminPage: React.FC = () => {
   
 
   const handleTestCaseAdd = (questionIndex: number, type: "public" | "hidden") => {
-    setContestData((prevState) => {
-      const newState = { ...prevState };
-      newState.question_set[questionIndex].test_cases[type].push({
-        input: "",
-        expected_output: "",
-      });
-      return newState;
-    });
-  };
+  setContestData((prevState) => {
+    const question = prevState.question_set[questionIndex];
+    const updatedTestCases = {
+      ...question.test_cases,
+      [type]: [...question.test_cases[type], { input: "", expected_output: "" }],
+    };
+
+    const updatedQuestion = {
+      ...question,
+      test_cases: updatedTestCases,
+    };
+
+    const updatedQuestionSet = [...prevState.question_set];
+    updatedQuestionSet[questionIndex] = updatedQuestion;
+
+    return {
+      ...prevState,
+      question_set: updatedQuestionSet,
+    };
+  });
+};
 
   const handleQuestionAdd = () => {
     setContestData((prevState) => ({
@@ -152,16 +191,20 @@ const AdminPage: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
   e.preventDefault();
+    if(error){
+    alert("Inputs or outputs are wrong")
+    return;
+  }
 
-  // Calculate total prize distribution sum
   const totalPrize = contestData.prize_distribution.reduce((acc, prize) => acc + prize, 0);
   const deductionAmount = totalPrize + 20; // Deduct 20 from the account
 
-  // Show alert with deduction amount
+ 
   const userConfirmed = window.confirm(`The total prize distribution is ${totalPrize}. An additional 20 will be deducted from your account. Total deduction: ${deductionAmount}. Do you wish to proceed?`);
 
-  if (!userConfirmed) {
+  if (!userConfirmed && error) {
     // If the user clicks "Cancel", stop the function execution
+    alert("Resolve the error");
     return;
   }
 
@@ -178,6 +221,7 @@ const AdminPage: React.FC = () => {
 
   console.log("Form data as JSON:", JSON.stringify(payload, null, 2));
 
+  
   try {
     // Send the request to the backend
     const response = await fetch(`${API_URL}api/community/create/contest`, {
@@ -260,7 +304,7 @@ const AdminPage: React.FC = () => {
                 />
               </div>
 
-              <div className="flex items-center space-x-2">
+              {/* <div className="flex items-center space-x-2">
                 <label className="text-white text-lg font-medium">Private Contest</label>
                 <input
                   type="checkbox"
@@ -268,7 +312,7 @@ const AdminPage: React.FC = () => {
                   onChange={(e) => handleChange(e, "contest", "private")}
                   className="w-5 h-5 rounded border-[#ffffff20] bg-[#ffffff08] checked:bg-[#0075ff] transition-all duration-300"
                 />
-              </div>
+              </div> */}
             </div>
           </motion.div>
 
@@ -332,12 +376,15 @@ const AdminPage: React.FC = () => {
                     </div>
 
                     {["public", "hidden"].map((type) => (
+                      <>
                       <div key={type} className="mt-6">
                         <h4 className="text-lg font-bold text-white capitalize mb-4">
                           {type} Test Cases
                         </h4>
                         <AnimatePresence>
-                          {question.test_cases[type as "public" | "hidden"].map((testCase, testCaseIndex) => (
+                          {question.test_cases[type as "public" | "hidden"].map((testCase, testCaseIndex) => {
+                            
+                            return (<>
                             <motion.div
                               key={testCaseIndex}
                               initial={{ opacity: 0, y: -10 }}
@@ -353,11 +400,12 @@ const AdminPage: React.FC = () => {
                                   <input
                                     type="text"
                                     value={testCase.input}
-                                    onChange={(e) => handleChange(e, "questions", "input", questionIndex, type as "public" | "hidden", testCaseIndex)}
+                                    onChange={(e) => handleChange(e, "questions", "input", questionIndex, type as "public" | "hidden", testCaseIndex,setError)}
                                     className="w-full px-4 py-3 bg-[#ffffff08] border border-[#ffffff20] rounded-xl text-white placeholder-gray-400 focus:outline-none focus:border-[#0075ff] transition-all duration-300"
                                     placeholder="Enter input"
                                   />
                                 </div>
+                                <h1 className="text-[white] opacity-95">example input: 2 , [478,589] , 45</h1>
                                 <div>
                                   <label className="block text-white text-lg mb-2">
                                     Expected Output
@@ -365,14 +413,18 @@ const AdminPage: React.FC = () => {
                                   <input
                                     type="text"
                                     value={testCase.expected_output}
-                                    onChange={(e) => handleChange(e, "questions", "expected_output", questionIndex, type as "public" | "hidden", testCaseIndex)}
+                                    onChange={(e) => handleChange(e, "questions", "expected_output", questionIndex, type as "public" | "hidden", testCaseIndex,setError)}
                                     className="w-full px-4 py-3 bg-[#ffffff08] border border-[#ffffff20] rounded-xl text-white placeholder-gray-400 focus:outline-none focus:border-[#0075ff] transition-all duration-300"
                                     placeholder="Enter expected output"
                                   />
+                                  <h1 className="text-[white] mt-2 opacity-95">example output: 4</h1>
                                 </div>
                               </div>
+                              
+                              <h1 className="text-[red]">{error}</h1>
                             </motion.div>
-                          ))}
+                            </>)
+                    })}
                         </AnimatePresence>
                         <motion.button
                           whileHover={{ scale: 1.02 }}
@@ -384,6 +436,7 @@ const AdminPage: React.FC = () => {
                           Add {type} Test Case
                         </motion.button>
                       </div>
+                      </>
                     ))}
                   </div>
                 </motion.div>
