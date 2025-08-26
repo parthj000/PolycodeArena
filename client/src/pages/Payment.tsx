@@ -17,7 +17,7 @@ const PaymentForm= () => {
     }
 
     try {
-      const response = await fetch(`${API_URL}wallet/pay`, {
+      const response = await fetch(`${API_URL}api/wallet/pay`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
