@@ -234,20 +234,16 @@ community.post("/verify-user", async (req: Request, res: Response) => {
     }
 
     try {
-        const unverifiedUser:any = await UnverifiedUserModel.findById(userId);
+        const unverifiedUser:any = await UserModel.findById(userId);
         if (!unverifiedUser) {
-            return res
-                .status(404)
-                .json({ message: "Unverified user not found." });
-
             return res
                 .status(404)
                 .json({ message: "Unverified user not found." });
         }
 
-        const verifiedUser = new UserModel({ ...unverifiedUser.toObject() });
-        await verifiedUser.save();
-        await UnverifiedUserModel.findByIdAndDelete(userId);
+        unverifiedUser.verification = true;
+        await unverifiedUser.save();
+        
 
         res.status(200).json({ message: "User verified successfully." });
     } catch (error) {
@@ -364,7 +360,7 @@ community.get("/users", async (_req: Request, res: Response) => {
 // Fetch All Unverified Users Route
 community.get("/unverified-users", async (_req: Request, res: Response) => {
     try {
-        const unverifiedUsers = await UnverifiedUserModel.find();
+        const unverifiedUsers = await UserModel.find({verification:false});
         res.status(200).json({ unverifiedUsers });
     } catch (error) {
         console.error("Error fetching unverified users:", error);

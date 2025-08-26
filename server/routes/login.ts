@@ -26,12 +26,12 @@ export async function login(req:any,res:any,role:role){
     }
     else{
         loginEntry = await UserModel.findOne({email:email});
-        unverifiedEntry = await UnverifiedUserModel.findOne({email:email});
+        // unverifiedEntry = await UnverifiedUserModel.findOne({email:email});
     }
-    if(unverifiedEntry){
-        return res.status(403).json({message:"Community admins will verify you first!"});
-    }
-    else if(!loginEntry){
+    // if(unverifiedEntry){
+    //     return res.status(403).json({message:"Community admins will verify you first!"});
+    // }
+    if(!loginEntry){
         return res.status(404).json({message:"Email doesnt exists"})
     }
     

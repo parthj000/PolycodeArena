@@ -161,10 +161,10 @@ user.post("/unverified-signup", async (req, res) => {
 
         console.log(req.body);
 
-        const existingUser = await UnverifiedUserModel.findOne({ email });
-        const verifiedUser = await UserModel.findOne({email:email});
+        // const existingUser = await UnverifiedUserModel.findOne({ email });
+        const existUser = await UserModel.findOne({email:email,verification:false});
 
-        if (existingUser || verifiedUser) {
+        if (existUser) {
             return res
                 .status(403)
                 .json({ message: "Unverified or verified user already exists." });
@@ -174,7 +174,7 @@ user.post("/unverified-signup", async (req, res) => {
 
         const walletId = generateRandomString(16);
 
-        const unverifiedUser = new UnverifiedUserModel({
+        const unverifiedUser = new UserModel({
             name,
             email,
             password: hashedPassword,
@@ -195,14 +195,14 @@ user.post("/unverified-signup", async (req, res) => {
 
         await generateWallet(walletId, "U", 500);
         return res.status(201).json({
-            message: "Signup successful. Please Wait for Verification",
+            message: "Signup successful.",
             urls: urls,
         });
     } catch (error) {
-        console.error("Error in unverified signup:", error);
+        console.error("Error in signup:", error);
         return res
             .status(500)
-            .json({ message: "An error occurred during unverified signup." });
+            .json({ message: "An error occurred during signup." });
     }
 });
 

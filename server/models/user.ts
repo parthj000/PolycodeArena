@@ -11,6 +11,7 @@ interface DUser extends Document {
     badges?: Buffer[];
     profile_pic?: string;
     certificates?: string;
+    verification?:boolean;
 }
 
 const userSchema = new mongoose.Schema<DUser>({
@@ -54,6 +55,10 @@ const userSchema = new mongoose.Schema<DUser>({
         type: String, // Array of binary data for storing images
         required: false,
     },
+    verification:{
+        type:Boolean,
+        default:false
+    }
 });
 
 const UserModel = mongoose.model<DUser>("User", userSchema);

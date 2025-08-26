@@ -10,7 +10,7 @@ require("dotenv");
 const wallet = express.Router();
 
 wallet.post("/pay",(req:any,res:any)=>{
-
+    console.log("hii boa")
     const {headId,amount} = req.body;
     const tailId = req.decoded.wallet_id;
 
