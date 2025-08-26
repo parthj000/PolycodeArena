@@ -42,10 +42,10 @@ async function submitProblems(req: any, res: any) {
 
   // }
 
-  const mes = await getMarksEngine(payload);
+  const mes = await getMarksEngine(payload,question.max_marks);
 
   console.log(mes);
-  if(!mes.iscorrect){
+  if(mes.stderr){
     return res.status(202).json(mes);
   }
 
@@ -78,6 +78,7 @@ async function submitProblems(req: any, res: any) {
     contest.markModified("rankings");
 
     await contest.save();
+    
 
     return res.status(200).json(mes);
   } catch (error) {
@@ -140,7 +141,7 @@ function sortRankingsByTotalMarks(rankings: { [key: string]: any }): { [key: str
 
 
 
-async function getMarksEngine(payload:any) {
+async function getMarksEngine(payload:any,max_marks:number) {
   try {
     const judge_1 = process.env.JUDGE_1_URL
     if(!judge_1){
@@ -158,15 +159,33 @@ async function getMarksEngine(payload:any) {
 
 
     if (!response.ok) {
-      return {message:"Something went wrong.",output:"swr",iscorrect:false}
+      return {stderr:"Something went wrong!"};
     }
 
     const data = await response.json();
 
-    console.log(data);
+    
+    if(data["error"]){
+      return {stderr:"something went wrong!"};
+    }
+    else if(data["stdout"]){
+      let out = data["stdout"];
+      let per_marks:number = max_marks/out.length;
+      console.log(max_marks);
+      console.log(per_marks);
+      let totalMarks = 0;
+      for(let resp of out){
+        if(resp.correct===1){
+          totalMarks=totalMarks+per_marks;
+        }
+      }
+      return {...data,marks:totalMarks}
 
-    return {message:"Submitted",output:JSON.stringify(data),iscorrect:true,marks:data.final_score};
-    console.log("Response:", data);
+    }
+    else{
+      return {...data,marks:0};
+    }
+
   } catch (error) {
     console.error("Error:", error);
      return {message:"Something went wrong.",output:"",iscorrect:false}
