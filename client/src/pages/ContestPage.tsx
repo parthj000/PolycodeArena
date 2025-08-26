@@ -164,7 +164,7 @@ const ContestPage: React.FC = () => {
     const handleRegisterSubmit = async (invitationCode: string) => {
         try {
             const response = await fetch(
-                `${API_URL}/api/user/contest/register`,
+                `${API_URL}api/user/contest/register`,
                 {
                     method: "POST",
                     headers: {

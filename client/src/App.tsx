@@ -35,7 +35,7 @@ import CompanyDashboard from "./pages/companyDashboard";
 
 export const TOKEN_STORAGE_KEY = "authToken";
 export const ID_STORAGE_KEY = "id";
-export const API_URL = "https://polycode-arena-backend.vercel.app/";
+export const API_URL = "http://localhost:8080/";
 
 function App() {
     const [token, setToken] = useState(localStorage.getItem(TOKEN_STORAGE_KEY));

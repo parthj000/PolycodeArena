@@ -108,21 +108,15 @@ const UserQuestionDashBoard: React.FC = () => {
 
     return (
         <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
+           
             className="min-h-screen bg-gradient-to-br from-[#0f1535] to-[#111c44] p-8 font-['Inter'] relative overflow-hidden"
         >
             {/* Animated background elements */}
             <motion.div
-                initial={{ opacity: 0, scale: 1.2 }}
-                animate={{ opacity: 0.15, scale: 1 }}
-                transition={{ duration: 3, repeat: Infinity, repeatType: "mirror" }}
+                
                 className="absolute inset-0 bg-gradient-to-br from-indigo-900/30 via-indigo-600/20 to-transparent"
             />
             <motion.div
-                initial={{ opacity: 0, scale: 0.8 }}
-                animate={{ opacity: 0.1, scale: 1.2 }}
-                transition={{ duration: 4, repeat: Infinity, repeatType: "mirror", delay: 0.5 }}
                 className="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-indigo-500/20 via-indigo-400/10 to-transparent"
             />
 
@@ -196,9 +190,7 @@ const UserQuestionDashBoard: React.FC = () => {
                             className="lg:col-span-3 bg-gradient-to-br from-[#ffffff0a] to-[#ffffff05] backdrop-blur-xl border border-[#ffffff20] rounded-xl p-6 relative overflow-hidden"
                         >
                             <motion.div
-                                initial={{ opacity: 0 }}
-                                animate={{ opacity: [0.1, 0.2, 0.1] }}
-                                transition={{ duration: 3, repeat: Infinity }}
+                               
                                 className="absolute inset-0 bg-gradient-to-br from-indigo-900/20 via-indigo-600/10 to-transparent rounded-xl pointer-events-none"
                             />
                             {contest && (
