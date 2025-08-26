@@ -34,6 +34,45 @@ async function createContest(req: any, res: any) {
         return res.status(400).json({ message: "All param are required" });
     }
 
+    for (let question of question_set) {
+    let test_cases: any = question["test_cases"];
+    let public_case = test_cases["public"];
+    let hidden = test_cases["hidden"];
+
+    if (public_case) {
+        for (let c of public_case) {
+            let inpu: any = isValidInput(c["input"]);
+            let out:any = isValidInput(c["expected_output"])
+            
+            if (!inpu.parsed || !out.parsed) {
+                return res.status(405).json({ message: "malformed test_cases" });
+            } else {
+                // Replace input with parsed value
+                c["input"] = inpu.parsed;
+                c["expected_output"] = out.parsed
+            }
+        }
+    }
+
+    if (hidden) {
+        for (let c of hidden) {
+            let inpu: any = isValidInput(c["input"]);
+            let out:any = isValidInput(c["expected_output"])
+            
+            if (!inpu.parsed || !out.parsed) {
+                return res.status(405).json({ message: "malformed test_cases" });
+            } else {
+                // Replace input with parsed value
+                c["input"] = inpu.parsed;
+                c["expected_output"] = out.parsed
+            }
+        }
+    }
+    }
+
+    console.log(question_set,"this is question set");
+
+
     const contest: contest = {
         contest_name: contest_name,
         invitation_code: createInvitationCodes(),
@@ -98,4 +137,17 @@ function createInvitationCodes(length = 4, count = 2): string {
     return String(Array.from(codes));
 }
 
+
+
+function isValidInput(input:any) {
+  
+  input = input.trim();
+
+  try {
+    const parsed = JSON.parse("[" + input + "]");
+    return { valid: true, parsed };
+  } catch {
+    return { valid: false, parsed: null };
+  }
+}
 export { createContest };

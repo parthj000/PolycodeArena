@@ -3,6 +3,7 @@ import { CONTEST_SECRET } from "../server";
 import { quizModel } from "../models/quiz";
 import { QUIZ_SECRET } from "../server";
 import jwt from "jsonwebtoken";
+import { exit } from "process";
 
 function getRandomMarks(min: number, max: number): number {
   return Math.floor(Math.random() * (max - min + 1)) + min;
@@ -32,10 +33,14 @@ async function submitProblems(req: any, res: any) {
   if (!question) {
     return res.status(404).json({ message: "Question not found." });
   }
-
-
+  
+  
   const payload = {test_cases:question.test_cases,code:code,language:"python"};
-  console.log(payload);
+  console.log(payload.test_cases);
+  // for(let testCase of payload["test_cases"]["public"]){
+  //   if(instanceof(testCase) ===)
+
+  // }
 
   const mes = await getMarksEngine(payload);
 
@@ -137,7 +142,12 @@ function sortRankingsByTotalMarks(rankings: { [key: string]: any }): { [key: str
 
 async function getMarksEngine(payload:any) {
   try {
-    const response = await fetch("https://w8pax9lc8b.execute-api.us-east-1.amazonaws.com/prod/polycode", {
+    const judge_1 = process.env.JUDGE_1_URL
+    if(!judge_1){
+      console.log("JUDGE_1:  coding engine url is required...");
+      exit(0)
+    }
+    const response = await fetch(judge_1, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -155,25 +165,7 @@ async function getMarksEngine(payload:any) {
 
     console.log(data);
 
-    if(data.public_results ){
-      if(data.public_results[0].error){
-              return {message:"Some error.",output:data.public_results[0].error,iscorrect:false}
-
-        
-      }
-
-       return {message:"Submitted",output:data.public_results,iscorrect:true,marks:data.final_score};
-
-      
-
-      
-
-    }
-    else{
-              throw new Error("Something went wrong.")
-
-
-    }
+    return {message:"Submitted",output:JSON.stringify(data),iscorrect:true,marks:data.final_score};
     console.log("Response:", data);
   } catch (error) {
     console.error("Error:", error);
@@ -183,3 +175,6 @@ async function getMarksEngine(payload:any) {
 }
 
 export { submitProblems };
+
+
+
