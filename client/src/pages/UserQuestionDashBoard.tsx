@@ -182,16 +182,16 @@ const UserQuestionDashBoard: React.FC = () => {
                         variants={containerVariants}
                         initial="hidden"
                         animate="visible"
-                        className="relative z-10 grid grid-cols-1 lg:grid-cols-4 gap-8"
+                        className="kapa-4 relative z-10 grid grid-cols-1 lg:grid-cols-4 gap-8"
                     >
                         {/* Main Content */}
                         <motion.div
                             variants={itemVariants}
-                            className="lg:col-span-3 bg-gradient-to-br from-[#ffffff0a] to-[#ffffff05] backdrop-blur-xl border border-[#ffffff20] rounded-xl p-6 relative overflow-hidden"
+                            className="lg:col-span-4 bg-gradient-to-br from-[#ffffff0a] to-[#ffffff05] backdrop-blur-xl border border-[#ffffff20] rounded-xl p-6 relative overflow-hidden"
                         >
                             <motion.div
                                
-                                className="absolute inset-0 bg-gradient-to-br from-indigo-900/20 via-indigo-600/10 to-transparent rounded-xl pointer-events-none"
+                                className="kapa-1 absolute inset-0 bg-gradient-to-br from-indigo-900/20 via-indigo-600/10 to-transparent rounded-xl pointer-events-none"
                             />
                             {contest && (
                                 <ProblemSet
@@ -200,63 +200,14 @@ const UserQuestionDashBoard: React.FC = () => {
                                     setOutput={setOutput}
                                 />
                             )}
+
+                            
                         </motion.div>
 
                         {/* Sidebar */}
-                        <motion.div
-                            variants={itemVariants}
-                            className="lg:col-span-1 space-y-6"
-                        >
-                            <div className="bg-gradient-to-br from-[#ffffff0a] to-[#ffffff05] backdrop-blur-xl border border-[#ffffff20] rounded-xl p-6">
-                                <h4 className="text-xl font-bold bg-gradient-to-r from-indigo-400 to-indigo-200 bg-clip-text text-transparent mb-6">
-                                    Submission Results
-                                </h4>
-                                <AnimatePresence mode="wait">
-                                    {output ? (
-                                        Array.isArray(output) ? (
-                                            output.map((out, index) => (
-                                                <motion.div
-                                                    key={index}
-                                                    initial={{ opacity: 0, y: 10 }}
-                                                    animate={{ opacity: 1, y: 0 }}
-                                                    exit={{ opacity: 0, y: -10 }}
-                                                    className="bg-[#ffffff10] rounded-xl p-4 mb-4"
-                                                >
-                                                    <span className="text-indigo-400 font-medium block mb-2">
-                                                        Output {index + 1}:
-                                                    </span>
-                                                    <pre className="text-gray-300 text-sm whitespace-pre-wrap break-words">
-                                                        {JSON.stringify(out, null, 2)}
-                                                    </pre>
-                                                </motion.div>
-                                            ))
-                                        ) : (
-                                            <motion.div
-                                                initial={{ opacity: 0, y: 10 }}
-                                                animate={{ opacity: 1, y: 0 }}
-                                                exit={{ opacity: 0, y: -10 }}
-                                                className="bg-[#ffffff10] rounded-xl p-4"
-                                            >
-                                                <span className="text-indigo-400 font-medium block mb-2">
-                                                    Output:
-                                                </span>
-                                                <pre className="text-gray-300 text-sm whitespace-pre-wrap break-words">
-                                                    {output}
-                                                </pre>
-                                            </motion.div>
-                                        )
-                                    ) : (
-                                        <motion.p
-                                            initial={{ opacity: 0 }}
-                                            animate={{ opacity: 1 }}
-                                            className="text-gray-400 text-center py-4"
-                                        >
-                                            No results to display yet.
-                                        </motion.p>
-                                    )}
-                                </AnimatePresence>
-                            </div>
-                        </motion.div>
+                        
+                            
+                        
                     </motion.div>
                 )}
             </AnimatePresence>
