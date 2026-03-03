@@ -8,7 +8,7 @@ import { decodeToken } from "../ts/utils/decodeToken";
 const LandingPage = () => {
     const [username, setUsername] = useState<string>("");
     const [loggedIn, setLoggedIn] = useState<boolean>(false);
-    const [decoded,setDecoded] = useState<any>({});
+    const [decoded, setDecoded] = useState<any>({});
     const { scrollYProgress } = useScroll();
 
     // Parallax and animation effects
@@ -17,9 +17,9 @@ const LandingPage = () => {
     const scale = useTransform(scrollYProgress, [0, 0.5], [1, 1.1]);
 
     useEffect(() => {
-            const token = localStorage.getItem("token");
+        const token = localStorage.getItem("token");
         if (token) {
-                setLoggedIn(true);
+            setLoggedIn(true);
             const decoded = decodeToken();
             if (decoded && decoded.name) {
                 setUsername(decoded.name);
@@ -31,7 +31,7 @@ const LandingPage = () => {
     const cardVariants = {
         offscreen: {
             y: 50,
-            opacity: 0
+            opacity: 0,
         },
         onscreen: {
             y: 0,
@@ -39,24 +39,24 @@ const LandingPage = () => {
             transition: {
                 type: "spring",
                 bounce: 0.4,
-                duration: 0.8
-            }
-        }
+                duration: 0.8,
+            },
+        },
     };
-    
+
     return (
         <div className="min-h-screen bg-[#0a0b14] text-white overflow-x-hidden">
             {/* Grid Background */}
-            <div 
+            <div
                 className="fixed inset-0 z-0"
                 style={{
                     backgroundImage: `
                         linear-gradient(to right, rgba(255,255,255,0.05) 1px, transparent 1px),
                         linear-gradient(to bottom, rgba(255,255,255,0.05) 1px, transparent 1px)
                     `,
-                    backgroundSize: '30px 30px',
-                    backgroundPosition: 'center center',
-                    backgroundColor: 'rgba(0,0,0,0.9)'
+                    backgroundSize: "30px 30px",
+                    backgroundPosition: "center center",
+                    backgroundColor: "rgba(0,0,0,0.9)",
                 }}
             >
                 <div className="absolute inset-0 bg-gradient-to-b from-[#0a0b14] via-[#0a0b1499] to-[#0a0b14] opacity-90"></div>
@@ -72,55 +72,59 @@ const LandingPage = () => {
             {/* Hero Section with Enhanced Glitch Effect */}
             <div className="relative min-h-screen flex flex-col items-center justify-center px-4">
                 {/* Environment Background */}
-                <div 
+                <div
                     className="absolute inset-0 bg-cover bg-center bg-no-repeat"
                     style={{
                         backgroundImage: `linear-gradient(to bottom, 
                             rgba(10,11,20,0.9),
                             rgba(10,11,20,0.85)
-                        ), url('/imageforus.png')`
+                        ), url('/imageforus.png')`,
                     }}
                 >
                     {/* Colored Overlay */}
                     <div className="absolute inset-0 bg-gradient-to-br from-purple-900/30 via-blue-900/30 to-cyan-900/30 mix-blend-overlay"></div>
                     {/* Vignette Effect */}
-                    <div className="absolute inset-0" style={{
-                        background: 'radial-gradient(circle at center, transparent 0%, rgba(0,0,0,0.6) 100%)'
-                    }}></div>
+                    <div
+                        className="absolute inset-0"
+                        style={{
+                            background:
+                                "radial-gradient(circle at center, transparent 0%, rgba(0,0,0,0.6) 100%)",
+                        }}
+                    ></div>
                 </div>
 
                 {/* Grid Overlay with Enhanced Animation */}
-                <div 
+                <div
                     className="absolute inset-0 z-[1] opacity-20"
                     style={{
                         backgroundImage: `
                             linear-gradient(to right, rgba(255,255,255,0.1) 1px, transparent 1px),
                             linear-gradient(to bottom, rgba(255,255,255,0.1) 1px, transparent 1px)
                         `,
-                        backgroundSize: '30px 30px',
-                        animation: 'gridFloat 20s linear infinite'
+                        backgroundSize: "30px 30px",
+                        animation: "gridFloat 20s linear infinite",
                     }}
                 ></div>
 
                 {/* Content */}
                 <div className="relative z-10 text-center">
                     <div className="mb-12">
-                        <h1 
+                        <h1
                             className="hero glitch layers text-[clamp(40px,10vw,100px)] leading-none inline-block text-white z-[2] tracking-[5px] filter drop-shadow-[0_5px_30px_rgba(0,117,255,0.25)] select-none font-inter font-black"
                             data-text="PolyCode"
                         >
                             <span>PolyCode</span>
                         </h1>
-                        
-                        <h2 
+
+                        <h2
                             className="hero glitch layers mt-4 text-[clamp(30px,8vw,80px)] leading-none inline-block text-white z-[2] tracking-[10px] filter drop-shadow-[0_5px_30px_rgba(0,117,255,0.25)] select-none font-inter font-bold"
                             data-text="ARENA"
                         >
                             <span>ARENA</span>
                         </h2>
-</div>
+                    </div>
 
-                    <motion.h3 
+                    <motion.h3
                         className="text-2xl md:text-3xl mb-8 text-gray-300 font-inter"
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
@@ -146,8 +150,11 @@ const LandingPage = () => {
                         transition={{ delay: 0.6 }}
                     >
                         <Link
-                            to={decoded?.role === "C" ? "/community/dashboard" : "/user/profile"}
-
+                            to={
+                                decoded?.role === "C"
+                                    ? "/community/dashboard"
+                                    : "/user/profile"
+                            }
                             className="inline-block font-medium py-4 px-10 bg-gradient-to-r from-[#e0287d] to-[#1bc7fb] rounded-xl text-white text-lg transition-all duration-300 transform hover:-translate-y-1 font-inter relative overflow-hidden group"
                         >
                             <span className="relative z-10">Enter Arena</span>
@@ -313,7 +320,7 @@ const LandingPage = () => {
             {/* Features Section */}
             <div className="relative py-10 px-4 bg-gradient-to-b from-[#0a0b14] to-[#111c44] ">
                 <div className="max-w-7xl mx-auto">
-                    <motion.h2 
+                    <motion.h2
                         className="text-3xl md:text-4xl font-bold text-center mb-16 bg-gradient-to-r from-[#0075ff] to-[#00a3ff] bg-clip-text text-transparent"
                         initial={{ opacity: 0, y: 20 }}
                         whileInView={{ opacity: 1, y: 0 }}
@@ -344,7 +351,8 @@ const LandingPage = () => {
                                 Interactive Learning
                             </h3>
                             <p className="text-gray-400">
-                                Engage with our interactive coding challenges and real-time feedback system.
+                                Engage with our interactive coding challenges
+                                and real-time feedback system.
                             </p>
                         </motion.div>
 
@@ -369,7 +377,8 @@ const LandingPage = () => {
                                 Community Driven
                             </h3>
                             <p className="text-gray-400">
-                                Join a thriving community of developers and learn together.
+                                Join a thriving community of developers and
+                                learn together.
                             </p>
                         </motion.div>
 
@@ -394,28 +403,22 @@ const LandingPage = () => {
                                 Advanced Tools
                             </h3>
                             <p className="text-gray-400">
-                                Access cutting-edge development tools and resources.
+                                Access cutting-edge development tools and
+                                resources.
                             </p>
                         </motion.div>
                     </div>
                 </div>
-                 <div className="bg-[#0f1a3d00] text-white  mt-8">
-      <div className="text-center">
-        <p className="text-sm">
-          &copy; 2025 <span className="font-semibold">PolycodeArena</span>. All rights reserved.
-        </p>
-      </div>
-    </div>
-                
+                <div className="bg-[#0f1a3d00] text-white  mt-8">
+                    <div className="text-center">
+                        <p className="text-sm">
+                            &copy; 2025{" "}
+                            <span className="font-semibold">PolycodeArena</span>
+                            . All rights reserved.
+                        </p>
+                    </div>
+                </div>
             </div>
-
-
-            
-
-           
-            
-
-            
         </div>
     );
 };

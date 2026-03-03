@@ -76,7 +76,7 @@ const JoinContestCommunity: React.FC = () => {
                 body: JSON.stringify(data),
             });
             const k = await response.json();
-            console.log(k)
+            console.log(k);
             alert(k.message);
         } catch (error) {
             console.error("Network Error:", error);
@@ -134,7 +134,7 @@ const JoinContestCommunity: React.FC = () => {
                 }
 
                 const eventSource = new EventSource(
-                    `${API_URL}api/community/join/${token}`
+                    `${API_URL}api/community/join/${token}`,
                 );
 
                 eventSource.onmessage = (event) => {
@@ -171,16 +171,10 @@ const JoinContestCommunity: React.FC = () => {
             className="min-h-screen bg-[#111111] p-8 font-['Inter'] relative overflow-hidden"
         >
             {/* Animated background elements */}
-            <motion.div
-                className="absolute inset-0 bg-gradient-to-br from-purple-900/30 via-purple-600/20 to-transparent"
-            />
-            <motion.div
-                className="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-purple-500/20 via-purple-400/10 to-transparent"
-            />
+            <motion.div className="absolute inset-0 bg-gradient-to-br from-purple-900/30 via-purple-600/20 to-transparent" />
+            <motion.div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-purple-500/20 via-purple-400/10 to-transparent" />
 
-            <motion.div
-                className="relative z-10 max-w-7xl mx-auto"
-            >
+            <motion.div className="relative z-10 max-w-7xl mx-auto">
                 <AnimatePresence mode="wait">
                     {error && (
                         <motion.div
@@ -207,10 +201,7 @@ const JoinContestCommunity: React.FC = () => {
                     animate={{ opacity: 1, y: 0 }}
                     className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8"
                 >
-                    <motion.div
-                        className="bg-gradient-to-br from-[#ffffff0a] to-[#ffffff05] backdrop-blur-xl border border-[#ffffff20] rounded-xl p-6"
-                       
-                    >
+                    <motion.div className="bg-gradient-to-br from-[#ffffff0a] to-[#ffffff05] backdrop-blur-xl border border-[#ffffff20] rounded-xl p-6">
                         <h2 className="text-2xl font-semibold mb-4 bg-gradient-to-r from-purple-400 to-purple-200 bg-clip-text text-transparent">
                             Leaderboard
                         </h2>
@@ -237,10 +228,7 @@ const JoinContestCommunity: React.FC = () => {
                         </motion.ul>
                     </motion.div>
 
-                    <motion.div
-                        className="md:col-span-2 bg-gradient-to-br from-[#ffffff0a] to-[#ffffff05] backdrop-blur-xl border border-[#ffffff20] rounded-xl p-6"
-                        
-                    >
+                    <motion.div className="md:col-span-2 bg-gradient-to-br from-[#ffffff0a] to-[#ffffff05] backdrop-blur-xl border border-[#ffffff20] rounded-xl p-6">
                         <h2 className="text-2xl font-semibold mb-4 bg-gradient-to-r from-purple-400 to-purple-200 bg-clip-text text-transparent">
                             Participants
                         </h2>
@@ -267,9 +255,9 @@ const JoinContestCommunity: React.FC = () => {
                     className="flex flex-wrap justify-center gap-6"
                 >
                     <motion.button
-                        whileHover={{ 
+                        whileHover={{
                             scale: 1.02,
-                            boxShadow: "0 8px 40px rgba(147, 51, 234, 0.2)"
+                            boxShadow: "0 8px 40px rgba(147, 51, 234, 0.2)",
                         }}
                         whileTap={{ scale: 0.98 }}
                         onClick={payReward}
@@ -279,9 +267,9 @@ const JoinContestCommunity: React.FC = () => {
                     </motion.button>
 
                     <motion.button
-                        whileHover={{ 
+                        whileHover={{
                             scale: 1.02,
-                            boxShadow: "0 8px 40px rgba(147, 51, 234, 0.2)"
+                            boxShadow: "0 8px 40px rgba(147, 51, 234, 0.2)",
                         }}
                         whileTap={{ scale: 0.98 }}
                         onClick={distributeCerts}

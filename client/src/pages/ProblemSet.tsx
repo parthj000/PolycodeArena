@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"; 
+import { useEffect, useState } from "react";
 import ReactCodeMirror from "@uiw/react-codemirror";
 import { loadLanguage } from "@uiw/codemirror-extensions-langs";
 import { tokyoNight } from "@uiw/codemirror-theme-tokyo-night";
@@ -48,44 +48,46 @@ const ProblemSet = ({
     token,
     setOutput,
 }: ProblemSetProps) => {
-    const [selectedQuestion, setSelectedQuestion] = useState<number | null>(null);
+    const [selectedQuestion, setSelectedQuestion] = useState<number | null>(
+        null,
+    );
     const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
     const [code, setCode] = useState<string>(initialCode);
     const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
     const [submissionResult, setSubmissionResult] = useState<any>({});
 
-    useEffect(()=>{
+    useEffect(() => {
         console.log(questions[0]["test_cases"]["public"][0]);
-    if(questions[0]["test_cases"]["public"][0]){
-        let cs = questions[0]["test_cases"]["public"][0];
-        let input_size = cs.input.length;
-        
-        let str = ""
-        for(let i=0;i<input_size;i++){
-            str = str +"," + `input_${i+1}`
-        }
-        str = str.slice(1);
-        let cd = `def kapa(${str}):
+        if (questions[0]["test_cases"]["public"][0]) {
+            let cs = questions[0]["test_cases"]["public"][0];
+            let input_size = cs.input.length;
+
+            let str = "";
+            for (let i = 0; i < input_size; i++) {
+                str = str + "," + `input_${i + 1}`;
+            }
+            str = str.slice(1);
+            let cd = `def kapa(${str}):
     """
      Write your logic here.
     """
     return output
     
-    `
+    `;
 
-         setCode(cd)
-        
-    }
-    },[])
+            setCode(cd);
+        }
+    }, []);
 
     const handleSubmit = async () => {
-        console.log("ksdnkdsjfdsklfndslkfsdlfkdsmf")
+        console.log("ksdnkdsjfdsklfndslkfsdlfkdsmf");
         if (selectedQuestion === null) {
-            alert("Please select a problem that you are solving in the problem statements section.")
+            alert(
+                "Please select a problem that you are solving in the problem statements section.",
+            );
             return;
-        }
-        else if(!code){
-            alert("Write code before submitting.")
+        } else if (!code) {
+            alert("Write code before submitting.");
             return;
         }
         setIsSubmitting(true);
@@ -140,11 +142,19 @@ const ProblemSet = ({
                                         animate={{ opacity: 1, y: 0 }}
                                         transition={{ delay: index * 0.1 }}
                                         className={`bg-gradient-to-br from-[#ffffff0a] to-[#ffffff05] backdrop-blur-xl border border-[#ffffff20] rounded-xl p-6 cursor-pointer hover:border-indigo-500/30 transition-all duration-300 ${
-                                            hoveredIndex === index ? "transform scale-[1.02]" : ""
+                                            hoveredIndex === index
+                                                ? "transform scale-[1.02]"
+                                                : ""
                                         }`}
-                                        onMouseEnter={() => setHoveredIndex(index)}
-                                        onMouseLeave={() => setHoveredIndex(null)}
-                                        onClick={() => setSelectedQuestion(index)}
+                                        onMouseEnter={() =>
+                                            setHoveredIndex(index)
+                                        }
+                                        onMouseLeave={() =>
+                                            setHoveredIndex(null)
+                                        }
+                                        onClick={() =>
+                                            setSelectedQuestion(index)
+                                        }
                                     >
                                         <div className="flex items-center space-x-4">
                                             <div className="w-12 h-12 rounded-xl bg-indigo-500/20 flex items-center justify-center text-2xl font-bold text-indigo-400">
@@ -183,35 +193,60 @@ const ProblemSet = ({
                                 </h2>
                                 <div className="prose prose-invert max-w-none">
                                     <p className="text-gray-300 mb-6">
-                                        {questions[selectedQuestion].question_description}
+                                        {
+                                            questions[selectedQuestion]
+                                                .question_description
+                                        }
                                     </p>
                                 </div>
 
                                 <div className="mt-8">
-                                    <h3 className="text-xl font-bold text-indigo-400 mb-4">Test Cases</h3>
+                                    <h3 className="text-xl font-bold text-indigo-400 mb-4">
+                                        Test Cases
+                                    </h3>
                                     <div className="space-y-4">
-                                        {questions[selectedQuestion].test_cases.public.map((testCase, i) => (
-                                            <motion.div
-                                                key={i}
-                                                initial={{ opacity: 0, x: -20 }}
-                                                animate={{ opacity: 1, x: 0 }}
-                                                transition={{ delay: i * 0.1 }}
-                                                className="bg-[#ffffff10] rounded-xl p-4"
-                                            >
-                                                <div className="mb-2">
-                                                    <span className="text-indigo-400 font-medium">Input:</span>
-                                                    <pre className="mt-1 p-2 bg-[#ffffff15] rounded-lg overflow-x-auto">
-                                                        {JSON.stringify(testCase.input).slice(1,-1)}
-                                                    </pre>
-                                                </div>
-                                                <div>
-                                                    <span className="text-indigo-400 font-medium">Expected Output:</span>
-                                                    <pre className="mt-1 p-2 bg-[#ffffff15] rounded-lg overflow-x-auto">
-                                                        {JSON.stringify(testCase.expected_output).slice(1,-1)}
-                                                    </pre>
-                                                </div>
-                                            </motion.div>
-                                        ))}
+                                        {questions[
+                                            selectedQuestion
+                                        ].test_cases.public.map(
+                                            (testCase, i) => (
+                                                <motion.div
+                                                    key={i}
+                                                    initial={{
+                                                        opacity: 0,
+                                                        x: -20,
+                                                    }}
+                                                    animate={{
+                                                        opacity: 1,
+                                                        x: 0,
+                                                    }}
+                                                    transition={{
+                                                        delay: i * 0.1,
+                                                    }}
+                                                    className="bg-[#ffffff10] rounded-xl p-4"
+                                                >
+                                                    <div className="mb-2">
+                                                        <span className="text-indigo-400 font-medium">
+                                                            Input:
+                                                        </span>
+                                                        <pre className="mt-1 p-2 bg-[#ffffff15] rounded-lg overflow-x-auto">
+                                                            {JSON.stringify(
+                                                                testCase.input,
+                                                            ).slice(1, -1)}
+                                                        </pre>
+                                                    </div>
+                                                    <div>
+                                                        <span className="text-indigo-400 font-medium">
+                                                            Expected Output:
+                                                        </span>
+                                                        <pre className="mt-1 p-2 bg-[#ffffff15] rounded-lg overflow-x-auto">
+                                                            {JSON.stringify(
+                                                                testCase.expected_output,
+                                                            ).slice(1, -1)}
+                                                        </pre>
+                                                    </div>
+                                                </motion.div>
+                                            ),
+                                        )}
                                     </div>
                                 </div>
                             </div>
@@ -222,15 +257,14 @@ const ProblemSet = ({
 
             {/* Right Side: Code Editor and Results */}
             <div className="w-full lg:w-1/3 h-full flex flex-col bg-[black]">
-                
-                    <ReactCodeMirror
-                                value={code}
-                                extensions={[loadLanguage("python")!]}
-                                // theme={tokyoNight}
-                                theme={'dark'}
-                                onChange={(value) => setCode(value)}
-                                className="h-[100%] rounded-lg"
-                            />
+                <ReactCodeMirror
+                    value={code}
+                    extensions={[loadLanguage("python")!]}
+                    // theme={tokyoNight}
+                    theme={"dark"}
+                    onChange={(value) => setCode(value)}
+                    className="h-[100%] rounded-lg"
+                />
 
                 <div className="p-4">
                     <motion.button
@@ -254,18 +288,14 @@ const ProblemSet = ({
                         )}
                     </motion.button>
                 </div>
-
-                
             </div>
 
             <div className="bg-gradient-to-br  from-[#ffffff0a] to-[#ffffff05] backdrop-blur-xl border border-[#ffffff20] rounded-xl p-6 w-full lg:w-1/3 h-full flex flex-col">
-                                <h4 className="text-xl font-bold bg-gradient-to-r from-indigo-400 to-indigo-200 bg-clip-text text-transparent mb-6">
-                                    Submission Results
-                                </h4>
-                                <SubmissionResult result={submissionResult} />
-                                
-                            </div>
-
+                <h4 className="text-xl font-bold bg-gradient-to-r from-indigo-400 to-indigo-200 bg-clip-text text-transparent mb-6">
+                    Submission Results
+                </h4>
+                <SubmissionResult result={submissionResult} />
+            </div>
         </div>
     );
 };

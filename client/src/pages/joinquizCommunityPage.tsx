@@ -26,13 +26,16 @@ const QuizAdminDashboard: React.FC = () => {
     // Function to distribute rewards to quiz participants
     const distributeRewards = async () => {
         try {
-            const response = await fetch(`${API_URL}api/admin/quiz/${quiz_id}/distribute-rewards`, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    Authorization: `Bearer ${localStorage.getItem("token")}`,
+            const response = await fetch(
+                `${API_URL}api/admin/quiz/${quiz_id}/distribute-rewards`,
+                {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        Authorization: `Bearer ${localStorage.getItem("token")}`,
+                    },
                 },
-            });
+            );
 
             const data = await response.json();
 
@@ -55,13 +58,16 @@ const QuizAdminDashboard: React.FC = () => {
             }
 
             try {
-                const response = await fetch(`${API_URL}api/community/quiz/${quiz_id}`, {
-                    method: "GET",
-                    headers: {
-                        "Content-Type": "application/json",
-                        Authorization: `Bearer ${localStorage.getItem("token")}`,
+                const response = await fetch(
+                    `${API_URL}api/community/quiz/${quiz_id}`,
+                    {
+                        method: "GET",
+                        headers: {
+                            "Content-Type": "application/json",
+                            Authorization: `Bearer ${localStorage.getItem("token")}`,
+                        },
                     },
-                });
+                );
 
                 if (!response.ok) {
                     const errorData = await response.json();
@@ -70,7 +76,7 @@ const QuizAdminDashboard: React.FC = () => {
                 }
 
                 const data: QuizUpdate = await response.json();
-                
+
                 if (data.rankings) {
                     setRankings(Object.values(data.rankings));
                 }
@@ -126,7 +132,9 @@ const QuizAdminDashboard: React.FC = () => {
                     >
                         Quiz Dashboard
                     </motion.h1>
-                    <p className="text-gray-400 mt-2">Monitor quiz progress and participants</p>
+                    <p className="text-gray-400 mt-2">
+                        Monitor quiz progress and participants
+                    </p>
                 </div>
 
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
@@ -152,13 +160,19 @@ const QuizAdminDashboard: React.FC = () => {
                                         <div className="w-8 h-8 rounded-full bg-gradient-to-r from-[#0075ff] to-[#00a3ff] flex items-center justify-center text-white font-bold">
                                             {index + 1}
                                         </div>
-                                        <span className="text-white">{ranking.name}</span>
+                                        <span className="text-white">
+                                            {ranking.name}
+                                        </span>
                                     </div>
-                                    <span className="text-gray-400">Score: {ranking.total_marks}</span>
+                                    <span className="text-gray-400">
+                                        Score: {ranking.total_marks}
+                                    </span>
                                 </motion.div>
                             ))}
                             {rankings.length === 0 && (
-                                <p className="text-center text-gray-400">No rankings available yet.</p>
+                                <p className="text-center text-gray-400">
+                                    No rankings available yet.
+                                </p>
                             )}
                         </div>
                     </motion.div>
@@ -185,13 +199,19 @@ const QuizAdminDashboard: React.FC = () => {
                                         <div className="w-8 h-8 rounded-full bg-[#ffffff20] flex items-center justify-center text-white">
                                             {index + 1}
                                         </div>
-                                        <span className="text-white">{participant.name}</span>
+                                        <span className="text-white">
+                                            {participant.name}
+                                        </span>
                                     </div>
-                                    <span className="text-gray-400 text-sm">ID: {participant.user_id}</span>
+                                    <span className="text-gray-400 text-sm">
+                                        ID: {participant.user_id}
+                                    </span>
                                 </motion.div>
                             ))}
                             {participants.length === 0 && (
-                                <p className="text-center text-gray-400">No participants yet.</p>
+                                <p className="text-center text-gray-400">
+                                    No participants yet.
+                                </p>
                             )}
                         </div>
                     </motion.div>

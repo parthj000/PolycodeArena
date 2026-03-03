@@ -16,12 +16,16 @@ const ListProductPage = () => {
         image: "",
         description: "",
     });
-    const [submittedProduct, setSubmittedProduct] = useState<Product | null>(null);
+    const [submittedProduct, setSubmittedProduct] = useState<Product | null>(
+        null,
+    );
     const [isLoading, setIsLoading] = useState(false);
     const [errorMessage, setErrorMessage] = useState<string | null>(null);
     const [successMessage, setSuccessMessage] = useState<string | null>(null);
 
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const handleChange = (
+        e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+    ) => {
         setProductDetails({
             ...productDetails,
             [e.target.name]: e.target.value,
@@ -34,22 +38,27 @@ const ListProductPage = () => {
         setErrorMessage(null);
         setSuccessMessage(null);
 
-        const payload = [{
-            storeName: productDetails.name,
-            price: productDetails.price,
-            imgUrl: productDetails.image,
-            description: productDetails.description,
-        }];
+        const payload = [
+            {
+                storeName: productDetails.name,
+                price: productDetails.price,
+                imgUrl: productDetails.image,
+                description: productDetails.description,
+            },
+        ];
 
         try {
-            const response = await fetch(`${API_URL}api/community/product/list`, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    authorization: `BEARER ${localStorage.getItem("token")}`,
+            const response = await fetch(
+                `${API_URL}api/community/product/list`,
+                {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        authorization: `BEARER ${localStorage.getItem("token")}`,
+                    },
+                    body: JSON.stringify(payload),
                 },
-                body: JSON.stringify(payload),
-            });
+            );
 
             const data = await response.json();
 
@@ -88,7 +97,9 @@ const ListProductPage = () => {
                     >
                         List a New Product
                     </motion.h1>
-                    <p className="text-gray-400 mt-2">Create and list your product in the marketplace</p>
+                    <p className="text-gray-400 mt-2">
+                        Create and list your product in the marketplace
+                    </p>
                 </div>
 
                 <motion.div
@@ -207,7 +218,9 @@ const ListProductPage = () => {
                                 exit={{ opacity: 0, height: 0 }}
                                 className="mt-8 bg-[#ffffff10] backdrop-blur-xl border border-[#ffffff20] rounded-xl p-6"
                             >
-                                <h3 className="text-xl font-bold text-white mb-4">Product Preview</h3>
+                                <h3 className="text-xl font-bold text-white mb-4">
+                                    Product Preview
+                                </h3>
                                 <div className="flex flex-col md:flex-row gap-6">
                                     <motion.div
                                         whileHover={{ scale: 1.05 }}

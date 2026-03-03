@@ -10,14 +10,14 @@ const containerVariants = {
         opacity: 1,
         transition: {
             staggerChildren: 0.1,
-            delayChildren: 0.2
-        }
-    }
+            delayChildren: 0.2,
+        },
+    },
 };
 
 const itemVariants = {
     hidden: { opacity: 0, y: 20 },
-    visible: { opacity: 1, y: 0 }
+    visible: { opacity: 1, y: 0 },
 };
 
 // Modal Component for Invitation Code
@@ -62,7 +62,11 @@ const Modal: React.FC<{
                 <motion.div
                     initial={{ opacity: 0, rotate: 0 }}
                     animate={{ opacity: 0.1, rotate: 360 }}
-                    transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+                    transition={{
+                        duration: 20,
+                        repeat: Infinity,
+                        ease: "linear",
+                    }}
                     className="absolute inset-0 bg-[conic-gradient(from_0deg_at_50%_50%,rgba(99,102,241,0.2)_0deg,transparent_60deg,rgba(99,102,241,0.2)_120deg,transparent_180deg,rgba(99,102,241,0.2)_240deg,transparent_300deg)] rounded-xl pointer-events-none"
                 />
 
@@ -72,39 +76,43 @@ const Modal: React.FC<{
                         animate={{ opacity: 1, y: 0 }}
                         className="text-2xl font-bold bg-gradient-to-r from-indigo-400 to-indigo-200 bg-clip-text text-transparent mb-6"
                     >
-                    Enter Invitation Code
+                        Enter Invitation Code
                     </motion.h2>
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: 0.1 }}
                     >
-                <input
-                    type="text"
+                        <input
+                            type="text"
                             className="w-full px-4 py-3 bg-[#ffffff10] border border-[#ffffff20] rounded-xl text-white placeholder-gray-400 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500/50 transition-all duration-300 mb-6"
-                    placeholder="Enter Invitation Code"
-                    value={invitationCode}
-                    onChange={(e) => setInvitationCode(e.target.value)}
-                />
+                            placeholder="Enter Invitation Code"
+                            value={invitationCode}
+                            onChange={(e) => setInvitationCode(e.target.value)}
+                        />
                         <div className="flex justify-end space-x-4">
                             <motion.button
-                                whileHover={{ scale: 1.02, backgroundColor: "rgba(99, 102, 241, 0.1)" }}
+                                whileHover={{
+                                    scale: 1.02,
+                                    backgroundColor: "rgba(99, 102, 241, 0.1)",
+                                }}
                                 whileTap={{ scale: 0.98 }}
                                 className="px-6 py-2 border border-indigo-500/30 text-indigo-400 rounded-xl hover:border-indigo-500/50 transition-all duration-300"
-                        onClick={onClose}
-                    >
-                        Cancel
+                                onClick={onClose}
+                            >
+                                Cancel
                             </motion.button>
                             <motion.button
-                                whileHover={{ 
+                                whileHover={{
                                     scale: 1.02,
-                                    boxShadow: "0 5px 20px rgba(99, 102, 241, 0.3)"
+                                    boxShadow:
+                                        "0 5px 20px rgba(99, 102, 241, 0.3)",
                                 }}
                                 whileTap={{ scale: 0.98 }}
                                 className="px-6 py-2 bg-gradient-to-r from-indigo-600 to-indigo-400 text-white rounded-xl transition-all duration-300"
-                        onClick={handleSubmit}
-                    >
-                        Submit
+                                onClick={handleSubmit}
+                            >
+                                Submit
                             </motion.button>
                         </div>
                     </motion.div>
@@ -175,13 +183,16 @@ const ContestPage: React.FC = () => {
                         invitation_code: invitationCode,
                         contest_id: selectedContest._id,
                     }),
-                }
+                },
             );
 
             const data = await response.json();
 
             if (response.ok) {
-                localStorage.setItem(`contest_${selectedContest._id}`, data.token);
+                localStorage.setItem(
+                    `contest_${selectedContest._id}`,
+                    data.token,
+                );
                 setIsModalOpen(false);
             }
 
@@ -192,8 +203,12 @@ const ContestPage: React.FC = () => {
         }
     };
 
-    const activeContests = contests.filter(c => new Date(c.end_time * 1000) > new Date());
-    const completedContests = contests.filter(c => new Date(c.end_time * 1000) <= new Date());
+    const activeContests = contests.filter(
+        (c) => new Date(c.end_time * 1000) > new Date(),
+    );
+    const completedContests = contests.filter(
+        (c) => new Date(c.end_time * 1000) <= new Date(),
+    );
 
     return (
         <div className="min-h-screen bg-gradient-to-br from-[#0f1535] to-[#111c44] p-8">
@@ -205,24 +220,25 @@ const ContestPage: React.FC = () => {
                 {/* Animated Background Elements */}
                 <motion.div
                     initial={{ opacity: 0 }}
-                    animate={{ 
+                    animate={{
                         opacity: [0.1, 0.2, 0.1],
                         scale: [1, 1.1, 1],
                     }}
-                    transition={{ 
+                    transition={{
                         duration: 5,
                         repeat: Infinity,
-                        repeatType: "reverse"
+                        repeatType: "reverse",
                     }}
                     className="fixed inset-0 pointer-events-none"
                     style={{
-                        background: "radial-gradient(circle at 50% 50%, rgba(99, 102, 241, 0.1) 0%, transparent 50%)",
-                        zIndex: 0
+                        background:
+                            "radial-gradient(circle at 50% 50%, rgba(99, 102, 241, 0.1) 0%, transparent 50%)",
+                        zIndex: 0,
                     }}
                 />
 
                 <AnimatePresence mode="wait">
-            {!selectedContest ? (
+                    {!selectedContest ? (
                         // List View
                         <motion.div
                             initial={{ opacity: 0, y: 20 }}
@@ -238,7 +254,10 @@ const ContestPage: React.FC = () => {
                                 <h1 className="text-4xl font-bold bg-gradient-to-r from-indigo-400 to-indigo-200 bg-clip-text text-transparent">
                                     Your Contests
                                 </h1>
-                                <p className="text-gray-400 mt-2">Track your contest progress and opportunities</p>
+                                <p className="text-gray-400 mt-2">
+                                    Track your contest progress and
+                                    opportunities
+                                </p>
 
                                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-8">
                                     <div className="bg-[#ffffff10] rounded-xl p-4">
@@ -247,8 +266,12 @@ const ContestPage: React.FC = () => {
                                                 📊
                                             </div>
                                             <div>
-                                                <p className="text-gray-400 text-sm">Total Contests</p>
-                                                <p className="text-white font-medium">{contests.length}</p>
+                                                <p className="text-gray-400 text-sm">
+                                                    Total Contests
+                                                </p>
+                                                <p className="text-white font-medium">
+                                                    {contests.length}
+                                                </p>
                                             </div>
                                         </div>
                                     </div>
@@ -258,8 +281,12 @@ const ContestPage: React.FC = () => {
                                                 🎯
                                             </div>
                                             <div>
-                                                <p className="text-gray-400 text-sm">Active Contests</p>
-                                                <p className="text-white font-medium">{activeContests.length}</p>
+                                                <p className="text-gray-400 text-sm">
+                                                    Active Contests
+                                                </p>
+                                                <p className="text-white font-medium">
+                                                    {activeContests.length}
+                                                </p>
                                             </div>
                                         </div>
                                     </div>
@@ -269,8 +296,12 @@ const ContestPage: React.FC = () => {
                                                 ✅
                                             </div>
                                             <div>
-                                                <p className="text-gray-400 text-sm">Completed</p>
-                                                <p className="text-white font-medium">{completedContests.length}</p>
+                                                <p className="text-gray-400 text-sm">
+                                                    Completed
+                                                </p>
+                                                <p className="text-white font-medium">
+                                                    {completedContests.length}
+                                                </p>
                                             </div>
                                         </div>
                                     </div>
@@ -299,7 +330,9 @@ const ContestPage: React.FC = () => {
                                     className="flex flex-col items-center justify-center h-64 space-y-4"
                                 >
                                     <div className="w-16 h-16 border-4 border-indigo-500/20 border-t-indigo-500 rounded-full animate-spin" />
-                                    <p className="text-indigo-400">Loading contests...</p>
+                                    <p className="text-indigo-400">
+                                        Loading contests...
+                                    </p>
                                 </motion.div>
                             ) : (
                                 <div className="space-y-8">
@@ -311,66 +344,124 @@ const ContestPage: React.FC = () => {
                                             </h2>
                                             <div className="space-y-4">
                                                 <AnimatePresence>
-                                                    {activeContests.map((contest, index) => (
-                                                        <motion.div
-                                                            key={contest._id}
-                                                            initial={{ opacity: 0, y: 20 }}
-                                                            animate={{ opacity: 1, y: 0 }}
-                                                            exit={{ opacity: 0, y: -20 }}
-                                                            transition={{ delay: index * 0.05 }}
-                                                            className="bg-[#ffffff10] rounded-xl overflow-hidden hover:bg-[#ffffff15] transition-all duration-300"
-                                                            onClick={() => setSelectedContest(contest)}
-                                                        >
-                                                            <div className="p-6 cursor-pointer">
-                                                                <div className="flex flex-col lg:flex-row lg:items-center gap-4">
-                                                                    <div className="flex items-center space-x-4 flex-1">
-                                                                        <motion.div 
-                                                                            className="w-12 h-12 rounded-xl bg-indigo-500/20 flex items-center justify-center text-2xl"
-                                                                            whileHover={{ scale: 1.1 }}
-                                                                        >
-                                                                            #{index + 1}
-                                                                        </motion.div>
-                                                                        <div className="flex-1">
-                                                                            <h3 className="text-xl font-bold bg-gradient-to-r from-indigo-400 to-indigo-200 bg-clip-text text-transparent">
-                                    {contest.meta.contest_name}
-                                                                            </h3>
-                                                                            <p className="text-gray-400 text-sm mt-1">
-                                                                                {contest.meta.description || "No description available"}
-                                                                            </p>
+                                                    {activeContests.map(
+                                                        (contest, index) => (
+                                                            <motion.div
+                                                                key={
+                                                                    contest._id
+                                                                }
+                                                                initial={{
+                                                                    opacity: 0,
+                                                                    y: 20,
+                                                                }}
+                                                                animate={{
+                                                                    opacity: 1,
+                                                                    y: 0,
+                                                                }}
+                                                                exit={{
+                                                                    opacity: 0,
+                                                                    y: -20,
+                                                                }}
+                                                                transition={{
+                                                                    delay:
+                                                                        index *
+                                                                        0.05,
+                                                                }}
+                                                                className="bg-[#ffffff10] rounded-xl overflow-hidden hover:bg-[#ffffff15] transition-all duration-300"
+                                                                onClick={() =>
+                                                                    setSelectedContest(
+                                                                        contest,
+                                                                    )
+                                                                }
+                                                            >
+                                                                <div className="p-6 cursor-pointer">
+                                                                    <div className="flex flex-col lg:flex-row lg:items-center gap-4">
+                                                                        <div className="flex items-center space-x-4 flex-1">
+                                                                            <motion.div
+                                                                                className="w-12 h-12 rounded-xl bg-indigo-500/20 flex items-center justify-center text-2xl"
+                                                                                whileHover={{
+                                                                                    scale: 1.1,
+                                                                                }}
+                                                                            >
+                                                                                #
+                                                                                {index +
+                                                                                    1}
+                                                                            </motion.div>
+                                                                            <div className="flex-1">
+                                                                                <h3 className="text-xl font-bold bg-gradient-to-r from-indigo-400 to-indigo-200 bg-clip-text text-transparent">
+                                                                                    {
+                                                                                        contest
+                                                                                            .meta
+                                                                                            .contest_name
+                                                                                    }
+                                                                                </h3>
+                                                                                <p className="text-gray-400 text-sm mt-1">
+                                                                                    {contest
+                                                                                        .meta
+                                                                                        .description ||
+                                                                                        "No description available"}
+                                                                                </p>
+                                                                            </div>
                                                                         </div>
-                                                                    </div>
 
-                                                                    <div className="flex flex-wrap gap-4 items-center">
-                                                                        <div className="flex items-center space-x-2 bg-indigo-500/10 px-3 py-1 rounded-full">
-                                                                            <span className="text-indigo-400">Prize:</span>
-                                                                            <span className="text-white">{contest.meta.prize_distribution[0]}</span>
+                                                                        <div className="flex flex-wrap gap-4 items-center">
+                                                                            <div className="flex items-center space-x-2 bg-indigo-500/10 px-3 py-1 rounded-full">
+                                                                                <span className="text-indigo-400">
+                                                                                    Prize:
+                                                                                </span>
+                                                                                <span className="text-white">
+                                                                                    {
+                                                                                        contest
+                                                                                            .meta
+                                                                                            .prize_distribution[0]
+                                                                                    }
+                                                                                </span>
+                                                                            </div>
+                                                                            <div className="flex items-center space-x-2 bg-green-500/10 px-3 py-1 rounded-full">
+                                                                                <span className="text-green-400">
+                                                                                    Start:
+                                                                                </span>
+                                                                                <span className="text-white">
+                                                                                    {new Date(
+                                                                                        contest.start_time *
+                                                                                            1000,
+                                                                                    ).toLocaleDateString()}
+                                                                                </span>
+                                                                            </div>
+                                                                            <div className="flex items-center space-x-2 bg-red-500/10 px-3 py-1 rounded-full">
+                                                                                <span className="text-red-400">
+                                                                                    End:
+                                                                                </span>
+                                                                                <span className="text-white">
+                                                                                    {new Date(
+                                                                                        contest.end_time *
+                                                                                            1000,
+                                                                                    ).toLocaleDateString()}
+                                                                                </span>
+                                                                            </div>
+                                                                            <motion.div
+                                                                                whileHover={{
+                                                                                    scale: 1.1,
+                                                                                    x: 5,
+                                                                                }}
+                                                                                whileTap={{
+                                                                                    scale: 0.9,
+                                                                                }}
+                                                                                className="w-8 h-8 rounded-full bg-indigo-500/10 flex items-center justify-center"
+                                                                            >
+                                                                                <span className="text-indigo-400">
+                                                                                    →
+                                                                                </span>
+                                                                            </motion.div>
                                                                         </div>
-                                                                        <div className="flex items-center space-x-2 bg-green-500/10 px-3 py-1 rounded-full">
-                                                                            <span className="text-green-400">Start:</span>
-                                                                            <span className="text-white">
-                                                                                {new Date(contest.start_time * 1000).toLocaleDateString()}
-                                                                            </span>
-                                                                        </div>
-                                                                        <div className="flex items-center space-x-2 bg-red-500/10 px-3 py-1 rounded-full">
-                                                                            <span className="text-red-400">End:</span>
-                                                                            <span className="text-white">
-                                                                                {new Date(contest.end_time * 1000).toLocaleDateString()}
-                                                                            </span>
-                                                                        </div>
-                                                                        <motion.div
-                                                                            whileHover={{ scale: 1.1, x: 5 }}
-                                                                            whileTap={{ scale: 0.9 }}
-                                                                            className="w-8 h-8 rounded-full bg-indigo-500/10 flex items-center justify-center"
-                                                                        >
-                                                                            <span className="text-indigo-400">→</span>
-                                                                        </motion.div>
                                                                     </div>
                                                                 </div>
-                                                            </div>
-                                                        </motion.div>
-                                                    ))}
+                                                            </motion.div>
+                                                        ),
+                                                    )}
                                                 </AnimatePresence>
-                                                {activeContests.length === 0 && (
+                                                {activeContests.length ===
+                                                    0 && (
                                                     <div className="text-center text-gray-400 py-8">
                                                         No active contests found
                                                     </div>
@@ -384,71 +475,125 @@ const ContestPage: React.FC = () => {
                                         <div className="p-6">
                                             <h2 className="text-xl font-bold bg-gradient-to-r from-indigo-400 to-indigo-200 bg-clip-text text-transparent mb-6">
                                                 Completed Contests
-                                </h2>
+                                            </h2>
                                             <div className="space-y-4">
                                                 <AnimatePresence>
-                                                    {completedContests.map((contest, index) => (
-                                                        <motion.div
-                                                            key={contest._id}
-                                                            initial={{ opacity: 0, y: 20 }}
-                                                            animate={{ opacity: 1, y: 0 }}
-                                                            exit={{ opacity: 0, y: -20 }}
-                                                            transition={{ delay: index * 0.05 }}
-                                                            className="bg-[#ffffff10] rounded-xl overflow-hidden hover:bg-[#ffffff15] transition-all duration-300 opacity-75"
-                                                            onClick={() => setSelectedContest(contest)}
-                                                        >
-                                                            <div className="p-6 cursor-pointer">
-                                                                <div className="flex flex-col lg:flex-row lg:items-center gap-4">
-                                                                    <div className="flex items-center space-x-4 flex-1">
-                                                                        <motion.div 
-                                                                            className="w-12 h-12 rounded-xl bg-gray-500/20 flex items-center justify-center text-2xl"
-                                                                            whileHover={{ scale: 1.1 }}
-                                                                        >
-                                                                            #{index + 1}
-                                                                        </motion.div>
-                                                                        <div className="flex-1">
-                                                                            <h3 className="text-xl font-bold text-gray-400">
-                                                                                {contest.meta.contest_name}
-                                                                            </h3>
-                                                                            <p className="text-gray-500 text-sm mt-1">
-                                                                                {contest.meta.description || "No description available"}
-                                </p>
-                            </div>
-                                                                    </div>
+                                                    {completedContests.map(
+                                                        (contest, index) => (
+                                                            <motion.div
+                                                                key={
+                                                                    contest._id
+                                                                }
+                                                                initial={{
+                                                                    opacity: 0,
+                                                                    y: 20,
+                                                                }}
+                                                                animate={{
+                                                                    opacity: 1,
+                                                                    y: 0,
+                                                                }}
+                                                                exit={{
+                                                                    opacity: 0,
+                                                                    y: -20,
+                                                                }}
+                                                                transition={{
+                                                                    delay:
+                                                                        index *
+                                                                        0.05,
+                                                                }}
+                                                                className="bg-[#ffffff10] rounded-xl overflow-hidden hover:bg-[#ffffff15] transition-all duration-300 opacity-75"
+                                                                onClick={() =>
+                                                                    setSelectedContest(
+                                                                        contest,
+                                                                    )
+                                                                }
+                                                            >
+                                                                <div className="p-6 cursor-pointer">
+                                                                    <div className="flex flex-col lg:flex-row lg:items-center gap-4">
+                                                                        <div className="flex items-center space-x-4 flex-1">
+                                                                            <motion.div
+                                                                                className="w-12 h-12 rounded-xl bg-gray-500/20 flex items-center justify-center text-2xl"
+                                                                                whileHover={{
+                                                                                    scale: 1.1,
+                                                                                }}
+                                                                            >
+                                                                                #
+                                                                                {index +
+                                                                                    1}
+                                                                            </motion.div>
+                                                                            <div className="flex-1">
+                                                                                <h3 className="text-xl font-bold text-gray-400">
+                                                                                    {
+                                                                                        contest
+                                                                                            .meta
+                                                                                            .contest_name
+                                                                                    }
+                                                                                </h3>
+                                                                                <p className="text-gray-500 text-sm mt-1">
+                                                                                    {contest
+                                                                                        .meta
+                                                                                        .description ||
+                                                                                        "No description available"}
+                                                                                </p>
+                                                                            </div>
+                                                                        </div>
 
-                                                                    <div className="flex flex-wrap gap-4 items-center">
-                                                                        <div className="flex items-center space-x-2 bg-gray-500/10 px-3 py-1 rounded-full">
-                                                                            <span className="text-gray-400">Prize:</span>
-                                                                            <span className="text-gray-300">{contest.meta.prize_distribution[0]}</span>
+                                                                        <div className="flex flex-wrap gap-4 items-center">
+                                                                            <div className="flex items-center space-x-2 bg-gray-500/10 px-3 py-1 rounded-full">
+                                                                                <span className="text-gray-400">
+                                                                                    Prize:
+                                                                                </span>
+                                                                                <span className="text-gray-300">
+                                                                                    {
+                                                                                        contest
+                                                                                            .meta
+                                                                                            .prize_distribution[0]
+                                                                                    }
+                                                                                </span>
+                                                                            </div>
+                                                                            <div className="flex items-center space-x-2 bg-gray-500/10 px-3 py-1 rounded-full">
+                                                                                <span className="text-gray-400">
+                                                                                    Completed:
+                                                                                </span>
+                                                                                <span className="text-gray-300">
+                                                                                    {new Date(
+                                                                                        contest.end_time *
+                                                                                            1000,
+                                                                                    ).toLocaleDateString()}
+                                                                                </span>
+                                                                            </div>
+                                                                            <motion.div
+                                                                                whileHover={{
+                                                                                    scale: 1.1,
+                                                                                    x: 5,
+                                                                                }}
+                                                                                whileTap={{
+                                                                                    scale: 0.9,
+                                                                                }}
+                                                                                className="w-8 h-8 rounded-full bg-gray-500/10 flex items-center justify-center"
+                                                                            >
+                                                                                <span className="text-gray-400">
+                                                                                    →
+                                                                                </span>
+                                                                            </motion.div>
                                                                         </div>
-                                                                        <div className="flex items-center space-x-2 bg-gray-500/10 px-3 py-1 rounded-full">
-                                                                            <span className="text-gray-400">Completed:</span>
-                                                                            <span className="text-gray-300">
-                                                                                {new Date(contest.end_time * 1000).toLocaleDateString()}
-                                                                            </span>
-                                                                        </div>
-                                                                        <motion.div
-                                                                            whileHover={{ scale: 1.1, x: 5 }}
-                                                                            whileTap={{ scale: 0.9 }}
-                                                                            className="w-8 h-8 rounded-full bg-gray-500/10 flex items-center justify-center"
-                                                                        >
-                                                                            <span className="text-gray-400">→</span>
-                                                                        </motion.div>
                                                                     </div>
                                                                 </div>
-                                                            </div>
-                                                        </motion.div>
-                                                    ))}
+                                                            </motion.div>
+                                                        ),
+                                                    )}
                                                 </AnimatePresence>
-                                                {completedContests.length === 0 && (
+                                                {completedContests.length ===
+                                                    0 && (
                                                     <div className="text-center text-gray-400 py-8">
-                                                        No completed contests found
+                                                        No completed contests
+                                                        found
                                                     </div>
                                                 )}
                                             </div>
                                         </div>
                                     </div>
-                    </div>
+                                </div>
                             )}
                         </motion.div>
                     ) : (
@@ -460,14 +605,14 @@ const ContestPage: React.FC = () => {
                             className="relative"
                         >
                             <motion.button
-                                whileHover={{ 
+                                whileHover={{
                                     scale: 1.02,
-                                    backgroundColor: "rgba(99, 102, 241, 0.1)"
+                                    backgroundColor: "rgba(99, 102, 241, 0.1)",
                                 }}
                                 whileTap={{ scale: 0.98 }}
                                 className="mb-8 px-6 py-2 bg-[#ffffff20] text-white rounded-xl hover:bg-[#ffffff30] transition-all duration-300 flex items-center space-x-2"
-                        onClick={handleBackToList}
-                    >
+                                onClick={handleBackToList}
+                            >
                                 <span>←</span>
                                 <span>Back to List</span>
                             </motion.button>
@@ -481,7 +626,10 @@ const ContestPage: React.FC = () => {
                                 <motion.div
                                     initial={{ opacity: 0 }}
                                     animate={{ opacity: [0.1, 0.2, 0.1] }}
-                                    transition={{ duration: 3, repeat: Infinity }}
+                                    transition={{
+                                        duration: 3,
+                                        repeat: Infinity,
+                                    }}
                                     className="absolute inset-0 bg-gradient-to-br from-indigo-900/20 via-indigo-600/10 to-transparent rounded-xl pointer-events-none"
                                 />
 
@@ -490,7 +638,7 @@ const ContestPage: React.FC = () => {
                                     initial={{ opacity: 0, y: -20 }}
                                     animate={{ opacity: 1, y: 0 }}
                                 >
-                        {selectedContest.meta.contest_name}
+                                    {selectedContest.meta.contest_name}
                                 </motion.h1>
 
                                 <motion.div
@@ -501,29 +649,54 @@ const ContestPage: React.FC = () => {
                                 >
                                     <div className="space-y-4">
                                         <p className="text-gray-400">
-                                            <span className="font-medium text-indigo-300">Start Time:</span>
+                                            <span className="font-medium text-indigo-300">
+                                                Start Time:
+                                            </span>
                                             <br />
-                                            {new Date(selectedContest.start_time * 1000).toLocaleString()}
+                                            {new Date(
+                                                selectedContest.start_time *
+                                                    1000,
+                                            ).toLocaleString()}
                                         </p>
                                         <p className="text-gray-400">
-                                            <span className="font-medium text-indigo-300">End Time:</span>
+                                            <span className="font-medium text-indigo-300">
+                                                End Time:
+                                            </span>
                                             <br />
-                                            {new Date(selectedContest.end_time * 1000).toLocaleString()}
+                                            {new Date(
+                                                selectedContest.end_time * 1000,
+                                            ).toLocaleString()}
                                         </p>
                                     </div>
                                     <div className="text-gray-400">
-                                        <span className="font-medium text-indigo-300">Prize Distribution:</span>
+                                        <span className="font-medium text-indigo-300">
+                                            Prize Distribution:
+                                        </span>
                                         <ul className="list-disc list-inside mt-2">
-                                            {selectedContest.meta.prize_distribution.map((prize: string, idx: number) => (
-                                                <motion.li
-                                                    key={idx}
-                                                    initial={{ opacity: 0, x: -20 }}
-                                                    animate={{ opacity: 1, x: 0 }}
-                                                    transition={{ delay: 0.3 + idx * 0.1 }}
-                                                >
-                                                    {prize}
-                                                </motion.li>
-                                            ))}
+                                            {selectedContest.meta.prize_distribution.map(
+                                                (
+                                                    prize: string,
+                                                    idx: number,
+                                                ) => (
+                                                    <motion.li
+                                                        key={idx}
+                                                        initial={{
+                                                            opacity: 0,
+                                                            x: -20,
+                                                        }}
+                                                        animate={{
+                                                            opacity: 1,
+                                                            x: 0,
+                                                        }}
+                                                        transition={{
+                                                            delay:
+                                                                0.3 + idx * 0.1,
+                                                        }}
+                                                    >
+                                                        {prize}
+                                                    </motion.li>
+                                                ),
+                                            )}
                                         </ul>
                                     </div>
                                 </motion.div>
@@ -534,14 +707,19 @@ const ContestPage: React.FC = () => {
                                     transition={{ delay: 0.4 }}
                                     className="mb-8"
                                 >
-                                    <h3 className="text-xl font-medium text-indigo-300 mb-2">Description</h3>
+                                    <h3 className="text-xl font-medium text-indigo-300 mb-2">
+                                        Description
+                                    </h3>
                                     <p className="text-gray-400">
-                                        {selectedContest.meta.description || "No description available."}
+                                        {selectedContest.meta.description ||
+                                            "No description available."}
                                     </p>
                                 </motion.div>
 
-                    {selectedContest.start_time < new Date().valueOf() / 1000 &&
-                    selectedContest.end_time > new Date().valueOf() / 1000 ? (
+                                {selectedContest.start_time <
+                                    new Date().valueOf() / 1000 &&
+                                selectedContest.end_time >
+                                    new Date().valueOf() / 1000 ? (
                                     <motion.div
                                         initial={{ opacity: 0, y: 20 }}
                                         animate={{ opacity: 1, y: 0 }}
@@ -549,26 +727,32 @@ const ContestPage: React.FC = () => {
                                         className="flex space-x-4"
                                     >
                                         <motion.button
-                                            whileHover={{ 
+                                            whileHover={{
                                                 scale: 1.02,
-                                                boxShadow: "0 5px 20px rgba(99, 102, 241, 0.3)"
+                                                boxShadow:
+                                                    "0 5px 20px rgba(99, 102, 241, 0.3)",
                                             }}
                                             whileTap={{ scale: 0.98 }}
                                             className="px-6 py-3 bg-gradient-to-r from-indigo-600 to-indigo-400 text-white rounded-xl transition-all duration-300"
-                                            onClick={() => handleJoinContest(selectedContest)}
+                                            onClick={() =>
+                                                handleJoinContest(
+                                                    selectedContest,
+                                                )
+                                            }
                                         >
                                             Join Contest
                                         </motion.button>
                                         <motion.button
-                                            whileHover={{ 
+                                            whileHover={{
                                                 scale: 1.02,
-                                                backgroundColor: "rgba(99, 102, 241, 0.1)"
+                                                backgroundColor:
+                                                    "rgba(99, 102, 241, 0.1)",
                                             }}
                                             whileTap={{ scale: 0.98 }}
                                             className="px-6 py-3 bg-[#ffffff20] text-white rounded-xl hover:bg-[#ffffff30] transition-all duration-300"
                                             onClick={handleRegisterContest}
-                            >
-                                Register
+                                        >
+                                            Register
                                         </motion.button>
                                     </motion.div>
                                 ) : (
@@ -588,11 +772,11 @@ const ContestPage: React.FC = () => {
 
                 <AnimatePresence>
                     {isModalOpen && (
-            <Modal
-                isOpen={isModalOpen}
-                onClose={() => setIsModalOpen(false)}
-                onSubmit={handleRegisterSubmit}
-            />
+                        <Modal
+                            isOpen={isModalOpen}
+                            onClose={() => setIsModalOpen(false)}
+                            onSubmit={handleRegisterSubmit}
+                        />
                     )}
                 </AnimatePresence>
             </motion.div>

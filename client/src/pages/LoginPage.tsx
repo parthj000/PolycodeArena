@@ -3,7 +3,6 @@ import { Link, useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { API_URL } from "../App";
 
-
 const LoginPage = () => {
     const [usernameOrEmail, setUsernameOrEmail] = useState("");
     const [password, setPassword] = useState("");
@@ -24,7 +23,7 @@ const LoginPage = () => {
         }
 
         // Prepare payload for login request
-        
+
         const payload = {
             email: usernameOrEmail,
             password: password,
@@ -33,9 +32,9 @@ const LoginPage = () => {
 
         try {
             // Simulate login request using POST
-            let urlPoint ;
-            role==="C"?urlPoint="community":urlPoint="user"
-            
+            let urlPoint;
+            role === "C" ? (urlPoint = "community") : (urlPoint = "user");
+
             const res = await fetch(`${API_URL}api/${urlPoint}/login`, {
                 method: "POST",
                 headers: {
@@ -50,15 +49,11 @@ const LoginPage = () => {
             if (res.status === 200) {
                 setMessage("Login successful! Redirecting...");
                 localStorage.setItem("token", data.token);
-                if(role==="C"){
+                if (role === "C") {
                     navigate("/community/dashboard");
-
-                }
-                else{
+                } else {
                     navigate("/leaderboard");
-
                 }
-                
             } else {
                 setMessage(data.message);
             }
@@ -73,14 +68,8 @@ const LoginPage = () => {
     return (
         <div className="min-h-screen bg-[#111111] p-4 sm:p-6 md:p-8 font-['Inter'] relative overflow-hidden">
             {/* Animated background elements */}
-            <motion.div
-                
-                className="absolute inset-0 bg-gradient-to-br from-purple-900/20 to-transparent"
-            />
-            <motion.div
-                
-                className="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-purple-500/10 via-transparent to-transparent"
-            />
+            <motion.div className="absolute inset-0 bg-gradient-to-br from-purple-900/20 to-transparent" />
+            <motion.div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-purple-500/10 via-transparent to-transparent" />
 
             <Link to={"/"}>
                 <motion.div
@@ -107,7 +96,9 @@ const LoginPage = () => {
                 className="max-w-md mx-auto relative z-10"
             >
                 <motion.div
-                    whileHover={{ boxShadow: "0 8px 40px rgba(147, 51, 234, 0.1)" }}
+                    whileHover={{
+                        boxShadow: "0 8px 40px rgba(147, 51, 234, 0.1)",
+                    }}
                     className="bg-gradient-to-r from-[#ffffff0a] to-[#ffffff05] backdrop-blur-xl border border-[#ffffff20] rounded-xl p-8 shadow-[0_8px_30px_rgb(0,0,0,0.12)]"
                 >
                     <motion.h2
@@ -129,7 +120,9 @@ const LoginPage = () => {
                                 type="text"
                                 placeholder="Enter your Email"
                                 value={usernameOrEmail}
-                                onChange={(e) => setUsernameOrEmail(e.target.value)}
+                                onChange={(e) =>
+                                    setUsernameOrEmail(e.target.value)
+                                }
                                 className="w-full bg-[#ffffff0a] border border-[#ffffff20] rounded-xl p-3 text-white placeholder-gray-400 focus:outline-none focus:border-purple-500/50 focus:bg-[#ffffff15] transition-all duration-300"
                             />
                         </motion.div>
@@ -158,13 +151,20 @@ const LoginPage = () => {
                                 onChange={(e) => setRole(e.target.value)}
                                 className="w-full bg-[#ffffff0a] border border-[#ffffff20] rounded-xl p-3 text-white focus:outline-none focus:border-purple-500/50 focus:bg-[#ffffff15] transition-all duration-300"
                             >
-                                <option value="C" className="bg-[#111111]">Admin</option>
-                                <option value="U" className="bg-[#111111]">Participant</option>
+                                <option value="C" className="bg-[#111111]">
+                                    Admin
+                                </option>
+                                <option value="U" className="bg-[#111111]">
+                                    Participant
+                                </option>
                             </select>
                         </motion.div>
 
                         <motion.button
-                            whileHover={{ scale: 1.02, boxShadow: "0 5px 20px rgba(147, 51, 234, 0.3)" }}
+                            whileHover={{
+                                scale: 1.02,
+                                boxShadow: "0 5px 20px rgba(147, 51, 234, 0.3)",
+                            }}
                             whileTap={{ scale: 0.98 }}
                             initial={{ opacity: 0 }}
                             animate={{ opacity: 1 }}
@@ -176,7 +176,11 @@ const LoginPage = () => {
                             <motion.div
                                 initial={false}
                                 animate={{ x: "100%" }}
-                                transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+                                transition={{
+                                    duration: 1,
+                                    repeat: Infinity,
+                                    ease: "linear",
+                                }}
                                 className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -skew-x-12 group-hover:opacity-100 opacity-0"
                             />
                             {isLoading ? (
@@ -213,7 +217,9 @@ const LoginPage = () => {
                     transition={{ duration: 0.4, delay: 0.8 }}
                     className="text-center mt-6"
                 >
-                    <span className="text-gray-400">Don't have an account? </span>
+                    <span className="text-gray-400">
+                        Don't have an account?{" "}
+                    </span>
                     <Link
                         to="/signup"
                         className="text-purple-400 hover:text-purple-300 font-medium transition-colors duration-300"

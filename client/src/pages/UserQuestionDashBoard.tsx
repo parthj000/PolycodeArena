@@ -16,14 +16,14 @@ const containerVariants = {
         opacity: 1,
         transition: {
             staggerChildren: 0.1,
-            delayChildren: 0.2
-        }
-    }
+            delayChildren: 0.2,
+        },
+    },
 };
 
 const itemVariants = {
     hidden: { opacity: 0, y: 20 },
-    visible: { opacity: 1, y: 0 }
+    visible: { opacity: 1, y: 0 },
 };
 
 const UserQuestionDashBoard: React.FC = () => {
@@ -75,7 +75,7 @@ const UserQuestionDashBoard: React.FC = () => {
     useEffect(() => {
         if (isAuthenticated && token) {
             const eventSource = new EventSource(
-                `${API_URL}api/user/join/${token}`
+                `${API_URL}api/user/join/${token}`,
             );
 
             eventSource.onmessage = (event: MessageEvent) => {
@@ -107,18 +107,10 @@ const UserQuestionDashBoard: React.FC = () => {
     }, [isAuthenticated, token]);
 
     return (
-        <motion.div
-           
-            className="min-h-screen bg-gradient-to-br from-[#0f1535] to-[#111c44] p-8 font-['Inter'] relative overflow-hidden"
-        >
+        <motion.div className="min-h-screen bg-gradient-to-br from-[#0f1535] to-[#111c44] p-8 font-['Inter'] relative overflow-hidden">
             {/* Animated background elements */}
-            <motion.div
-                
-                className="absolute inset-0 bg-gradient-to-br from-indigo-900/30 via-indigo-600/20 to-transparent"
-            />
-            <motion.div
-                className="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-indigo-500/20 via-indigo-400/10 to-transparent"
-            />
+            <motion.div className="absolute inset-0 bg-gradient-to-br from-indigo-900/30 via-indigo-600/20 to-transparent" />
+            <motion.div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-indigo-500/20 via-indigo-400/10 to-transparent" />
 
             <AnimatePresence mode="wait">
                 {isLoading ? (
@@ -128,14 +120,14 @@ const UserQuestionDashBoard: React.FC = () => {
                         className="flex flex-col items-center justify-center h-64 space-y-4"
                     >
                         <motion.div
-                            animate={{ 
+                            animate={{
                                 scale: [1, 1.1, 1],
-                                opacity: [1, 0.8, 1]
+                                opacity: [1, 0.8, 1],
                             }}
-                            transition={{ 
+                            transition={{
                                 duration: 1.5,
                                 repeat: Infinity,
-                                ease: "easeInOut"
+                                ease: "easeInOut",
                             }}
                             className="relative"
                         >
@@ -143,13 +135,13 @@ const UserQuestionDashBoard: React.FC = () => {
                             <div className="absolute inset-0 rounded-full border-2 border-indigo-500/20"></div>
                         </motion.div>
                         <motion.p
-                            animate={{ 
-                                opacity: [1, 0.7, 1]
+                            animate={{
+                                opacity: [1, 0.7, 1],
                             }}
-                            transition={{ 
+                            transition={{
                                 duration: 1.5,
                                 repeat: Infinity,
-                                ease: "easeInOut"
+                                ease: "easeInOut",
                             }}
                             className="text-indigo-400"
                         >
@@ -166,9 +158,9 @@ const UserQuestionDashBoard: React.FC = () => {
                         <h2 className="text-2xl font-bold mb-4">Error</h2>
                         <p>{error}</p>
                         <motion.button
-                            whileHover={{ 
+                            whileHover={{
                                 scale: 1.02,
-                                backgroundColor: "rgba(239, 68, 68, 0.2)"
+                                backgroundColor: "rgba(239, 68, 68, 0.2)",
                             }}
                             whileTap={{ scale: 0.98 }}
                             className="mt-6 px-6 py-2 bg-red-500/10 rounded-xl text-red-400 hover:bg-red-500/20 transition-all duration-300"
@@ -189,10 +181,7 @@ const UserQuestionDashBoard: React.FC = () => {
                             variants={itemVariants}
                             className="lg:col-span-4 bg-gradient-to-br from-[#ffffff0a] to-[#ffffff05] backdrop-blur-xl border border-[#ffffff20] rounded-xl p-6 relative overflow-hidden"
                         >
-                            <motion.div
-                               
-                                className="kapa-1 absolute inset-0 bg-gradient-to-br from-indigo-900/20 via-indigo-600/10 to-transparent rounded-xl pointer-events-none"
-                            />
+                            <motion.div className="kapa-1 absolute inset-0 bg-gradient-to-br from-indigo-900/20 via-indigo-600/10 to-transparent rounded-xl pointer-events-none" />
                             {contest && (
                                 <ProblemSet
                                     questions={contest.question_set || []}
@@ -200,14 +189,9 @@ const UserQuestionDashBoard: React.FC = () => {
                                     setOutput={setOutput}
                                 />
                             )}
-
-                            
                         </motion.div>
 
                         {/* Sidebar */}
-                        
-                            
-                        
                     </motion.div>
                 )}
             </AnimatePresence>

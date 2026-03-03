@@ -3,7 +3,6 @@ import { Link, useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { API_URL } from "../App";
 
-
 const RecruitmentPage: React.FC = () => {
     const [recruitments, setRecruitments] = useState<any[]>([]);
     const [error, setError] = useState<string | null>(null);
@@ -13,9 +12,12 @@ const RecruitmentPage: React.FC = () => {
     useEffect(() => {
         const fetchRecruitments = async () => {
             try {
-                const response = await fetch(`${API_URL}api/community/recruitment/all`, {
-                    headers: { "Content-Type": "application/json" },
-                });
+                const response = await fetch(
+                    `${API_URL}api/community/recruitment/all`,
+                    {
+                        headers: { "Content-Type": "application/json" },
+                    },
+                );
 
                 if (!response.ok) {
                     throw new Error("Failed to fetch recruitment drives");
@@ -48,19 +50,20 @@ const RecruitmentPage: React.FC = () => {
                 {/* Animated Background Elements */}
                 <motion.div
                     initial={{ opacity: 0 }}
-                    animate={{ 
+                    animate={{
                         opacity: [0.1, 0.2, 0.1],
                         scale: [1, 1.1, 1],
                     }}
-                    transition={{ 
+                    transition={{
                         duration: 5,
                         repeat: Infinity,
-                        repeatType: "reverse"
+                        repeatType: "reverse",
                     }}
                     className="fixed inset-0 pointer-events-none"
                     style={{
-                        background: "radial-gradient(circle at 50% 50%, rgba(99, 102, 241, 0.1) 0%, transparent 50%)",
-                        zIndex: 0
+                        background:
+                            "radial-gradient(circle at 50% 50%, rgba(99, 102, 241, 0.1) 0%, transparent 50%)",
+                        zIndex: 0,
                     }}
                 />
 
@@ -77,7 +80,7 @@ const RecruitmentPage: React.FC = () => {
                             </div>
                             <div>
                                 <p className="text-gray-400">Total Drives</p>
-                                <motion.h3 
+                                <motion.h3
                                     className="text-2xl font-bold text-white"
                                     initial={{ scale: 1 }}
                                     whileHover={{ scale: 1.05 }}
@@ -99,12 +102,18 @@ const RecruitmentPage: React.FC = () => {
                             </div>
                             <div>
                                 <p className="text-gray-400">Active Drives</p>
-                                <motion.h3 
+                                <motion.h3
                                     className="text-2xl font-bold text-white"
                                     initial={{ scale: 1 }}
                                     whileHover={{ scale: 1.05 }}
                                 >
-                                    {recruitments.filter(r => new Date(r.end_date) > new Date()).length}
+                                    {
+                                        recruitments.filter(
+                                            (r) =>
+                                                new Date(r.end_date) >
+                                                new Date(),
+                                        ).length
+                                    }
                                 </motion.h3>
                             </div>
                         </div>
@@ -115,8 +124,8 @@ const RecruitmentPage: React.FC = () => {
                         animate={{ opacity: 1, y: 0 }}
                         className="bg-gradient-to-br from-[#0f1535] to-[#111c44] p-6 rounded-xl border border-[#ffffff10] backdrop-blur-xl hover:border-indigo-500/30 transition-all duration-300"
                     >
-                <Link
-                    to="/community/recruitment/create"
+                        <Link
+                            to="/community/recruitment/create"
                             className="flex items-center space-x-4 group"
                         >
                             <div className="w-12 h-12 rounded-xl bg-indigo-500/20 flex items-center justify-center text-2xl group-hover:bg-indigo-500/30 transition-all duration-300">
@@ -124,7 +133,7 @@ const RecruitmentPage: React.FC = () => {
                             </div>
                             <div>
                                 <p className="text-gray-400">Create New</p>
-                                <motion.h3 
+                                <motion.h3
                                     className="text-xl font-bold text-white"
                                     initial={{ scale: 1 }}
                                     whileHover={{ scale: 1.05 }}
@@ -132,14 +141,14 @@ const RecruitmentPage: React.FC = () => {
                                     Start Drive
                                 </motion.h3>
                             </div>
-                </Link>
+                        </Link>
                     </motion.div>
                 </div>
 
                 {/* Error Display */}
                 <AnimatePresence>
                     {error && (
-                        <motion.div 
+                        <motion.div
                             initial={{ opacity: 0, y: -20 }}
                             animate={{ opacity: 1, y: 0 }}
                             exit={{ opacity: 0, y: -20 }}
@@ -162,7 +171,9 @@ const RecruitmentPage: React.FC = () => {
                 ) : (
                     <div className="bg-gradient-to-br from-[#0f1535] to-[#111c44] rounded-xl border border-[#ffffff10] backdrop-blur-xl overflow-hidden">
                         <div className="p-6">
-                            <h2 className="text-xl font-bold text-white mb-6">Recruitment Drives</h2>
+                            <h2 className="text-xl font-bold text-white mb-6">
+                                Recruitment Drives
+                            </h2>
                             <div className="space-y-4">
                                 <AnimatePresence>
                                     {recruitments.map((drive, index) => (
@@ -173,50 +184,78 @@ const RecruitmentPage: React.FC = () => {
                                             exit={{ opacity: 0, y: -20 }}
                                             transition={{ delay: index * 0.05 }}
                                             className="bg-[#ffffff10] rounded-xl overflow-hidden hover:bg-[#ffffff15] transition-all duration-300"
-                                            onClick={() => handleViewDetails(drive._id)}
+                                            onClick={() =>
+                                                handleViewDetails(drive._id)
+                                            }
                                         >
                                             <div className="p-6 cursor-pointer">
                                                 <div className="flex flex-col lg:flex-row lg:items-center gap-4">
                                                     <div className="flex items-center space-x-4 flex-1">
-                                                        <motion.div 
+                                                        <motion.div
                                                             className="w-12 h-12 rounded-xl bg-indigo-500/20 flex items-center justify-center text-2xl"
-                                                            whileHover={{ scale: 1.1 }}
+                                                            whileHover={{
+                                                                scale: 1.1,
+                                                            }}
                                                         >
                                                             #{index + 1}
                                                         </motion.div>
                                                         <div className="flex-1">
                                                             <h3 className="text-xl font-bold bg-gradient-to-r from-indigo-400 to-indigo-200 bg-clip-text text-transparent">
-                                                                {drive.drive_name}
+                                                                {
+                                                                    drive.drive_name
+                                                                }
                                                             </h3>
                                                             <p className="text-gray-400 text-sm mt-1">
-                                                                {drive.description || "No description available"}
+                                                                {drive.description ||
+                                                                    "No description available"}
                                                             </p>
                                                         </div>
                                                     </div>
 
                                                     <div className="flex flex-wrap gap-4 items-center">
                                                         <div className="flex items-center space-x-2 bg-indigo-500/10 px-3 py-1 rounded-full">
-                                                            <span className="text-indigo-400">Company:</span>
-                                                            <span className="text-white">{drive.company_id}</span>
+                                                            <span className="text-indigo-400">
+                                                                Company:
+                                                            </span>
+                                                            <span className="text-white">
+                                                                {
+                                                                    drive.company_id
+                                                                }
+                                                            </span>
                                                         </div>
                                                         <div className="flex items-center space-x-2 bg-green-500/10 px-3 py-1 rounded-full">
-                                                            <span className="text-green-400">Start:</span>
+                                                            <span className="text-green-400">
+                                                                Start:
+                                                            </span>
                                                             <span className="text-white">
-                                                                {new Date(drive.start_date).toLocaleDateString()}
+                                                                {new Date(
+                                                                    drive.start_date,
+                                                                ).toLocaleDateString()}
                                                             </span>
                                                         </div>
                                                         <div className="flex items-center space-x-2 bg-red-500/10 px-3 py-1 rounded-full">
-                                                            <span className="text-red-400">End:</span>
+                                                            <span className="text-red-400">
+                                                                End:
+                                                            </span>
                                                             <span className="text-white">
-                                                                {new Date(drive.end_date).toLocaleDateString()}
+                                                                {new Date(
+                                                                    drive.end_date,
+                                                                ).toLocaleDateString()}
                                                             </span>
                                                         </div>
                                                         <motion.div
-                                                            whileHover={{ scale: 1.1, x: 5 }}
-                                                            whileTap={{ scale: 0.9 }}
+                                                            whileHover={{
+                                                                scale: 1.1,
+                                                                x: 5,
+                                                            }}
+                                                            whileTap={{
+                                                                scale: 0.9,
+                                                            }}
                                                             className="w-8 h-8 rounded-full bg-indigo-500/10 flex items-center justify-center"
                                                         >
-                                                            <span className="text-indigo-400">→</span>
+                                                            <span className="text-indigo-400">
+                                                                →
+                                                            </span>
                                                         </motion.div>
                                                     </div>
                                                 </div>

@@ -6,7 +6,11 @@ interface SkillTagsProps {
     onAddSkill: (skill: string) => void; // Function to handle adding a skill
 }
 
-const SkillTags: React.FC<SkillTagsProps> = ({ skills, onRemoveSkill, onAddSkill }) => {
+const SkillTags: React.FC<SkillTagsProps> = ({
+    skills,
+    onRemoveSkill,
+    onAddSkill,
+}) => {
     const [skillList, setSkillList] = useState<string[]>(skills);
     const [previousSkills, setPreviousSkills] = useState<string[][]>([]); // Track previous states for undo
 
@@ -30,7 +34,9 @@ const SkillTags: React.FC<SkillTagsProps> = ({ skills, onRemoveSkill, onAddSkill
         if (previousSkills.length > 0) {
             const lastSkillsState = previousSkills[previousSkills.length - 1];
             setSkillList(lastSkillsState); // Restore the previous skills state
-            setPreviousSkills(previousSkills.slice(0, previousSkills.length - 1)); // Remove last state
+            setPreviousSkills(
+                previousSkills.slice(0, previousSkills.length - 1),
+            ); // Remove last state
         }
     };
 

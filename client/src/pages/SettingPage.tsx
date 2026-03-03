@@ -30,7 +30,7 @@ const SettingPage = ({
                     headers: {
                         Authorization: token,
                     },
-                }
+                },
             )
             .then(({ data }) => {
                 if (data.success) {

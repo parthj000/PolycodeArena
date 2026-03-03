@@ -11,7 +11,7 @@ const WalletPage = () => {
     const [data, setData] = useState();
     const [isModalOpen, setModalOpen] = useState(false);
     const [receiverWalletId, setReceiverWalletId] = useState("");
-    const [loading,setLoading] = useState(false);
+    const [loading, setLoading] = useState(false);
     useEffect(() => {
         setLoading(true);
         const decoded = decodeToken();
@@ -28,10 +28,10 @@ const WalletPage = () => {
                     {
                         headers: {
                             Authorization: `Bearer ${localStorage.getItem(
-                                "token"
+                                "token",
                             )}`,
                         },
-                    }
+                    },
                 );
                 const data = await res.json();
                 const mainJson = data.data;
@@ -39,16 +39,11 @@ const WalletPage = () => {
                     console.log("Something went wrong!");
                 }
                 setData(mainJson);
-                
             } catch (error) {
                 setData({});
-
-                
-            }
-            finally{
+            } finally {
                 setLoading(false);
             }
-            
         };
 
         fetchWallet();
@@ -59,12 +54,14 @@ const WalletPage = () => {
             alert("Wallet ID cannot be empty!");
             return;
         }
-        navigate(`/${window.location.pathname.split("/")[1]}/pay/${receiverWalletId}`);
+        navigate(
+            `/${window.location.pathname.split("/")[1]}/pay/${receiverWalletId}`,
+        );
     };
 
     return (
         <div className="min-h-screen bg-gradient-to-br from-[#0f1535] to-[#111c44] p-8 font-['Inter']">
-            {data ?
+            {data ? (
                 <motion.div
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
@@ -80,7 +77,9 @@ const WalletPage = () => {
                             <h2 className="text-4xl font-bold bg-gradient-to-r from-[#0075ff] to-[#00a3ff] bg-clip-text text-transparent mb-2">
                                 {data.current_balance} arena_coins
                             </h2>
-                            <p className="text-gray-400">Wallet ID: {walletId}</p>
+                            <p className="text-gray-400">
+                                Wallet ID: {walletId}
+                            </p>
                             <motion.button
                                 whileHover={{ scale: 1.02 }}
                                 whileTap={{ scale: 0.98 }}
@@ -111,41 +110,57 @@ const WalletPage = () => {
                         animate={{ opacity: 1, y: 0 }}
                         className="bg-[#ffffff10] backdrop-blur-xl border border-[#ffffff20] rounded-xl p-8"
                     >
-                        <h2 className="text-2xl font-bold text-white mb-6">Transactions</h2>
+                        <h2 className="text-2xl font-bold text-white mb-6">
+                            Transactions
+                        </h2>
                         <div className="space-y-4">
-                            {data.transactions && data.transactions.map((tx, index) => (
-                                <motion.div
-                                    key={index}
-                                    whileHover={{ scale: 1.02 }}
-                                    className="bg-[#ffffff10] backdrop-blur-xl border border-[#ffffff20] rounded-xl p-4"
-                                >
-                                    <div className="grid grid-cols-3 gap-4">
-                                        <div>
-                                            <p className="text-gray-400">From</p>
-                                            <p className="text-white font-medium truncate">{tx.head}</p>
+                            {data.transactions &&
+                                data.transactions.map((tx, index) => (
+                                    <motion.div
+                                        key={index}
+                                        whileHover={{ scale: 1.02 }}
+                                        className="bg-[#ffffff10] backdrop-blur-xl border border-[#ffffff20] rounded-xl p-4"
+                                    >
+                                        <div className="grid grid-cols-3 gap-4">
+                                            <div>
+                                                <p className="text-gray-400">
+                                                    From
+                                                </p>
+                                                <p className="text-white font-medium truncate">
+                                                    {tx.head}
+                                                </p>
+                                            </div>
+                                            <div>
+                                                <p className="text-gray-400">
+                                                    To
+                                                </p>
+                                                <p className="text-white font-medium truncate">
+                                                    {tx.tail}
+                                                </p>
+                                            </div>
+                                            <div>
+                                                <p className="text-gray-400">
+                                                    Amount
+                                                </p>
+                                                <p className="text-white font-medium">
+                                                    ${tx.amount.toFixed(2)}
+                                                </p>
+                                            </div>
                                         </div>
-                                        <div>
-                                            <p className="text-gray-400">To</p>
-                                            <p className="text-white font-medium truncate">{tx.tail}</p>
-                                        </div>
-                                        <div>
-                                            <p className="text-gray-400">Amount</p>
-                                            <p className="text-white font-medium">${tx.amount.toFixed(2)}</p>
-                                        </div>
-                                    </div>
-                                </motion.div>
-                            ))}
+                                    </motion.div>
+                                ))}
                         </div>
                     </motion.div>
                 </motion.div>
-            :
-            <motion.div
-                                    initial={{ opacity: 0 }}
-                                    animate={{ opacity: 1 }}
-                                    className="flex justify-center items-center h-64"
-                                >
-                                    <div className="w-16 h-16 border-4 border-indigo-500/20 border-t-indigo-500 rounded-full animate-spin" />
-                                </motion.div>}
+            ) : (
+                <motion.div
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    className="flex justify-center items-center h-64"
+                >
+                    <div className="w-16 h-16 border-4 border-indigo-500/20 border-t-indigo-500 rounded-full animate-spin" />
+                </motion.div>
+            )}
 
             {/* Payment Modal */}
             <AnimatePresence>
@@ -162,13 +177,17 @@ const WalletPage = () => {
                             animate={{ scale: 1, opacity: 1 }}
                             exit={{ scale: 0.9, opacity: 0 }}
                             className="bg-[#ffffff10] backdrop-blur-xl border border-[#ffffff20] rounded-xl p-8 max-w-md w-full mx-4"
-                            onClick={e => e.stopPropagation()}
+                            onClick={(e) => e.stopPropagation()}
                         >
-                            <h3 className="text-2xl font-bold text-white mb-6">Enter Wallet ID</h3>
+                            <h3 className="text-2xl font-bold text-white mb-6">
+                                Enter Wallet ID
+                            </h3>
                             <input
                                 type="text"
                                 value={receiverWalletId}
-                                onChange={(e) => setReceiverWalletId(e.target.value)}
+                                onChange={(e) =>
+                                    setReceiverWalletId(e.target.value)
+                                }
                                 placeholder="Enter Wallet ID"
                                 className="w-full px-4 py-3 bg-[#ffffff10] border border-[#ffffff20] rounded-xl text-white placeholder-gray-400 focus:outline-none focus:border-[#0075ff] transition-all duration-300 mb-6"
                             />

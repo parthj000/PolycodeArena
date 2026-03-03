@@ -6,18 +6,18 @@ import ProductShowcase from "../components/ProductShowcase";
 
 const containerVariants = {
     hidden: { opacity: 0 },
-    visible: { 
+    visible: {
         opacity: 1,
         transition: {
             staggerChildren: 0.1,
-            delayChildren: 0.3
-        }
-    }
+            delayChildren: 0.3,
+        },
+    },
 };
 
 const itemVariants = {
     hidden: { opacity: 0, y: 20 },
-    visible: { opacity: 1, y: 0 }
+    visible: { opacity: 1, y: 0 },
 };
 
 const MarketplacePage = () => {
@@ -37,7 +37,7 @@ const MarketplacePage = () => {
                             "Content-Type": "application/json",
                             authorization: `BEARER ${localStorage.getItem("token")}`,
                         },
-                    }
+                    },
                 );
 
                 if (!response.ok) {
@@ -67,44 +67,49 @@ const MarketplacePage = () => {
             <motion.div
                 initial={{ opacity: 0, scale: 1.2 }}
                 animate={{ opacity: 0.15, scale: 1 }}
-                transition={{ duration: 3, repeat: Infinity, repeatType: "mirror" }}
+                transition={{
+                    duration: 3,
+                    repeat: Infinity,
+                    repeatType: "mirror",
+                }}
                 className="absolute inset-0 bg-gradient-to-br from-purple-900/30 via-purple-600/20 to-transparent"
             />
             <motion.div
                 initial={{ opacity: 0, scale: 0.8 }}
                 animate={{ opacity: 0.1, scale: 1.2 }}
-                transition={{ duration: 4, repeat: Infinity, repeatType: "mirror", delay: 0.5 }}
+                transition={{
+                    duration: 4,
+                    repeat: Infinity,
+                    repeatType: "mirror",
+                    delay: 0.5,
+                }}
                 className="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-purple-500/20 via-purple-400/10 to-transparent"
             />
             <motion.div
                 initial={{ opacity: 0, scale: 1 }}
                 animate={{ opacity: 0.05, scale: 1.1 }}
-                transition={{ duration: 5, repeat: Infinity, repeatType: "mirror", delay: 1 }}
+                transition={{
+                    duration: 5,
+                    repeat: Infinity,
+                    repeatType: "mirror",
+                    delay: 1,
+                }}
                 className="absolute inset-0 bg-[conic-gradient(from_0deg_at_50%_50%,rgba(168,85,247,0.2)_0deg,transparent_60deg,rgba(168,85,247,0.2)_120deg,transparent_180deg,rgba(168,85,247,0.2)_240deg,transparent_300deg)]"
             />
 
             {/* Enhanced Header with floating effect */}
-            
+
             <motion.div
                 initial={{ opacity: 0, y: -20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8, ease: "easeOut" }}
                 className="text-center mb-12 relative z-10 "
             >
-                <div
-                    
-                >
-                    <h1
-                        
-                        
-                        className="text-5xl font-bold bg-gradient-to-r from-purple-500 via-purple-300 to-purple-500 bg-clip-text text-transparent bg-[length:200%_auto] mb-2 drop-shadow-[0_0_10px_rgba(168,85,247,0.3)]"
-                    >
+                <div>
+                    <h1 className="text-5xl font-bold bg-gradient-to-r from-purple-500 via-purple-300 to-purple-500 bg-clip-text text-transparent bg-[length:200%_auto] mb-2 drop-shadow-[0_0_10px_rgba(168,85,247,0.3)]">
                         Marketplace
                     </h1>
-                    <p
-                        
-                        className="text-purple-300/60 text-lg"
-                    >
+                    <p className="text-purple-300/60 text-lg">
                         Discover amazing products
                     </p>
                 </div>
@@ -120,14 +125,14 @@ const MarketplacePage = () => {
                         className="flex flex-col gap-4 justify-center items-center h-64"
                     >
                         <motion.div
-                            animate={{ 
+                            animate={{
                                 scale: [1, 1.1, 1],
-                                opacity: [1, 0.8, 1]
+                                opacity: [1, 0.8, 1],
                             }}
-                            transition={{ 
+                            transition={{
                                 duration: 1.5,
                                 repeat: Infinity,
-                                ease: "easeInOut"
+                                ease: "easeInOut",
                             }}
                             className="relative"
                         >
@@ -135,13 +140,13 @@ const MarketplacePage = () => {
                             <div className="absolute inset-0 rounded-full border-2 border-purple-500/20"></div>
                         </motion.div>
                         <motion.p
-                            animate={{ 
-                                opacity: [1, 0.7, 1]
+                            animate={{
+                                opacity: [1, 0.7, 1],
                             }}
-                            transition={{ 
+                            transition={{
                                 duration: 1.5,
                                 repeat: Infinity,
-                                ease: "easeInOut"
+                                ease: "easeInOut",
                             }}
                             className="text-purple-400"
                         >
@@ -185,9 +190,10 @@ const MarketplacePage = () => {
                                     initial="hidden"
                                     animate="visible"
                                     exit={{ opacity: 0, y: 20 }}
-                                    whileHover={{ 
+                                    whileHover={{
                                         scale: 1.03,
-                                        boxShadow: "0 8px 40px rgba(147, 51, 234, 0.2)"
+                                        boxShadow:
+                                            "0 8px 40px rgba(147, 51, 234, 0.2)",
                                     }}
                                     className="bg-gradient-to-br from-[#0f1535] to-[#111c44] backdrop-blur-xl border border-[#ffffff20] rounded-xl overflow-hidden transition-all duration-300 cursor-pointer group hover:border-purple-500/30"
                                     onClick={() => handleProductClick(product)}
@@ -208,18 +214,30 @@ const MarketplacePage = () => {
                                             className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-transparent flex items-end p-4 backdrop-blur-sm"
                                         >
                                             <div>
-                                                <motion.h3 
+                                                <motion.h3
                                                     className="text-lg font-bold text-white mb-1"
-                                                    initial={{ y: 20, opacity: 0 }}
-                                                    whileHover={{ y: 0, opacity: 1 }}
+                                                    initial={{
+                                                        y: 20,
+                                                        opacity: 0,
+                                                    }}
+                                                    whileHover={{
+                                                        y: 0,
+                                                        opacity: 1,
+                                                    }}
                                                     transition={{ delay: 0.1 }}
                                                 >
                                                     {product.name}
                                                 </motion.h3>
-                                                <motion.p 
+                                                <motion.p
                                                     className="text-sm text-purple-300"
-                                                    initial={{ y: 20, opacity: 0 }}
-                                                    whileHover={{ y: 0, opacity: 1 }}
+                                                    initial={{
+                                                        y: 20,
+                                                        opacity: 0,
+                                                    }}
+                                                    whileHover={{
+                                                        y: 0,
+                                                        opacity: 1,
+                                                    }}
                                                     transition={{ delay: 0.2 }}
                                                 >
                                                     {product.storeName}
@@ -236,17 +254,26 @@ const MarketplacePage = () => {
                                                 Price: {product.price}
                                             </motion.p>
                                             <motion.button
-                                                whileHover={{ 
+                                                whileHover={{
                                                     scale: 1.05,
-                                                    boxShadow: "0 0 20px rgba(147, 51, 234, 0.4)"
+                                                    boxShadow:
+                                                        "0 0 20px rgba(147, 51, 234, 0.4)",
                                                 }}
                                                 whileTap={{ scale: 0.95 }}
                                                 className="px-4 py-2 bg-gradient-to-r from-purple-600 to-purple-400 rounded-lg text-white text-sm font-medium shadow-lg shadow-purple-500/20 hover:shadow-purple-500/40 transition-all duration-300"
                                             >
                                                 <motion.span
-                                                    initial={{ backgroundPosition: "0% 50%" }}
-                                                    whileHover={{ backgroundPosition: "100% 50%" }}
-                                                    transition={{ duration: 0.3 }}
+                                                    initial={{
+                                                        backgroundPosition:
+                                                            "0% 50%",
+                                                    }}
+                                                    whileHover={{
+                                                        backgroundPosition:
+                                                            "100% 50%",
+                                                    }}
+                                                    transition={{
+                                                        duration: 0.3,
+                                                    }}
                                                     className="inline-block bg-gradient-to-r from-white to-purple-200 bg-clip-text text-transparent"
                                                 >
                                                     View Details
@@ -264,7 +291,10 @@ const MarketplacePage = () => {
             {/* Product Showcase Modal */}
             <AnimatePresence>
                 {selectedProduct && (
-                    <ProductShowcase product={selectedProduct} onClose={() => setSelectedProduct(null)} />
+                    <ProductShowcase
+                        product={selectedProduct}
+                        onClose={() => setSelectedProduct(null)}
+                    />
                 )}
             </AnimatePresence>
         </div>

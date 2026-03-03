@@ -103,9 +103,11 @@ const QuizPage: React.FC = () => {
                     animate={{ scale: 1, opacity: 1 }}
                     exit={{ scale: 0.9, opacity: 0 }}
                     className="bg-[#ffffff10] backdrop-blur-xl border border-[#ffffff20] rounded-xl p-8 max-w-md w-full mx-4"
-                    onClick={e => e.stopPropagation()}
+                    onClick={(e) => e.stopPropagation()}
                 >
-                    <h2 className="text-2xl font-bold text-white mb-6">Enter Invitation Code</h2>
+                    <h2 className="text-2xl font-bold text-white mb-6">
+                        Enter Invitation Code
+                    </h2>
                     <motion.input
                         whileFocus={{ scale: 1.01 }}
                         type="text"
@@ -160,7 +162,10 @@ const QuizPage: React.FC = () => {
                             >
                                 Available Quizzes
                             </motion.h1>
-                            <p className="text-gray-400 mt-2">Join or register for quizzes to test your knowledge</p>
+                            <p className="text-gray-400 mt-2">
+                                Join or register for quizzes to test your
+                                knowledge
+                            </p>
                         </div>
 
                         {isLoading ? (
@@ -185,15 +190,25 @@ const QuizPage: React.FC = () => {
                                         <div className="space-y-2 text-gray-400">
                                             <p className="flex justify-between">
                                                 <span>Start:</span>
-                                                <span>{new Date(quiz.start_time * 1000).toLocaleString()}</span>
+                                                <span>
+                                                    {new Date(
+                                                        quiz.start_time * 1000,
+                                                    ).toLocaleString()}
+                                                </span>
                                             </p>
                                             <p className="flex justify-between">
                                                 <span>End:</span>
-                                                <span>{new Date(quiz.end_time * 1000).toLocaleString()}</span>
+                                                <span>
+                                                    {new Date(
+                                                        quiz.end_time * 1000,
+                                                    ).toLocaleString()}
+                                                </span>
                                             </p>
                                             <p className="flex justify-between">
                                                 <span>Questions:</span>
-                                                <span>{quiz.meta.total_questions}</span>
+                                                <span>
+                                                    {quiz.meta.total_questions}
+                                                </span>
                                             </p>
                                         </div>
                                     </motion.div>
@@ -225,33 +240,50 @@ const QuizPage: React.FC = () => {
                                 <div className="space-y-2 text-gray-400">
                                     <p className="flex justify-between">
                                         <span>Start Time:</span>
-                                        <span>{new Date(selectedQuiz.start_time * 1000).toLocaleString()}</span>
+                                        <span>
+                                            {new Date(
+                                                selectedQuiz.start_time * 1000,
+                                            ).toLocaleString()}
+                                        </span>
                                     </p>
                                     <p className="flex justify-between">
                                         <span>End Time:</span>
-                                        <span>{new Date(selectedQuiz.end_time * 1000).toLocaleString()}</span>
+                                        <span>
+                                            {new Date(
+                                                selectedQuiz.end_time * 1000,
+                                            ).toLocaleString()}
+                                        </span>
                                     </p>
                                     <p className="flex justify-between">
                                         <span>Total Questions:</span>
-                                        <span>{selectedQuiz.meta.total_questions}</span>
+                                        <span>
+                                            {selectedQuiz.meta.total_questions}
+                                        </span>
                                     </p>
                                 </div>
                             </div>
 
                             <div className="mt-6">
-                                <h2 className="text-xl font-semibold text-white mb-2">Description</h2>
+                                <h2 className="text-xl font-semibold text-white mb-2">
+                                    Description
+                                </h2>
                                 <p className="text-gray-400">
-                                    {selectedQuiz.meta.description || "No description available."}
+                                    {selectedQuiz.meta.description ||
+                                        "No description available."}
                                 </p>
                             </div>
 
-                            {selectedQuiz.start_time < new Date().valueOf() / 1000 &&
-                            selectedQuiz.end_time > new Date().valueOf() / 1000 ? (
+                            {selectedQuiz.start_time <
+                                new Date().valueOf() / 1000 &&
+                            selectedQuiz.end_time >
+                                new Date().valueOf() / 1000 ? (
                                 <div className="flex gap-4 mt-8">
                                     <motion.button
                                         whileHover={{ scale: 1.02 }}
                                         whileTap={{ scale: 0.98 }}
-                                        onClick={() => handleJoinQuiz(selectedQuiz)}
+                                        onClick={() =>
+                                            handleJoinQuiz(selectedQuiz)
+                                        }
                                         className="px-6 py-3 bg-gradient-to-r from-[#0075ff] to-[#00a3ff] rounded-xl text-white font-medium hover:shadow-lg transition-all duration-300"
                                     >
                                         Join Quiz
@@ -259,7 +291,9 @@ const QuizPage: React.FC = () => {
                                     <motion.button
                                         whileHover={{ scale: 1.02 }}
                                         whileTap={{ scale: 0.98 }}
-                                        onClick={() => handleRegisterQuiz(selectedQuiz)}
+                                        onClick={() =>
+                                            handleRegisterQuiz(selectedQuiz)
+                                        }
                                         className="px-6 py-3 bg-[#ffffff20] rounded-xl text-white font-medium hover:bg-[#ffffff30] transition-all duration-300"
                                     >
                                         Register
