@@ -61,8 +61,8 @@ const ProblemList = ({
                 acceptance_rate_count === ""
                     ? "asc"
                     : acceptance_rate_count === "asc"
-                    ? "des"
-                    : "",
+                      ? "des"
+                      : "",
             title: SortOptions.title,
             difficulty: SortOptions.difficulty,
         };
@@ -108,8 +108,8 @@ const ProblemList = ({
                                 SortOptions.title === "asc"
                                     ? "rgb(34, 197, 94)"
                                     : SortOptions.title === "des"
-                                    ? "rgb(220, 38, 38)"
-                                    : "",
+                                      ? "rgb(220, 38, 38)"
+                                      : "",
                         }}
                         onClick={() => titleOnClick()}
                     >
@@ -125,9 +125,9 @@ const ProblemList = ({
                                 SortOptions.acceptance_rate_count === "asc"
                                     ? "rgb(34, 197, 94)"
                                     : SortOptions.acceptance_rate_count ===
-                                      "des"
-                                    ? "rgb(220, 38, 38)"
-                                    : "",
+                                        "des"
+                                      ? "rgb(220, 38, 38)"
+                                      : "",
                         }}
                         onClick={() => acceptanceOnClick()}
                     >
@@ -143,8 +143,8 @@ const ProblemList = ({
                                 SortOptions.difficulty === "asc"
                                     ? "rgb(34, 197, 94)"
                                     : SortOptions.difficulty === "des"
-                                    ? "rgb(220, 38, 38)"
-                                    : "",
+                                      ? "rgb(220, 38, 38)"
+                                      : "",
                         }}
                         onClick={() => difficultyOnClick()}
                     >
@@ -194,8 +194,8 @@ const ProblemList = ({
                                     main.difficulty === "easy"
                                         ? "hover-easy-bg-color"
                                         : main.difficulty === "medium"
-                                        ? "hover-medium-bg-color"
-                                        : "hover-hard-bg-color"
+                                          ? "hover-medium-bg-color"
+                                          : "hover-hard-bg-color"
                                 } `}
                             >
                                 <Link
@@ -217,8 +217,8 @@ const ProblemList = ({
                                                     main.status === "solved"
                                                         ? "#22c55e"
                                                         : main.status === "none"
-                                                        ? "#808080"
-                                                        : "#f97316",
+                                                          ? "#808080"
+                                                          : "#f97316",
                                             }}
                                         >
                                             {main.status === "solved" ? (
@@ -291,13 +291,13 @@ const ProblemList = ({
                                                 main.difficulty === "easy"
                                                     ? "text-green-500"
                                                     : main.difficulty ===
-                                                      "medium"
-                                                    ? "text-orange-500"
-                                                    : "text-red-500"
+                                                        "medium"
+                                                      ? "text-orange-500"
+                                                      : "text-red-500"
                                             }`}
                                         >
                                             {kebabToSpacedPascal(
-                                                main.difficulty
+                                                main.difficulty,
                                             )}
                                         </div>
                                     </div>

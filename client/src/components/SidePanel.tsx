@@ -16,10 +16,7 @@ const SidePanelItem = ({
     style?: React.CSSProperties;
 }) => {
     return (
-        <motion.div
-            whileHover={{ x: 5 }}
-            className="w-full"
-        >
+        <motion.div whileHover={{ x: 5 }} className="w-full">
             <Link
                 to={to}
                 className="flex items-center space-x-3 w-[88%] mx-auto my-[8px] rounded-xl hover:bg-[#ffffff10] py-[10px] px-[16px] text-[14px] text-gray-400 hover:text-white transition-all duration-300"

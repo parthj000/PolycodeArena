@@ -18,7 +18,7 @@ const MainHeading = ({ data }: { data?: MainHeadingData }) => {
 
     return (
         <>
-            <motion.div 
+            <motion.div
                 initial={{ y: -100 }}
                 animate={{ y: 0 }}
                 className="fixed w-full h-[60px] bg-gradient-to-r from-[#0f1535] to-[#111c44] border-b border-[#ffffff10] flex flex-row z-[100] backdrop-blur-xl"
@@ -46,7 +46,7 @@ const MainHeading = ({ data }: { data?: MainHeadingData }) => {
                 {data?.status === "loggedin" || data?.status == undefined ? (
                     <div className="fixed flex flex-row right-[36px] items-center h-[60px] space-x-4">
                         <div className="inline-block p-[5px] text-[14px] text-gray-400 md:hidden">
-                            <motion.div 
+                            <motion.div
                                 whileHover={{ scale: 1.05 }}
                                 className="w-[32px] h-[32px] border border-[#ffffff20] rounded-xl relative hover:bg-[#ffffff10] cursor-pointer transition-all duration-300"
                             >
@@ -79,7 +79,9 @@ const MainHeading = ({ data }: { data?: MainHeadingData }) => {
                             displayFn={setSidePanelState}
                             display={sidePanelState}
                             data={{
-                                username: userData.name ? `Hello, ${userData.name}` : "",
+                                username: userData.name
+                                    ? `Hello, ${userData.name}`
+                                    : "",
                                 role: userData.role,
                             }}
                         />

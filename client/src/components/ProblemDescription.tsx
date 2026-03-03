@@ -5,10 +5,10 @@ import StarIcon from "./StarIcon";
 
 const ProblemDescription = ({ data }: { data: DescriptionData }) => {
     const [isStarred, setIsStarred] = useState<boolean>(
-        data.is_starred || false
+        data.is_starred || false,
     );
     const [likeStatus, setLikeStatus] = useState<string>(
-        data.like_status || "none"
+        data.like_status || "none",
     );
     return (
         <>
@@ -24,8 +24,8 @@ const ProblemDescription = ({ data }: { data: DescriptionData }) => {
                                 data.difficulty === "easy"
                                     ? "text-green-500"
                                     : data.difficulty === "medium"
-                                    ? "text-orange-500"
-                                    : "text-red-600"
+                                      ? "text-orange-500"
+                                      : "text-red-600"
                             }`}
                         >
                             {changeCase(data.difficulty, "pascal")}
@@ -35,8 +35,8 @@ const ProblemDescription = ({ data }: { data: DescriptionData }) => {
                                 data.status === "solved"
                                     ? "problem-solved"
                                     : data.status === "none"
-                                    ? "problem-not-solved"
-                                    : "problem-attempted"
+                                      ? "problem-not-solved"
+                                      : "problem-attempted"
                             }`}
                         >
                             {data.status === "solved" ? (
@@ -117,7 +117,7 @@ const ProblemDescription = ({ data }: { data: DescriptionData }) => {
                         className="mt-[36px] ml-[26px] text-[14px]"
                         dangerouslySetInnerHTML={{
                             __html: convertMarkdownToHtml(
-                                data.description_body
+                                data.description_body,
                             ),
                         }}
                     ></div>

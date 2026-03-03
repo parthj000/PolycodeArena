@@ -12,7 +12,7 @@ const modalVariants = {
         opacity: 0,
         scale: 0.8,
         y: 20,
-        backdropFilter: "blur(0px)"
+        backdropFilter: "blur(0px)",
     },
     visible: {
         opacity: 1,
@@ -22,20 +22,20 @@ const modalVariants = {
         transition: {
             type: "spring",
             damping: 25,
-            staggerChildren: 0.1
-        }
+            staggerChildren: 0.1,
+        },
     },
     exit: {
         opacity: 0,
         scale: 0.8,
         y: 20,
-        backdropFilter: "blur(0px)"
-    }
+        backdropFilter: "blur(0px)",
+    },
 };
 
 const contentVariants = {
     hidden: { opacity: 0, y: 20 },
-    visible: { opacity: 1, y: 0 }
+    visible: { opacity: 1, y: 0 },
 };
 
 const ProductShowcase: React.FC<ProductProps> = ({ product, onClose }) => {
@@ -47,7 +47,7 @@ const ProductShowcase: React.FC<ProductProps> = ({ product, onClose }) => {
             id: product._id,
             name: product.storeName,
             url: product.imgUrl,
-            price: product.price
+            price: product.price,
         };
 
         if (confirm("Are you sure you want to buy this product?")) {
@@ -58,20 +58,26 @@ const ProductShowcase: React.FC<ProductProps> = ({ product, onClose }) => {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json",
-                        authorization: `BEARER ${localStorage.getItem("token")}`
+                        authorization: `BEARER ${localStorage.getItem("token")}`,
                     },
-                    body: JSON.stringify(b)
+                    body: JSON.stringify(b),
                 });
 
                 const data = await res.json();
                 if (!res.ok) {
-                    throw new Error(data.message || "Failed to process purchase");
+                    throw new Error(
+                        data.message || "Failed to process purchase",
+                    );
                 }
                 onClose();
                 alert(data.message);
             } catch (error) {
                 console.error("Error buying product:", error);
-                setError(error instanceof Error ? error.message : "Failed to process purchase. Please try again.");
+                setError(
+                    error instanceof Error
+                        ? error.message
+                        : "Failed to process purchase. Please try again.",
+                );
             } finally {
                 setIsLoading(false);
             }
@@ -104,7 +110,11 @@ const ProductShowcase: React.FC<ProductProps> = ({ product, onClose }) => {
                 <motion.div
                     initial={{ opacity: 0, rotate: 0 }}
                     animate={{ opacity: 0.1, rotate: 360 }}
-                    transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+                    transition={{
+                        duration: 20,
+                        repeat: Infinity,
+                        ease: "linear",
+                    }}
                     className="absolute inset-0 bg-[conic-gradient(from_0deg_at_50%_50%,rgba(168,85,247,0.2)_0deg,transparent_60deg,rgba(168,85,247,0.2)_120deg,transparent_180deg,rgba(168,85,247,0.2)_240deg,transparent_300deg)] rounded-xl pointer-events-none"
                 />
 
@@ -131,10 +141,10 @@ const ProductShowcase: React.FC<ProductProps> = ({ product, onClose }) => {
                     </motion.div>
 
                     <motion.button
-                        whileHover={{ 
-                            scale: 1.1, 
+                        whileHover={{
+                            scale: 1.1,
                             backgroundColor: "rgba(0, 0, 0, 0.7)",
-                            boxShadow: "0 0 20px rgba(168, 85, 247, 0.3)"
+                            boxShadow: "0 0 20px rgba(168, 85, 247, 0.3)",
                         }}
                         whileTap={{ scale: 0.9 }}
                         onClick={onClose}
@@ -144,15 +154,16 @@ const ProductShowcase: React.FC<ProductProps> = ({ product, onClose }) => {
                     </motion.button>
                 </div>
 
-                <motion.div
-                    variants={contentVariants}
-                    className="space-y-4"
-                >
+                <motion.div variants={contentVariants} className="space-y-4">
                     <motion.h2
                         className="text-3xl font-bold bg-gradient-to-r from-purple-400 via-purple-300 to-purple-400 bg-clip-text text-transparent"
                         initial={{ backgroundPosition: "200% 0" }}
                         animate={{ backgroundPosition: "-200% 0" }}
-                        transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+                        transition={{
+                            duration: 20,
+                            repeat: Infinity,
+                            ease: "linear",
+                        }}
                     >
                         {product.storeName}
                     </motion.h2>
@@ -193,12 +204,13 @@ const ProductShowcase: React.FC<ProductProps> = ({ product, onClose }) => {
                         >
                             Price: {product.price}
                         </motion.p>
-                        
+
                         <div className="flex gap-4">
                             <motion.button
-                                whileHover={{ 
+                                whileHover={{
                                     scale: 1.02,
-                                    boxShadow: "0 5px 20px rgba(147, 51, 234, 0.3)"
+                                    boxShadow:
+                                        "0 5px 20px rgba(147, 51, 234, 0.3)",
                                 }}
                                 whileTap={{ scale: 0.98 }}
                                 onClick={buyProduct}
@@ -208,22 +220,33 @@ const ProductShowcase: React.FC<ProductProps> = ({ product, onClose }) => {
                                 <motion.div
                                     initial={false}
                                     animate={{ x: "100%" }}
-                                    transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+                                    transition={{
+                                        duration: 1,
+                                        repeat: Infinity,
+                                        ease: "linear",
+                                    }}
                                     className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -skew-x-12 group-hover:opacity-100 opacity-0"
                                 />
                                 {isLoading ? (
-                                    <motion.span 
+                                    <motion.span
                                         className="flex items-center gap-2"
                                         animate={{ opacity: [1, 0.7, 1] }}
-                                        transition={{ duration: 1, repeat: Infinity }}
+                                        transition={{
+                                            duration: 1,
+                                            repeat: Infinity,
+                                        }}
                                     >
                                         <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
                                         Processing...
                                     </motion.span>
                                 ) : (
                                     <motion.span
-                                        initial={{ backgroundPosition: "0% 50%" }}
-                                        whileHover={{ backgroundPosition: "100% 50%" }}
+                                        initial={{
+                                            backgroundPosition: "0% 50%",
+                                        }}
+                                        whileHover={{
+                                            backgroundPosition: "100% 50%",
+                                        }}
                                         transition={{ duration: 0.3 }}
                                         className="inline-block bg-gradient-to-r from-white to-purple-200 bg-clip-text text-transparent"
                                     >
@@ -231,12 +254,12 @@ const ProductShowcase: React.FC<ProductProps> = ({ product, onClose }) => {
                                     </motion.span>
                                 )}
                             </motion.button>
-                            
+
                             <motion.button
-                                whileHover={{ 
-                                    scale: 1.02, 
+                                whileHover={{
+                                    scale: 1.02,
                                     backgroundColor: "rgba(147, 51, 234, 0.1)",
-                                    borderColor: "rgba(147, 51, 234, 0.5)"
+                                    borderColor: "rgba(147, 51, 234, 0.5)",
                                 }}
                                 whileTap={{ scale: 0.98 }}
                                 onClick={onClose}

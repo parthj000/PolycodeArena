@@ -48,7 +48,7 @@ const UserQuestionDashBoard: React.FC = () => {
     useEffect(() => {
         if (isAuthenticated && token) {
             const eventSource = new EventSource(
-                `${API_URL}api/user/join/${token}`
+                `${API_URL}api/user/join/${token}`,
             );
 
             eventSource.onmessage = (event: MessageEvent) => {
