@@ -46,7 +46,7 @@ export function changeCase(
         | "kebab"
         | "scream"
         | "upper"
-        | "lower"
+        | "lower",
 ) {
     if (str == null) return;
     switch (changeTo) {
@@ -69,7 +69,8 @@ export function toCamelOrPascalCase(str: string, changeTo: "camel" | "pascal") {
     let result = str
         .split(/[-_ ]+/)
         .map(
-            (word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()
+            (word) =>
+                word.charAt(0).toUpperCase() + word.slice(1).toLowerCase(),
         )
         .join("");
     return changeTo === "camel"
@@ -84,7 +85,7 @@ export function toUpperOrLowerCase(str: string, changeTo: "lower" | "upper") {
 
 export function toSnakeOrKebabOrScreamCase(
     str: string,
-    changeTo: "snake" | "kebab" | "scream"
+    changeTo: "snake" | "kebab" | "scream",
 ) {
     let separator = changeTo === "kebab" ? "-" : "_";
     let result = str.split(/[-_ ]+/).join(separator);
@@ -108,7 +109,7 @@ export function spice(
     string: string,
     start: number,
     deleteCount: number,
-    insertString?: string
+    insertString?: string,
 ): string {
     return (
         string.slice(0, start) +
@@ -123,7 +124,7 @@ export function spice(
 export function addCharAt(
     str: string,
     strToAdd: string,
-    index: number
+    index: number,
 ): string {
     return str.slice(0, index) + strToAdd + str.slice(index);
 }
