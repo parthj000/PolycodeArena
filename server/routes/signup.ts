@@ -81,7 +81,7 @@ export async function signup(req: any, res: any, role: role) {
 async function generateWallet(
     walletId: string,
     role: role,
-    current_balance: number
+    current_balance: number,
 ) {
     const walletObj: wallet = {
         wallet_id: walletId,
@@ -108,6 +108,4 @@ function generateRandomString(length: number): string {
     return result;
 }
 
-
-
-export {generateWallet};
+export { generateWallet };

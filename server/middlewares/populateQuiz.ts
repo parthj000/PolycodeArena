@@ -24,10 +24,12 @@ async function populateQuiz(req: any, res: any) {
         };
 
         // Sign a token with the payload
-        const token = jwt.sign(payload, QUIZ_SECRET, { expiresIn: '1h' });
+        const token = jwt.sign(payload, QUIZ_SECRET, { expiresIn: "1h" });
 
         // Return success response with the token
-        return res.status(200).json({ message: "Access granted.", token: token });
+        return res
+            .status(200)
+            .json({ message: "Access granted.", token: token });
     } catch (error) {
         console.error("Error populating quiz:", error);
         return res.status(500).json({ message: "Something went wrong!" });

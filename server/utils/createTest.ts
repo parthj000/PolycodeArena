@@ -60,7 +60,7 @@ function equality(item1, item2) {
 export function writeTestFile(
     codeBody: string,
     testCases: any[][],
-    functionName: string
+    functionName: string,
 ): Promise<WriteFileOut> {
     try {
         acorn.parse(codeBody, { ecmaVersion: 2022 });
@@ -104,7 +104,7 @@ export function writeTestFile(
         codeBody +
         handleTestFunction +
         `try { return (handleTests(${JSON.stringify(
-            testCases
+            testCases,
         )}, ${functionName})); } catch (e) { return (\`{ "status":"Runtime Error",
         "date":"${new Date()}",
         "runtime": 0,

@@ -17,6 +17,9 @@ const quizRegisteredSchema = new mongoose.Schema<QuizRegistration>({
     },
 });
 
-const QuizRegisteredModel = mongoose.model<QuizRegistration>("QuizRegistered", quizRegisteredSchema);
+const QuizRegisteredModel = mongoose.model<QuizRegistration>(
+    "QuizRegistered",
+    quizRegisteredSchema,
+);
 
 export { QuizRegisteredModel };

@@ -56,5 +56,5 @@ const UnverifiedUserSchema = new mongoose.Schema({
 
 export const UnverifiedUserModel = mongoose.model(
     "UnverifiedUser",
-    UnverifiedUserSchema
+    UnverifiedUserSchema,
 );

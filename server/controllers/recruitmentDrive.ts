@@ -32,11 +32,18 @@ async function createRecruitmentDrive(req: any, res: any) {
         start_date,
         end_date,
         description,
-        company_id // Included directly in the request body
+        company_id, // Included directly in the request body
     } = req.body;
 
     // Validate required fields
-    if (!drive_name || !stages || !Array.isArray(stages) || !start_date || !end_date || !company_id) {
+    if (
+        !drive_name ||
+        !stages ||
+        !Array.isArray(stages) ||
+        !start_date ||
+        !end_date ||
+        !company_id
+    ) {
         return res.status(400).json({ message: "All parameters are required" });
     }
 
@@ -67,15 +74,26 @@ async function createRecruitmentDrive(req: any, res: any) {
         });
 
         await newDrive.save();
-        return res.status(200).json({ message: "Recruitment Drive Created!", drive_id: newDrive._id });
+        return res
+            .status(200)
+            .json({
+                message: "Recruitment Drive Created!",
+                drive_id: newDrive._id,
+            });
     } catch (error) {
         console.error(error);
-        return res.status(500).json({ message: "Something went wrong while creating the recruitment drive." });
+        return res
+            .status(500)
+            .json({
+                message:
+                    "Something went wrong while creating the recruitment drive.",
+            });
     }
 }
 
 function generateInvitationCode(length = 6): string {
-    const characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+    const characters =
+        "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
     let code = "";
     for (let i = 0; i < length; i++) {
         const randomIndex = Math.floor(Math.random() * characters.length);
@@ -89,28 +107,41 @@ export async function addParticipantToStageOne(req: any, res: any) {
 
     // Validate input
     if (!drive_id || !user_id) {
-        return res.status(400).json({ message: "drive_id and user_id are required" });
+        return res
+            .status(400)
+            .json({ message: "drive_id and user_id are required" });
     }
 
     try {
         // Find the recruitment drive by ID
-                const recruitmentDrive = await RecruitmentDriveModel.findById(drive_id).exec() as IRecruitmentDriveDocument | null;
-
+        const recruitmentDrive = (await RecruitmentDriveModel.findById(
+            drive_id,
+        ).exec()) as IRecruitmentDriveDocument | null;
 
         if (!recruitmentDrive) {
-            return res.status(404).json({ message: "Recruitment drive not found" });
+            return res
+                .status(404)
+                .json({ message: "Recruitment drive not found" });
         }
 
         // Access the first stage (stage-1)
-        const stageOne = recruitmentDrive.meta.stages.find((stage) => stage.stage_id === "stage-1");
+        const stageOne = recruitmentDrive.meta.stages.find(
+            (stage) => stage.stage_id === "stage-1",
+        );
 
         if (!stageOne) {
-            return res.status(404).json({ message: "Stage-1 not found in the recruitment drive" });
+            return res
+                .status(404)
+                .json({
+                    message: "Stage-1 not found in the recruitment drive",
+                });
         }
 
         // Check if the user is already a participant
         if (stageOne.participants?.includes(user_id)) {
-            return res.status(400).json({ message: "User is already a participant in Stage-1" });
+            return res
+                .status(400)
+                .json({ message: "User is already a participant in Stage-1" });
         }
 
         // Add the user to the participants list
@@ -122,10 +153,19 @@ export async function addParticipantToStageOne(req: any, res: any) {
         // Save the updated recruitment drive
         await recruitmentDrive.save();
 
-        return res.status(200).json({ message: "User added to Stage-1 participants", stage: stageOne });
+        return res
+            .status(200)
+            .json({
+                message: "User added to Stage-1 participants",
+                stage: stageOne,
+            });
     } catch (error) {
         console.error(error);
-        return res.status(500).json({ message: "An error occurred while adding the participant." });
+        return res
+            .status(500)
+            .json({
+                message: "An error occurred while adding the participant.",
+            });
     }
 }
 

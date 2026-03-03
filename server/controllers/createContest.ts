@@ -35,43 +35,46 @@ async function createContest(req: any, res: any) {
     }
 
     for (let question of question_set) {
-    let test_cases: any = question["test_cases"];
-    let public_case = test_cases["public"];
-    let hidden = test_cases["hidden"];
+        let test_cases: any = question["test_cases"];
+        let public_case = test_cases["public"];
+        let hidden = test_cases["hidden"];
 
-    if (public_case) {
-        for (let c of public_case) {
-            let inpu: any = isValidInput(c["input"]);
-            let out:any = isValidInput(c["expected_output"])
-            
-            if (!inpu.parsed || !out.parsed) {
-                return res.status(405).json({ message: "malformed test_cases" });
-            } else {
-                // Replace input with parsed value
-                c["input"] = inpu.parsed;
-                c["expected_output"] = out.parsed
+        if (public_case) {
+            for (let c of public_case) {
+                let inpu: any = isValidInput(c["input"]);
+                let out: any = isValidInput(c["expected_output"]);
+
+                if (!inpu.parsed || !out.parsed) {
+                    return res
+                        .status(405)
+                        .json({ message: "malformed test_cases" });
+                } else {
+                    // Replace input with parsed value
+                    c["input"] = inpu.parsed;
+                    c["expected_output"] = out.parsed;
+                }
+            }
+        }
+
+        if (hidden) {
+            for (let c of hidden) {
+                let inpu: any = isValidInput(c["input"]);
+                let out: any = isValidInput(c["expected_output"]);
+
+                if (!inpu.parsed || !out.parsed) {
+                    return res
+                        .status(405)
+                        .json({ message: "malformed test_cases" });
+                } else {
+                    // Replace input with parsed value
+                    c["input"] = inpu.parsed;
+                    c["expected_output"] = out.parsed;
+                }
             }
         }
     }
 
-    if (hidden) {
-        for (let c of hidden) {
-            let inpu: any = isValidInput(c["input"]);
-            let out:any = isValidInput(c["expected_output"])
-            
-            if (!inpu.parsed || !out.parsed) {
-                return res.status(405).json({ message: "malformed test_cases" });
-            } else {
-                // Replace input with parsed value
-                c["input"] = inpu.parsed;
-                c["expected_output"] = out.parsed
-            }
-        }
-    }
-    }
-
-    console.log(question_set,"this is question set");
-
+    console.log(question_set, "this is question set");
 
     const contest: contest = {
         contest_name: contest_name,
@@ -89,7 +92,7 @@ async function createContest(req: any, res: any) {
             (accumulator: any, currentValue: any) => {
                 return accumulator + currentValue;
             },
-            0
+            0,
         );
 
         let CHARGE = 20;
@@ -107,7 +110,7 @@ async function createContest(req: any, res: any) {
             req.decoded.wallet_id,
             totalMoney,
             req,
-            res
+            res,
         );
         console.log(cut_money);
 
@@ -137,17 +140,14 @@ function createInvitationCodes(length = 4, count = 2): string {
     return String(Array.from(codes));
 }
 
+function isValidInput(input: any) {
+    input = input.trim();
 
-
-function isValidInput(input:any) {
-  
-  input = input.trim();
-
-  try {
-    const parsed = JSON.parse("[" + input + "]");
-    return { valid: true, parsed };
-  } catch {
-    return { valid: false, parsed: null };
-  }
+    try {
+        const parsed = JSON.parse("[" + input + "]");
+        return { valid: true, parsed };
+    } catch {
+        return { valid: false, parsed: null };
+    }
 }
 export { createContest };

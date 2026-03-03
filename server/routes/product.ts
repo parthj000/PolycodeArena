@@ -6,7 +6,7 @@ import Product from "../models/product";
  */
 export const addProducts = async (
     req: Request,
-    res: Response
+    res: Response,
 ): Promise<void> => {
     const products = req.body;
 
@@ -57,7 +57,7 @@ export const addProducts = async (
  */
 export const getProducts = async (
     req: Request,
-    res: Response
+    res: Response,
 ): Promise<void> => {
     try {
         const products = await Product.find();

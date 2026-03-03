@@ -5,7 +5,9 @@ async function joinQuizCommunity(req: any, res: any) {
     const { quiz_id, invitation_code } = req.body;
 
     if (!quiz_id || !invitation_code) {
-        return res.status(400).json({ message: "All parameters are required." });
+        return res
+            .status(400)
+            .json({ message: "All parameters are required." });
     }
 
     try {
@@ -13,12 +15,19 @@ async function joinQuizCommunity(req: any, res: any) {
         if (!quiz) {
             return res.status(404).json({ message: "Quiz not found." });
         } else if (invitation_code !== quiz.meta.invitation_code) {
-            return res.status(403).json({ message: "Incorrect invitation code." });
+            return res
+                .status(403)
+                .json({ message: "Incorrect invitation code." });
         }
 
-        const registered = await RegisteredModel.findOne({ user_id: req.decoded.id, quiz_id });
+        const registered = await RegisteredModel.findOne({
+            user_id: req.decoded.id,
+            quiz_id,
+        });
         if (registered) {
-            return res.status(200).json({ message: "User already registered." });
+            return res
+                .status(200)
+                .json({ message: "User already registered." });
         }
 
         const regUser = new RegisteredModel({
@@ -28,7 +37,9 @@ async function joinQuizCommunity(req: any, res: any) {
         });
         await regUser.save();
 
-        return res.status(200).json({ message: "User registered successfully." });
+        return res
+            .status(200)
+            .json({ message: "User registered successfully." });
     } catch (error) {
         return res.status(500).json({ message: "Something went wrong." });
     }

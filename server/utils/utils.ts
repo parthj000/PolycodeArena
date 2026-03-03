@@ -18,7 +18,7 @@ export function sortByDifficulty(
     arr: (Document<unknown, {}, DProblem> &
         DProblem & {
             _id: Types.ObjectId;
-        })[]
+        })[],
 ) {
     if (order === "") return arr;
     const difficultyRule = { easy: 1, medium: 2, hard: 3 };
@@ -26,13 +26,13 @@ export function sortByDifficulty(
         return arr.sort(
             (a, b) =>
                 difficultyRule[a.main.difficulty] -
-                difficultyRule[b.main.difficulty]
+                difficultyRule[b.main.difficulty],
         );
     } else {
         return arr.sort(
             (a, b) =>
                 difficultyRule[b.main.difficulty] -
-                difficultyRule[a.main.difficulty]
+                difficultyRule[a.main.difficulty],
         );
     }
 }
@@ -42,18 +42,18 @@ export function sortByAcceptance(
     arr: (Document<unknown, {}, DProblem> &
         DProblem & {
             _id: Types.ObjectId;
-        })[]
+        })[],
 ) {
     if (order === "") return arr;
     if (order === "asc") {
         return arr.sort(
             (a, b) =>
-                b.main.acceptance_rate_count - a.main.acceptance_rate_count
+                b.main.acceptance_rate_count - a.main.acceptance_rate_count,
         );
     } else {
         return arr.sort(
             (a, b) =>
-                a.main.acceptance_rate_count - b.main.acceptance_rate_count
+                a.main.acceptance_rate_count - b.main.acceptance_rate_count,
         );
     }
 }
@@ -63,7 +63,7 @@ export function sortByTitle(
     arr: (Document<unknown, {}, DProblem> &
         DProblem & {
             _id: Types.ObjectId;
-        })[]
+        })[],
 ) {
     if (order === "") return arr;
     if (order === "asc") {

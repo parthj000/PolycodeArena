@@ -5,7 +5,7 @@ export async function transaction(
     transmitterId: string,
     amount: number,
     req: any,
-    res: any
+    res: any,
 ) {
     if (amount <= 0) {
         return res
@@ -20,10 +20,10 @@ export async function transaction(
 
         // Check if both exist
         const transmitter = wallets.find(
-            (wallet) => wallet.wallet_id === transmitterId
+            (wallet) => wallet.wallet_id === transmitterId,
         );
         const receiver = wallets.find(
-            (wallet) => wallet.wallet_id === receiverId
+            (wallet) => wallet.wallet_id === receiverId,
         );
 
         if (!transmitter || !receiver) {
@@ -68,7 +68,7 @@ async function specialTransactions(
     transmitterId: string,
     amount: number,
     req: any,
-    res: any
+    res: any,
 ) {
     try {
         if (transmitterId === "U") {
@@ -93,7 +93,6 @@ async function specialTransactions(
             receiver.transactions.push(newTransaction);
             await receiver.save();
             return true;
-            
         } else if (receiverId === "U") {
             const transmitter: any = await WalletModel.findOne({
                 wallet_id: transmitterId,
@@ -103,8 +102,6 @@ async function specialTransactions(
                 return res.status(404).json({ message: "Not found." });
             }
 
-            
-
             const newTransaction: any = {
                 head: "U",
                 tail: transmitter.wallet_id,
@@ -112,8 +109,8 @@ async function specialTransactions(
             };
 
             transmitter.current_balance -= amount;
-            if(transmitter.current_balance<0){
-              return false;
+            if (transmitter.current_balance < 0) {
+                return false;
             }
             transmitter.transactions.push(newTransaction);
             await transmitter.save();

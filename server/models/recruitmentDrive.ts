@@ -30,18 +30,24 @@ const StageSchema: Schema = new Schema<IStage>({
     participants: { type: [String], default: [] },
 });
 
-const RecruitmentDriveSchema: Schema = new Schema<IRecruitmentDrive>({
-    meta: {
-        drive_name: { type: String, required: true },
-        invitation_code: { type: String, required: true, unique: true },
-        stages: { type: [StageSchema], required: true },
-        company_id: { type: String, required: true },
+const RecruitmentDriveSchema: Schema = new Schema<IRecruitmentDrive>(
+    {
+        meta: {
+            drive_name: { type: String, required: true },
+            invitation_code: { type: String, required: true, unique: true },
+            stages: { type: [StageSchema], required: true },
+            company_id: { type: String, required: true },
+            start_date: { type: Number, required: true },
+            end_date: { type: Number, required: true },
+            description: { type: String },
+        },
         start_date: { type: Number, required: true },
         end_date: { type: Number, required: true },
-        description: { type: String },
     },
-    start_date: { type: Number, required: true },
-    end_date: { type: Number, required: true },
-}, { timestamps: true });
+    { timestamps: true },
+);
 
-export const RecruitmentDriveModel = mongoose.model<IRecruitmentDrive>("RecruitmentDrive", RecruitmentDriveSchema);
+export const RecruitmentDriveModel = mongoose.model<IRecruitmentDrive>(
+    "RecruitmentDrive",
+    RecruitmentDriveSchema,
+);

@@ -24,8 +24,10 @@ async function joinContestCommunity(req: any, res: any) {
         console.log(error);
     }
 
-    if(req.contest.start_time>new Date().valueOf()/1000){
-        res.write(`data: ${JSON.stringify({show_message:"Event not started yet."})}\n\n`);
+    if (req.contest.start_time > new Date().valueOf() / 1000) {
+        res.write(
+            `data: ${JSON.stringify({ show_message: "Event not started yet." })}\n\n`,
+        );
         res.end();
     }
 

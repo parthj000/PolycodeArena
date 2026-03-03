@@ -24,7 +24,7 @@ export const generatePresignedUrl = async (
     bucketName: string,
     key: string,
     expiresIn: number = 3600,
-    contentType: string
+    contentType: string,
 ): Promise<string> => {
     try {
         console.log(contentType + "   contenType in s3 Uplaod file ");
@@ -53,7 +53,7 @@ export const generatePresignedUrl = async (
  */
 export const generateMultipleUrls = async (
     username: string,
-    contentType: string
+    contentType: string,
 ) => {
     const bucketName = process.env.AWS_BUCKET_NAME || "";
     const mimeToExtension: Record<string, string> = {
@@ -86,7 +86,7 @@ export const generateMultipleUrls = async (
                     bucketName,
                     file.key,
                     3600 * 10,
-                    file.contentType
+                    file.contentType,
                 ),
             };
         });

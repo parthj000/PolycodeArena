@@ -33,8 +33,8 @@ user.post("/signup", async (req, res) => {
 
 user.get("/product/list", getProducts);
 
-user.post("/buy",async (req:any,res:any)=>{
-    const {id,name,url,price} = req.body;
+user.post("/buy", async (req: any, res: any) => {
+    const { id, name, url, price } = req.body;
 
     const ticketmessage = `You have purchased this ${id},
     user_id:${req.decoded.id},
@@ -42,40 +42,47 @@ user.post("/buy",async (req:any,res:any)=>{
     status:done,
     
     
-    `
-
+    `;
 
     try {
-        await specialTransactions("U",req.decoded.wallet_id,Number(price),req,res);
-    await sendMailBuyTicket(req.decoded.email,req.decoded.name,ticketmessage,generateRandomString(10),url);
-            return res.status(200).json({message:"Product purchase complete."})
-
-        
+        await specialTransactions(
+            "U",
+            req.decoded.wallet_id,
+            Number(price),
+            req,
+            res,
+        );
+        await sendMailBuyTicket(
+            req.decoded.email,
+            req.decoded.name,
+            ticketmessage,
+            generateRandomString(10),
+            url,
+        );
+        return res.status(200).json({ message: "Product purchase complete." });
     } catch (error) {
-        return res.status(500).json({message:"Something went wrong."})
-        
+        return res.status(500).json({ message: "Something went wrong." });
     }
-    
-
-})
-
+});
 
 user.get("/recruitment/all", async (req: any, res: any) => {
-  try {
-      const recruitmentDrives = await RecruitmentDriveModel.find();
-      const formattedDrives = recruitmentDrives.map(drive => ({
-          _id: drive._id,
-          drive_name: drive.meta.drive_name,
-          description: drive.meta.description,
-          company_id: drive.meta.company_id,
-          start_date: drive.meta.start_date,
-          end_date: drive.meta.end_date,
-      }));
-      res.status(200).json(formattedDrives);
-  } catch (error) {
-      console.error("Error fetching recruitment drives:", error);
-      res.status(500).json({ message: "Failed to fetch recruitment drives." });
-  }
+    try {
+        const recruitmentDrives = await RecruitmentDriveModel.find();
+        const formattedDrives = recruitmentDrives.map((drive) => ({
+            _id: drive._id,
+            drive_name: drive.meta.drive_name,
+            description: drive.meta.description,
+            company_id: drive.meta.company_id,
+            start_date: drive.meta.start_date,
+            end_date: drive.meta.end_date,
+        }));
+        res.status(200).json(formattedDrives);
+    } catch (error) {
+        console.error("Error fetching recruitment drives:", error);
+        res.status(500).json({
+            message: "Failed to fetch recruitment drives.",
+        });
+    }
 });
 
 user.get("/users", async (_req: any, res: any) => {
@@ -90,35 +97,38 @@ user.get("/users", async (_req: any, res: any) => {
 });
 
 user.get("/recruitment/:recruitment_id", async (req: any, res: any) => {
-  const { recruitment_id } = req.params;
+    const { recruitment_id } = req.params;
 
-  try {
-      const recruitmentDrive = await RecruitmentDriveModel.findById(recruitment_id);
+    try {
+        const recruitmentDrive =
+            await RecruitmentDriveModel.findById(recruitment_id);
 
-      if (!recruitmentDrive) {
-          return res.status(404).json({ message: "Recruitment drive not found." });
-      }
+        if (!recruitmentDrive) {
+            return res
+                .status(404)
+                .json({ message: "Recruitment drive not found." });
+        }
 
-      res.status(200).json({
-          recruitmentDrive: {
-              meta: {
-                  drive_name: recruitmentDrive.meta.drive_name,
-                  invitation_code: recruitmentDrive.meta.invitation_code,
-                  stages: recruitmentDrive.meta.stages,
-                  company_id: recruitmentDrive.meta.company_id,
-                  start_date: recruitmentDrive.meta.start_date,
-                  end_date: recruitmentDrive.meta.end_date,
-                  description: recruitmentDrive.meta.description,
-              },
-              _id: recruitmentDrive._id,
-              start_date: recruitmentDrive.start_date,
-              end_date: recruitmentDrive.end_date,
-          },
-      });
-  } catch (error) {
-      console.error("Error fetching recruitment drive:", error);
-      res.status(500).json({ message: "Failed to fetch recruitment drive." });
-  }
+        res.status(200).json({
+            recruitmentDrive: {
+                meta: {
+                    drive_name: recruitmentDrive.meta.drive_name,
+                    invitation_code: recruitmentDrive.meta.invitation_code,
+                    stages: recruitmentDrive.meta.stages,
+                    company_id: recruitmentDrive.meta.company_id,
+                    start_date: recruitmentDrive.meta.start_date,
+                    end_date: recruitmentDrive.meta.end_date,
+                    description: recruitmentDrive.meta.description,
+                },
+                _id: recruitmentDrive._id,
+                start_date: recruitmentDrive.start_date,
+                end_date: recruitmentDrive.end_date,
+            },
+        });
+    } catch (error) {
+        console.error("Error fetching recruitment drive:", error);
+        res.status(500).json({ message: "Failed to fetch recruitment drive." });
+    }
 });
 // Unverified Signup Route
 user.post("/unverified-signup", async (req, res) => {
@@ -162,12 +172,17 @@ user.post("/unverified-signup", async (req, res) => {
         console.log(req.body);
 
         // const existingUser = await UnverifiedUserModel.findOne({ email });
-        const existUser = await UserModel.findOne({email:email,verification:false});
+        const existUser = await UserModel.findOne({
+            email: email,
+            verification: false,
+        });
 
         if (existUser) {
             return res
                 .status(403)
-                .json({ message: "Unverified or verified user already exists." });
+                .json({
+                    message: "Unverified or verified user already exists.",
+                });
         }
 
         const hashedPassword = await bcrypt.hash(password, 10);
@@ -216,14 +231,14 @@ user.get("/auth", (req, res) => {
     return res.status(200).json({ message: "Authenticated." });
 });
 
-user.get("/assets", async (req:any, res:any) => {
+user.get("/assets", async (req: any, res: any) => {
     try {
         const userId = req.decoded?.id;
         // Access userId from decoded token
         console.log(userId + " user id in asset routes ");
         // Fetch user data from the database
         const user = await UserModel.findById(userId).select(
-            "profile_pic resume_url certificates name tag"
+            "profile_pic resume_url certificates name tag",
         );
 
         if (!user) {
@@ -271,10 +286,7 @@ user.get("/quiz/join/:token", (req, res) => {
     const { token } = req.params;
 
     try {
-        const verify:any = jwt.verify(
-            token,
-            String(CONTEST_SECRET)
-        ) 
+        const verify: any = jwt.verify(token, String(CONTEST_SECRET));
 
         if (!verify || !verify.quiz_id) {
             return res
@@ -344,7 +356,7 @@ user.get("/join/:token", (req, res) => {
     const { token } = req.params;
 
     try {
-        const verify:any = jwt.verify(token, String(CONTEST_SECRET));
+        const verify: any = jwt.verify(token, String(CONTEST_SECRET));
         console.log(verify, "this is coolll");
 
         if (!verify) {
@@ -367,7 +379,7 @@ user.get("/join/:token", (req, res) => {
         res.write(`data: ${data}\n\n`);
 
         const sendEvent = async () => {
-            const contestRankings:any = await pollContest(verify.contest_id);
+            const contestRankings: any = await pollContest(verify.contest_id);
             const kapa = {
                 message: "Update from Stream 1",
                 rankings: contestRankings.rankings,

@@ -23,7 +23,9 @@ async function registerQuiz(req: DecodedRequest, res: Response) {
     const { quiz_id, invitation_code } = req.body;
 
     if (!quiz_id || !invitation_code) {
-        return res.status(400).json({ message: "All parameters are required." });
+        return res
+            .status(400)
+            .json({ message: "All parameters are required." });
     }
 
     try {
@@ -31,11 +33,15 @@ async function registerQuiz(req: DecodedRequest, res: Response) {
         if (!quiz) {
             return res.status(404).json({ message: "Quiz not found." });
         } else if (invitation_code !== quiz.meta.invitation_code) {
-            return res.status(403).json({ message: "Incorrect invitation code." });
+            return res
+                .status(403)
+                .json({ message: "Incorrect invitation code." });
         }
 
         if (!req.decoded?.id) {
-            return res.status(401).json({ message: "Unauthorized: No user ID found." });
+            return res
+                .status(401)
+                .json({ message: "Unauthorized: No user ID found." });
         }
 
         // Generate payload for JWT token
@@ -51,13 +57,15 @@ async function registerQuiz(req: DecodedRequest, res: Response) {
         // Sign the JWT token
         const regToken = jwt.sign(payload, String(QUIZ_SECRET));
 
-        const registered = await QuizRegisteredModel.findOne({ 
-            user_id: req.decoded.id, 
-            quiz_id: quiz._id 
+        const registered = await QuizRegisteredModel.findOne({
+            user_id: req.decoded.id,
+            quiz_id: quiz._id,
         });
-        
+
         if (registered) {
-            return res.status(200).json({ message: "User already registered.", token: regToken });
+            return res
+                .status(200)
+                .json({ message: "User already registered.", token: regToken });
         }
 
         const regUser = new QuizRegisteredModel({
@@ -67,7 +75,12 @@ async function registerQuiz(req: DecodedRequest, res: Response) {
         });
         await regUser.save();
 
-        return res.status(200).json({ message: "User registered successfully.", token: regToken });
+        return res
+            .status(200)
+            .json({
+                message: "User registered successfully.",
+                token: regToken,
+            });
     } catch (error) {
         console.error(error);
         return res.status(500).json({ message: "Something went wrong." });

@@ -4,7 +4,9 @@ export async function findQuiz(req: any, res: any) {
     try {
         let quizzes: any;
         if (req.decoded.role === "C") {
-            quizzes = await quizModel.find({ "meta.community_id": req.decoded.id });
+            quizzes = await quizModel.find({
+                "meta.community_id": req.decoded.id,
+            });
         } else {
             quizzes = await quizModel.find({});
         }

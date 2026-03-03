@@ -13,7 +13,11 @@ interface UserRequest extends Request {
     allownext?: boolean;
 }
 
-export function authenticateToken(req: UserRequest, res: any, next: NextFunction): void {
+export function authenticateToken(
+    req: UserRequest,
+    res: any,
+    next: NextFunction,
+): void {
     console.log("Request Path:", req.path);
 
     // Helper function to check specific paths
@@ -26,20 +30,21 @@ export function authenticateToken(req: UserRequest, res: any, next: NextFunction
     const isCommunityJoinPath = (): boolean => {
         const path = req.path.split("/");
         console.log("Community Path:", path);
-        return path[1] === "community" && path[2] === "join" && path.length === 4;
+        return (
+            path[1] === "community" && path[2] === "join" && path.length === 4
+        );
     };
 
     // Allow paths that do not require authentication
     if (
         req.path === "/community/login" ||
-        req.path === "/community/create/drive"||
+        req.path === "/community/create/drive" ||
         req.path === "/community/signup" ||
         req.path === "/community/create/quiz" ||
         req.path === "/community/unverified-users" ||
-        req.path === "/community/recruitment/all"||
+        req.path === "/community/recruitment/all" ||
         req.path === "/user/login" ||
         req.path === "/user/signup" ||
-        
         req.path === "/user/unverified-signup" ||
         isUserJoinPath() ||
         isCommunityJoinPath()
